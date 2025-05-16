@@ -22,8 +22,8 @@
   <button class="bg-orange-500 text-white px-3 py-2 rounded hover:bg-orange-600">CSS</button>
   <button class="bg-orange-500 text-white px-3 py-2 rounded hover:bg-orange-600">JavaScript</button>
   <button class="bg-orange-500 text-white px-3 py-2 rounded hover:bg-orange-600">FE</button>
-  <button class="bg-orange-500 text-white px-3 py-2 rounded hover:bg-orange-600">PHP</button>
   <button class="bg-orange-500 text-white px-3 py-2 rounded hover:bg-orange-600">IP</button>
+  <button class="bg-orange-500 text-white px-3 py-2 rounded hover:bg-orange-600">PHP</button>
 </div>
   </div>
 </div>
@@ -32,8 +32,8 @@
     <div class="space-y-4">
       <?php
       $questions = [
-        ['id' => 1, 'title' => 'How to suck ur owndick?', 'slug' => 'how-to-solve-quadratic-equations', 'tags' => ['Math', 'Algebra']],
-        ['id' => 2, 'title' => 'Can someone explain Newton’s 3rd law?', 'slug' => 'newtons-third-law', 'tags' => ['Physics']],
+        ['id' => 1, 'title' => 'How to suck ur own dick?', 'slug' => 'how-to-solve-quadratic-equations', 'tags' => ['Math', 'Algebra']],
+        ['id' => 2, 'title' => 'Can someone explain how dogs can lick theri own balls?', 'slug' => 'newtons-third-law', 'tags' => ['Physics']],
       ];
       foreach ($questions as $q): ?>
         <div class="bg-white shadow p-4 rounded">
@@ -49,7 +49,9 @@
       <?php endforeach; ?>
     </div>
   </main>
-
+<div class="z-10">
+  <?php include 'Partials/footer.php'; ?>
+</div>
 
 </body>
 </html>

@@ -13,7 +13,7 @@
   <?php include 'Partials/nav.php'; ?>
 
   <!-- Left Sidebar -->
-  <aside class="fixed top-20 left-0 h-[calc(100%-5rem)] w-[200px] bg-white z-10 hidden md:block shadow">
+  <aside class="fixed top-20 left-0 h-[calc(100%-10rem)] w-[200px] bg-white z-10 hidden md:block shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
@@ -52,8 +52,8 @@
     </div>
   </main>
 
-  <!-- Footer -->
+ <div class="z-10">
   <?php include 'Partials/footer.php'; ?>
-
+</div>
 </body>
 </html>
