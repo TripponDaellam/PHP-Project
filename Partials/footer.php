@@ -14,7 +14,6 @@
       <a href="terms.php" class="hover:text-orange-500">Terms</a>
     </div>
 
-    <!-- Right Social Icons -->
     <div class="flex justify-center gap-6">
       <a href="#" target="_blank" class="hover:text-orange-500">
         <i class="fab fa-facebook-f text-xl"></i>
