@@ -22,7 +22,7 @@
     placeholder="Search..."
     class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400"
   >
-  <a href="#" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Ask</a>
+  <a href="#" class="bg-orange-500 h-100 text-white px-4 py-2 rounded hover:bg-orange-600">Ask</a>
   <a href="/notifications" class="text-gray-700 hover:text-orange-500">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
       stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
