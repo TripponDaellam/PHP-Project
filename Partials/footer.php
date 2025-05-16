@@ -1,4 +1,5 @@
-<footer class="relative z-10 bg-white text-gray-600 border-t mt-10 w-full">
+<footer class="relative z-10 bg-black text-white border-t mt-10 w-full">
+
   <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col lg:flex-row justify-between items-center text-sm space-y-4 lg:space-y-0">
     
     <!-- Left -->
