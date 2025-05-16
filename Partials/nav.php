@@ -60,10 +60,7 @@
           </svg>
         </button>
       </div>
-    </div>
-
- 
-    <div x-show="open" x-transition class="mt-3 md:hidden space-y-3">
+    </div><div x-show="open" x-transition class="mt-3 md:hidden space-y-3">
   <input
     type="text"
     placeholder="Search..."

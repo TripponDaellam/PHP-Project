@@ -18,7 +18,7 @@
   </aside>
 
   <!-- Right Sidebar (Filter) -->
-  <aside class="fixed top-20 right-0 h-[calc(100%-5rem)] w-60 bg-white shadow px-4 py-6 z-10 hidden lg:block">
+  <aside class="fixed top-20 right-0 h-[calc(100%-10rem)] w-60 bg-white shadow px-4 py-6 z-10 hidden lg:block">
     <?php include 'Partials/filter.php'; ?>
   </aside>
 
