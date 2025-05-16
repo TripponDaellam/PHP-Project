@@ -13,7 +13,7 @@
   <?php include 'Partials/nav.php'; ?>
 
   <!-- Left Sidebar -->
-  <aside class="fixed top-[67px] left-0 h-[calc(100%-5rem)] w-[180px] bg-white z-10 hidden md:block border border-r-gray-400">
+  <aside class="fixed top-20 left-0 h-[calc(100%-5rem)] w-[180px] bg-white z-10 hidden md:block">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
