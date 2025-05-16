@@ -8,7 +8,7 @@
 </head>
 <body class="bg-white text-black">
 
-  <nav x-data="{ open: false }" class="fixed bg-white top-0 left-0 w-full shadow px-6 py-3">
+  <nav x-data="{ open: false }" class="fixed bg-white top-0 left-0 w-full border border-b-gray-400 px-6 py-3">
     <div class="flex items-center justify-between">
 
       <div class="flex items-center space-x-3">
