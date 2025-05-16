@@ -1,8 +1,9 @@
-<nav class="bg-white p-4 rounded shadow space-y-2">
-  <a href="index.php" class="block text-orange-600 hover:underline">Home</a>
-  <a href="tags.php" class="block text-orange-600 hover:underline">Tags</a>
-  <a href="topics.php" class="block text-orange-600 hover:underline">Topics</a>
-  <a href="about.php" class="block text-orange-600 hover:underline">About</a>
-  <a href="Question.php" class="block text-orange-600 hover:underline">View Questions</a>
-
-</nav>
+<div class="mt-5">
+  <a href="#" class="flex text-orange-600 hover:bg-gray-300 px-4 h-9 justify-left items-center text-sm">Home</a>
+  <a href="#" class="flex text-orange-600 hover:bg-gray-300 px-4 h-9 justify-left items-center text-sm">Questions</a>
+  <a href="#" class="flex text-orange-600 hover:bg-gray-300 px-4 h-9 justify-left items-center text-sm">Tags</a>
+  <a href="#" class="flex text-orange-600 hover:bg-gray-300 px-4 h-9 justify-left items-center text-sm">Saved</a>
+  <a href="#" class="flex text-orange-600 hover:bg-gray-300 px-4 h-9 justify-left items-center text-sm">Community</a>
+  <a href="#" class="flex text-orange-600 hover:bg-gray-300 px-4 h-9 justify-left items-center text-sm">Friends</a>
+  <a href="#" class="flex text-orange-600 hover:bg-gray-300 px-4 h-9 justify-left items-center text-sm">About</a>
+</div>
