@@ -7,7 +7,7 @@
 </head>
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
     <?php include 'Partials/nav.php'; ?>
-   <aside class="fixed top-20 left-0 h-[calc(100%-10rem)] w-[180px] bg-white z-10 hidden md:block shadow">
+   <aside class="fixed top-20 left-0 h-[calc(100%-5rem)] w-[200px] bg-white z-10 hidden md:block shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
   <main class="flex-1 w-screen-full mx-auto px-4 py-6 md:ml-60 lg:mr-10">
