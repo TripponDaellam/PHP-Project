@@ -25,8 +25,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'methodflow12@gmail.com';
-            $mail->Password = 'nvviqkfpbespvfbg';
+            $mail->Username = 'your-email';
+            $mail->Password = 'your-app-password';
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
             $mail->SMTPDebug = 0;
