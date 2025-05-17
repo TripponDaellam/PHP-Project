@@ -1,11 +1,7 @@
 <?php
 session_start();
+$isLoggedIn = isset($_SESSION['user_id']);
 
-if (!isset($_SESSION['user_id'])) {
-    // Redirect to login page
-    header("Location: /User/login.php");
-    exit();
-}
 require_once 'DBConnection/DBConnector.php';
 
 if (!$pdo) {

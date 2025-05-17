@@ -1,10 +1,6 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: /User/login.php");
-    exit();
-}
+$isLoggedIn = isset($_SESSION['user_id']);
 ?>
 
 
