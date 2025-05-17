@@ -29,9 +29,9 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
 
   <?php include 'Partials/nav.php'; ?>
 
-  <aside class="fixed top-20 left-0 h-[calc(100%-10rem)] w-[200px] bg-white z-10 hidden md:block shadow">
-    <?php include 'Partials/left_nav.php'; ?>
-  </aside>
+ <aside class="fixed top-20 left-0 h-[calc(100%-10rem)] w-[200px] bg-white z-10 hidden md:block shadow">
+  <?php include 'Partials/left_nav.php'; ?>
+</aside>
 
   <aside class="fixed top-20 right-0 h-[calc(100%-10rem)] w-60 bg-white shadow px-4 py-6 z-10 hidden lg:block">
     <?php include 'Partials/filter.php'; ?>
@@ -62,15 +62,19 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
 
             <!-- Existing Answers -->
             <?php if (isset($allComments[$q['id']])): ?>
-              <div class="mt-4 border-t pt-3">
-                <h3 class="text-sm font-semibold text-gray-700 mb-2">Answers:</h3>
-                <?php foreach ($allComments[$q['id']] as $comment): ?>
-                  <div class="mb-2 bg-gray-100 p-2 rounded text-sm">
-                    <?= htmlspecialchars($comment['content']) ?>
-                    <div class="text-xs text-gray-500 mt-1">Posted on <?= date('F j, Y H:i', strtotime($comment['created_at'])) ?></div>
-                  </div>
-                <?php endforeach; ?>
-              </div>
+             <div class="mt-4 border-t pt-3">
+  <h3 class="text-sm font-semibold text-gray-700 mb-2">Answers:</h3>
+  <?php 
+    $commentsToShow = array_slice($allComments[$q['id']], 0, 2); 
+    foreach ($commentsToShow as $comment): 
+  ?>
+    <div class="mb-2 bg-gray-100 p-2 rounded text-sm">
+      <?= htmlspecialchars($comment['comment'] ?? 'No comment provided.') ?>
+      <div class="text-xs text-gray-500 mt-1">Posted on <?= date('F j, Y H:i', strtotime($comment['created_at'])) ?></div>
+    </div>
+  <?php endforeach; ?>
+</div>
+
             <?php endif; ?>
 
 
