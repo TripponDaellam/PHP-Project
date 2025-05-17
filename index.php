@@ -76,20 +76,6 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
 </div>
 
             <?php endif; ?>
-
-
-            <div class="mt-4 border-t pt-4">
-              <?php if ($isLoggedIn): ?>
-                <form action="../Controller/commentController.php" method="POST" class="space-y-2">
-                  <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
-                  <textarea name="content" required rows="3" placeholder="Write your answer..." class="w-full p-2 border rounded"></textarea>
-                  <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit Answer</button>
-                </form>
-              <?php else: ?>
-                <a href="User/Login.php" class="text-blue-600 underline">Log in to post an answer</a>
-              <?php endif; ?>
-            </div>
-          </div>
         <?php endforeach; ?>
       <?php else: ?>
         <p class="text-gray-500">No questions found.</p>

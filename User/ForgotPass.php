@@ -36,7 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $mail->isHTML(true);
             $mail->Subject = 'Reset your Method Flow password';
             $mail->Body = "Click the link below to reset your password:<br><br>
-                           <a href='http://localhost/MethodFlow/reset-password.php?token=$token'>Reset Password</a>";
+          <a href='http://localhost/MethodFlow/User/resetPassword.php?token=$token&email=$email'>
+Reset Password</a>";
 
             $mail->send();
             $message = "<p class='text-green-600'>Reset link sent to your email.</p>";
@@ -68,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <input type="email" name="email" class="w-full px-3 py-2 border rounded" required>
       </div>
 
-      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 w-full rounded">
+      <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white py-2 w-full rounded">
         Send Reset Link
       </button>
     </form>

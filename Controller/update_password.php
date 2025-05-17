@@ -1,36 +1,32 @@
 <?php
 require '../DBConnection/DBConnector.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST['email'] ?? '';
     $token = $_POST['token'] ?? '';
-    $newPassword = $_POST['new_password'] ?? '';
-    $confirmPassword = $_POST['confirm_password'] ?? '';
+    $new_password = $_POST['new_password'] ?? '';
+    $confirm_password = $_POST['confirm_password'] ?? '';
 
-    if ($newPassword !== $confirmPassword) {
-        echo "Passwords do not match.";
-        exit();
+    if ($new_password !== $confirm_password) {
+        die("Passwords do not match.");
     }
 
-    // Recheck token
-    $stmt = $pdo->prepare("SELECT * FROM password_resets WHERE email = ? AND token = ? AND expires_at > NOW()");
-    $stmt->execute([$email, $token]);
+    $token_hash = hash('sha256', $token);
+
+    // Validate token
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ? AND reset_token = ? AND token_expire > NOW()");
+    $stmt->execute([$email, $token_hash]);
     $user = $stmt->fetch();
 
     if (!$user) {
-        echo "Invalid or expired token.";
-        exit();
+        die("Invalid or expired token.");
     }
 
-    // Hash the new password
-    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+    // Update password
+    $new_password_hashed = password_hash($new_password, PASSWORD_DEFAULT);
+    $stmt = $pdo->prepare("UPDATE users SET password = ?, reset_token = NULL, token_expire = NULL WHERE email = ?");
+    $stmt->execute([$new_password_hashed, $email]);
 
-    // Update password in your users table
-    $update = $pdo->prepare("UPDATE users SET password = ? WHERE email = ?");
-    $update->execute([$hashedPassword, $email]);
-
-    // Delete the reset token
-    $pdo->prepare("DELETE FROM password_resets WHERE email = ?")->execute([$email]);
-
-    echo "Password updated successfully. You can now <a href='login.php'>login</a>.";
+    echo "Password updated successfully. <a href='login.php'>Login here</a>";
 }
+?>

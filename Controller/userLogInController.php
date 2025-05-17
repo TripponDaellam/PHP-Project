@@ -19,15 +19,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } else {
             $_SESSION['login_error'] = "Invalid username or password";
-            header("Location: login.php");
+            header("Location: ../User/Login.php");
             exit;
         }
     } catch (PDOException $e) {
         $_SESSION['login_error'] = "Database error: " . $e->getMessage();
-        header("Location: login.php");
+        header("Location: ../User/Login.php");
         exit;
     }
 } else {
-    header("Location: login.php");
+    header("Location: ../User/Login.php");
     exit;
 }

@@ -1,23 +1,23 @@
 <?php
-require '../DBConnection/DBConnector.php'; // Your DB connection
+require '../DBConnection/DBConnector.php';
 session_start();
 
-// Get token and email from URL
 $token = $_GET['token'] ?? '';
-$email = $_GET['email'] ?? '';
+$token_hash = hash('sha256', $token);
 
-// Check if token and email are valid
-$stmt = $pdo->prepare("SELECT * FROM password_resets WHERE email = ? AND token = ? AND expires_at > NOW()");
-$stmt->execute([$email, $token]);
+// Check if token is valid and not expired
+$stmt = $pdo->prepare("SELECT * FROM users WHERE reset_token = ? AND token_expire > NOW()");
+$stmt->execute([$token_hash]);
 $user = $stmt->fetch();
 
 if (!$user) {
     echo "Invalid or expired token.";
     exit();
 }
+
+$email = $user['email']; // get email to use in form
 ?>
 
-<!-- HTML Password Reset Form -->
 <!DOCTYPE html>
 <html>
 <head>
