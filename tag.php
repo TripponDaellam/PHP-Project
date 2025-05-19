@@ -45,7 +45,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <?php include 'Partials/nav.php'; ?>
 
-    <aside class="fixed top-20 left-0 h-[calc(100%-10rem)] w-[180px] bg-white z-10 hidden md:block shadow">
+    <aside class="fixed top-20 left-0 h-full w-[200px] bg-white z-10 hidden md:block shadow">
         <?php include 'Partials/left_nav.php'; ?>
     </aside>
 

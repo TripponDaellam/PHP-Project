@@ -14,7 +14,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
 </head>
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
     <?php include 'Partials/nav.php'; ?>
-   <aside class="fixed top-20 left-0 h-[calc(100%-5rem)] w-[200px] bg-white z-10 hidden md:block shadow">
+   <aside class="fixed top-20 left-0 h-full w-[200px] bg-white z-10 hidden md:block shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
