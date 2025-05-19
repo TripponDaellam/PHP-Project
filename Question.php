@@ -13,9 +13,8 @@ $isLoggedIn = isset($_SESSION['user_id']);
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
-  <?php include 'Partials/nav.php'; ?>
-  
-  <aside class="fixed top-20 left-0 h-[calc(100%-10rem)] w-[180px] bg-white z-10 hidden md:block shadow">
+    <?php include 'Partials/nav.php'; ?>
+   <aside class="fixed top-20 left-0 h-[calc(100%-5rem)] w-[200px] bg-white z-10 hidden md:block shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
