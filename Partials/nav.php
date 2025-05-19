@@ -8,7 +8,7 @@
 </head>
 <body class="bg-white text-black">
 
-  <nav x-data="{ open: false }" class="fixed bg-white top-0 left-0 w-full shadow px-6 py-3">
+  <nav x-data="{ open: false }" class="fixed bg-white top-0 left-0 w-full shadow px-6 py-3 z-50">
     <div class="flex items-center justify-between">
 
       <div class="flex items-center space-x-3">
@@ -55,15 +55,16 @@
   <?php endif; ?>
 </div>
       <div class="md:hidden">
-        <button @click="open = !open" class="text-gray-700 focus:outline-none">
+        <button @click="open = !open" class="text-gray-700 focus:outline-none ">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
             <path x-show="!open" d="M4 6h16M4 12h16M4 18h16" />
             <path x-show="open" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          </svg
         </button>
       </div>
-    </div><div x-show="open" x-transition class="mt-3 md:hidden space-y-3">
+    </div>
+  <div x-show="open" x-transition class="mt-3 md:hidden space-y-3">
   <input
     type="text"
     placeholder="Search..."
