@@ -28,7 +28,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   <script src="https://unpkg.com/alpinejs" defer></script>
 </head>
 
-<body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
+<body class="flex flex-col min-h-screen bg-gray-50 text-black pt-[60px] overflow-x-hidden">
 
   <?php include 'Partials/nav.php'; ?>
 
