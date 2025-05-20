@@ -35,42 +35,43 @@ $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tags</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-50">
 
     <?php include 'Partials/nav.php'; ?>
 
-    <aside class="fixed top-20 left-0 h-full w-[200px] bg-white z-10 hidden md:block shadow">
+    <aside class="fixed top-[60px] left-0 h-[calc(100%-8rem)] w-[200px] bg-white z-10 hidden md:block shadow">
         <?php include 'Partials/left_nav.php'; ?>
     </aside>
 
     <main class="pb-20 flex-1 w-screen-full mx-auto px-4 py-6 md:ml-60 lg:mr-10">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl mt-12 font-bold text-orange-600">Tags</h1>
-     <select class="bg-orange-500 mt-12 text-white px-4 py-2 rounded">
-    <option>Popular</option>
-    <option>Newest</option>
-</select>
+            <select class="bg-orange-500 mt-12 text-white px-4 py-2 rounded">
+                <option>Popular</option>
+                <option>Newest</option>
+            </select>
 
-        </div>       
+        </div>
         <div class="mb-6">
             <form method="GET" action="tag.php" class="flex items-center space-x-2">
-                <input 
-                    type="text" 
-                    name="search" 
-                    placeholder="Search by tags" 
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search by tags"
                     value="<?= htmlspecialchars($search) ?>"
-                    class="px-4 py-2 border border-gray-300 rounded w-72 focus:outline-none focus:ring-2 focus:ring-orange-400"
-                >
+                    class="px-4 py-2 border border-gray-300 rounded w-72 focus:outline-none focus:ring-2 focus:ring-orange-400">
                 <button type="submit" class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600">
-                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                   <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                   </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
                 </button>
             </form>
         </div>
@@ -104,4 +105,5 @@ $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </main>
 
 </body>
+
 </html>
