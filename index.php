@@ -3,7 +3,7 @@ session_start();
 $isLoggedIn = isset($_SESSION['user_id']);
 $username = $isLoggedIn ? $_SESSION['username'] : '';
 
-require_once 'DBConnection/DBConnector.php'; 
+require_once 'DBConnection/DBConnector.php';
 require_once 'DBConnection/DBLocal.php';
 
 $query = "SELECT id, title, description, tags, created_at FROM questions ORDER BY created_at DESC LIMIT 10";
@@ -14,11 +14,12 @@ $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $commentStmt = $localPdo->query("SELECT * FROM comments ORDER BY created_at DESC");
 $allComments = [];
 while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
-    $allComments[$c['question_id']][] = $c;
+  $allComments[$c['question_id']][] = $c;
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Method Flow - Home</title>
@@ -26,11 +27,12 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs" defer></script>
 </head>
+
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
 
   <?php include 'Partials/nav.php'; ?>
 
-  <aside class="fixed top-20 left-0 h-[calc(100%-10rem)] w-[200px] bg-white z-10 hidden md:block shadow">
+  <aside class="fixed top-[60px] left-0 h-[calc(100%-8rem)] w-[200px] bg-white z-10 hidden md:block shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
@@ -38,7 +40,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
     <div class="space-y-4">
       <h3 class="font-semibold text-gray-800">Popular Tags</h3>
       <div class="flex flex-wrap gap-2">
-        <?php 
+        <?php
         $tagStmt = $pdo->query("SELECT tags FROM questions");
         $allTags = [];
         while ($row = $tagStmt->fetch(PDO::FETCH_ASSOC)) {
@@ -61,7 +63,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
     </div>
   </aside> -->
 
-  <main class="flex-1 min-w-[700px] max-w-screen-full mx-auto px-4 py-6 md:ml-60 lg:mr-10">
+  <main class="flex-1 min-w-[700px] max-w-screen-full px-0 py-0 md:ml-60 lg:mr-4 lg:ml-[220px]">
     <?php if ($isLoggedIn): ?>
       <div class="mb-6">
         <h2 class="text-2xl font-bold text-gray-800">Welcome back, <?= htmlspecialchars($username) ?>!</h2>
@@ -69,9 +71,9 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
       </div>
     <?php endif; ?>
 
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex justify-between items-center mb-4">
       <h1 class="text-3xl font-bold">Recent Questions</h1>
-      <a href="ask.php" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Ask a Question</a>
+      <a href="ask.php" class="bg-orange-500 text-white px-3 py-2 rounded hover:bg-orange-600 text-sm">Ask a Question</a>
     </div>
 
     <div class="space-y-6">
@@ -102,9 +104,9 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
             <?php if (isset($allComments[$q['id']])): ?>
               <div class="mt-4 border-t pt-3">
                 <h3 class="text-sm font-semibold text-gray-700 mb-2">Answers:</h3>
-                <?php 
-                  $commentsToShow = array_slice($allComments[$q['id']], 0, 2); 
-                  foreach ($commentsToShow as $comment): 
+                <?php
+                $commentsToShow = array_slice($allComments[$q['id']], 0, 2);
+                foreach ($commentsToShow as $comment):
                 ?>
                   <div class="mb-2 bg-gray-100 p-2 rounded text-sm">
                     <?= htmlspecialchars($comment['comment'] ?? 'No comment provided.') ?>
@@ -125,4 +127,5 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
     <?php include 'Partials/footer.php'; ?>
   </div>
 </body>
+
 </html>

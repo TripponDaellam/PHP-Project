@@ -6,15 +6,17 @@ $isLoggedIn = isset($_SESSION['user_id']);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Questions</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
-    <?php include 'Partials/nav.php'; ?>
-   <aside class="fixed top-20 left-0 h-[calc(100%-5rem)] w-[200px] bg-white z-10 hidden md:block shadow">
+  <?php include 'Partials/nav.php'; ?>
+  <aside class="fixed top-[60px] left-0 h-[calc(100%-8rem)] w-[200px] bg-white z-10 hidden md:block shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
@@ -40,8 +42,8 @@ $isLoggedIn = isset($_SESSION['user_id']);
       <!-- Filter Button -->
       <button onclick="toggleFilter()" class="ml-auto px-3 py-1 border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-</svg>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+        </svg>
 
       </button>
     </div>
@@ -144,4 +146,5 @@ $isLoggedIn = isset($_SESSION['user_id']);
     }
   </script>
 </body>
+
 </html>
