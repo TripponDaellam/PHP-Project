@@ -44,7 +44,7 @@
       </div>
 
 
-      <a href="">
+      <a href="../User/profile.php">
         <div class="hidden md:flex items-center space-x-4 hover:text-orange-500">
           <?php if (isset($_SESSION['user_id'])): ?>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

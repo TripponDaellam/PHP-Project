@@ -20,7 +20,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
   <?php include 'Partials/left_nav.php'; ?>
 </aside>
 
-  <main class="flex-1 min-w-[700px] max-w-screen-full px-0 py-0 md:ml-60 lg:mr-4 lg:ml-[220px]">
+  <main class="flex-1 min-w-[500px] max-w-screen-full px-0 py-0 md:ml-50 lg:mr-4 lg:ml-[200px]">
     <div class="flex flex-wrap gap-2 items-center relative text-sm">
       <button class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Newest</button>
       <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Active</button>
