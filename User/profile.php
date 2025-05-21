@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: Login.php");
+    exit();}
+
 require_once '../DBConnection/DBConnector.php';
 
 if (!isset($_SESSION['user_id'])) {
@@ -28,7 +32,7 @@ $user = $stmt->fetch();
 <body class="bg-gray-50 text-black min-h-screen pt-20 overflow-x-hidden">
 
   <?php include '../Partials/nav.php'; ?>
-  <aside class="fixed top-20 left-0 h-full w-[200px] bg-white z-10 hidden md:block shadow">
+  <aside class="fixed top-[60px] left-0 h-full w-[200px] bg-white z-10 hidden md:block shadow">
     <?php include '../Partials/left_nav.php'; ?>
   </aside>
 
@@ -60,13 +64,18 @@ $user = $stmt->fetch();
       <h2 class="text-xl font-semibold text-gray-800"><?= htmlspecialchars($user['username']) ?></h2>
 
       <!-- Tabs -->
-      <div class="flex space-x-5 mt-4 border-b w-full justify-center">
-        <button class="tab-button text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('info')">Profile Info</button>
-        <button class="tab-button text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('about')">About Me</button>
-        <button class="tab-button text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('links')">Links</button>
-        <button class="tab-button text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('edit')">Edit Profile</button>
-         <button class="tab-button text-gray-600 py-2 px-2 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('setting')">Setting</button>
-      </div>
+     <div class="overflow-x-auto">
+  <div class="flex flex-nowrap md:flex-wrap justify-start md:justify-center space-x-4 mt-4 border-b w-full px-4">
+    <button class="tab-button whitespace-nowrap text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('info')">Profile Info</button>
+    <button class="tab-button whitespace-nowrap text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('post')">Post</button>
+    <button class="tab-button whitespace-nowrap text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('save')">Save</button>
+    <button class="tab-button whitespace-nowrap text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('about')">About Me</button>
+    <button class="tab-button whitespace-nowrap text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('links')">Links</button>
+    <button class="tab-button whitespace-nowrap text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('edit')">Edit Profile</button>
+    <button class="tab-button whitespace-nowrap text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('setting')">Setting</button>
+  </div>
+</div>
+
     </section>
 
     <!-- Tabs Content -->

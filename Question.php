@@ -16,9 +16,9 @@ $isLoggedIn = isset($_SESSION['user_id']);
 
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
   <?php include 'Partials/nav.php'; ?>
-  <aside class="fixed top-[60px] left-0 h-[calc(100%-8rem)] w-[200px] bg-white z-10 hidden md:block shadow">
-    <?php include 'Partials/left_nav.php'; ?>
-  </aside>
+  <aside class="hidden lg:block fixed top-[60px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
+  <?php include 'Partials/left_nav.php'; ?>
+</aside>
 
   <main class="flex-1 w-screen-full mx-auto px-4 py-6 md:ml-60 lg:mr-10">
     <div class="flex flex-wrap gap-2 mt-2 items-center relative">
@@ -122,10 +122,6 @@ $isLoggedIn = isset($_SESSION['user_id']);
     </div>
   </main>
 
-  <div class="z-10">
-    <?php include 'Partials/footer.php'; ?>
-  </div>
-
   <!-- Script for toggling -->
   <script>
     function toggleFilter() {
@@ -145,6 +141,9 @@ $isLoggedIn = isset($_SESSION['user_id']);
       });
     }
   </script>
+   <div class="mt-auto z-10">
+    <?php include 'Partials/footer.php'; ?>
+  </div>
 </body>
 
 </html>
