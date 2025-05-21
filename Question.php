@@ -20,13 +20,11 @@ $isLoggedIn = isset($_SESSION['user_id']);
   <?php include 'Partials/left_nav.php'; ?>
 </aside>
 
-  <main class="flex-1 w-screen-full mx-auto px-4 py-6 md:ml-60 lg:mr-10">
-    <div class="flex flex-wrap gap-2 mt-2 items-center relative">
+  <main class="flex-1 min-w-[700px] max-w-screen-full px-0 py-0 md:ml-60 lg:mr-4 lg:ml-[220px]">
+    <div class="flex flex-wrap gap-2 items-center relative text-sm">
       <button class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Newest</button>
       <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Active</button>
-      <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">
-        Bountied
-      </button>
+      <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Bountied</button>
       <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Unanswered</button>
 
       <!-- More Dropdown -->
@@ -40,7 +38,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
       </div>
 
       <!-- Filter Button -->
-      <button onclick="toggleFilter()" class="ml-auto px-3 py-1 border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
+      <button onclick="toggleFilter()" class="ml-auto px-2 py-0 border border-blue-500 text-blue-500 rounded hover:bg-blue-50">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
         </svg>
@@ -92,7 +90,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
     </div>
 
     <!-- Question List -->
-    <div class="mt-6 space-y-4">
+    <div class="mt-4 space-y-4">
       <?php
       $questions = [
         ['id' => 1, 'title' => 'How to solve quadratic equations?', 'slug' => 'how-to-solve-quadratic-equations', 'tags' => ['math', 'algebra'], 'views' => 3, 'votes' => 0, 'answers' => 0],

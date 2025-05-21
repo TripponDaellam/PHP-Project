@@ -43,7 +43,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-50">
+<body class="flex flex-col min-h-screen bg-gray-50 text-black pt-[60px] overflow-x-hidden">
 
     <?php include 'Partials/nav.php'; ?>
 
@@ -51,15 +51,15 @@ $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php include 'Partials/left_nav.php'; ?>
     </aside>
 
-    <main class="pb-20 flex-1 w-screen-full mx-auto px-4 py-6 md:ml-60 lg:mr-10">
+    <main class="flex-1 min-w-[700px] max-w-screen-full px-0 py-0 md:ml-60 lg:mr-4 lg:ml-[220px]">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl mt-12 font-bold text-orange-600">Tags</h1>
-            <select class="bg-orange-500 mt-12 text-white px-4 py-2 rounded">
+            <h1 class="text-3xl font-bold text-orange-600">Tags</h1>
+            <select class="bg-orange-500 text-white px-5 py-2 rounded text-sm">
                 <option>Popular</option>
                 <option>Newest</option>
             </select>
-
         </div>
+
         <div class="mb-6">
             <form method="GET" action="tag.php" class="flex items-center space-x-2">
                 <input
@@ -103,6 +103,10 @@ $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <a href="#" class="px-3 py-1 hover:bg-orange-100 rounded">68</a>
         </div>
     </main>
+
+    <div class="mt-auto z-10">
+    <?php include 'Partials/footer.php'; ?>
+  </div>
 
 </body>
 
