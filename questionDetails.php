@@ -3,52 +3,59 @@ session_start();
 $isLoggedIn = isset($_SESSION['user_id']);
 $username = $isLoggedIn ? $_SESSION['username'] : '';
 
-require_once 'DBConnection/DBConnector.php';
-require_once 'DBConnection/DBLocal.php';
+require_once 'DBConnection/DBConnector.php'; // Remote DB (questions, users)
+require_once 'DBConnection/DBLocal.php';     // Local DB (comments)
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-  echo "Invalid question ID.";
-  exit;
+    echo "Invalid question ID.";
+    exit;
 }
 
 $question_id = intval($_GET['id']);
 
-// Fetch question with user info
-$stmt = $pdo->prepare("SELECT q.*, u.username, u.profile_image FROM questions q JOIN users u ON q.user_id = u.id WHERE q.id = :id");
+// Fetch question + user info
+$stmt = $pdo->prepare("
+    SELECT q.*, u.username, u.profile_image, q.upvotes, q.downvotes
+    FROM questions q
+    JOIN users u ON q.user_id = u.id
+    WHERE q.id = :id
+");
 $stmt->execute(['id' => $question_id]);
 $question = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$question) {
-  echo "Question not found.";
-  exit;
+    echo "Question not found.";
+    exit;
 }
 
-// Fetch comments with commenter info
-// Fetch comments with commenter info
-// Fetch comments with user info
+// Fetch comments from local DB
 $commentStmt = $localPdo->prepare("SELECT * FROM comments WHERE question_id = :qid ORDER BY created_at DESC");
 $commentStmt->execute(['qid' => $question_id]);
 $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
-$userIds = array_unique(array_column($comments, 'user_id'));
-$inClause = implode(',', array_fill(0, count($userIds), '?'));
-$userStmt = $pdo->prepare("SELECT id, username, profile_image FROM users WHERE id IN ($inClause)");
-$userStmt->execute($userIds);
-$users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Index users by ID
+// Collect user IDs from comments to fetch their info
 $userMap = [];
-foreach ($users as $user) {
-    $userMap[$user['id']] = $user;
-}
-foreach ($comments as &$comment) {
-    $userId = $comment['user_id'];
-    $comment['username'] = $userMap[$userId]['username'] ?? 'Unknown';
-    $comment['profile_image'] = $userMap[$userId]['profile_image'] ?? null;
-}
-unset($comment); // good practice
+if (!empty($comments)) {
+    $userIds = array_unique(array_column($comments, 'user_id'));
+    $placeholders = implode(',', array_fill(0, count($userIds), '?'));
 
+    $userStmt = $pdo->prepare("SELECT id, username, profile_image FROM users WHERE id IN ($placeholders)");
+    $userStmt->execute($userIds);
+    $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
 
+    foreach ($users as $user) {
+        $userMap[$user['id']] = $user;
+    }
+
+    foreach ($comments as &$comment) {
+        $userId = $comment['user_id'];
+        $comment['username'] = $userMap[$userId]['username'] ?? 'Unknown';
+        $comment['profile_image'] = $userMap[$userId]['profile_image'] ?? null;
+    }
+    unset($comment); // Clean ref
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
