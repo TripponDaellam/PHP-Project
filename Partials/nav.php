@@ -1,3 +1,18 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once __DIR__ . '/../DBConnection/DBConnector.php';
+$userId = $_SESSION['user_id'] ?? null;
+$profileImage = '';
+
+if ($userId) {
+    $stmt = $pdo->prepare("SELECT profile_image FROM users WHERE id = :id");
+    $stmt->execute(['id' => $userId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $profileImage = $result['profile_image'] ?? '';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,18 +59,31 @@
       </div>
 
 
-      <a href="../User/profile.php">
-        <div class="hidden md:flex items-center space-x-4 hover:text-orange-500">
-          <?php if (isset($_SESSION['user_id'])): ?>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-            </svg>
-      </a>
-
+<?php if (isset($_SESSION['user_id'])): ?>
+<a href="../User/profile.php">
+  <div class="hidden md:flex items-center space-x-4 hover:text-orange-500">
+    <?php if (empty($profileImage)): ?>
+      <!-- Show icon if no profile image -->
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+           stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 
+              7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 
+              0-5.216-.584-7.499-1.632Z"/>
+      </svg>
     <?php else: ?>
-      <a href="User/Login.php" class="text-orange-600 text-sm hover:underline">Login</a>
-      <a href="User/SignUp.php" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 text-sm h-7 flex items-center">Sign Up</a>
+      <!-- Show profile image -->
+      <img src="<?php echo htmlspecialchars($profileImage); ?>" 
+           alt="Profile" 
+           class="w-8 h-8 rounded-full border-2 border-orange-500">
     <?php endif; ?>
+  </div>
+</a>
+
+<?php else: ?>
+  <a href="User/Login.php" class="text-orange-600 text-sm hover:underline">Login</a>
+  <a href="User/SignUp.php" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 text-sm h-7 flex items-center">Sign Up</a>
+<?php endif; ?>
     </div>
     <div class="md:hidden">
       <button @click="open = !open" class="text-gray-700 focus:outline-none ">

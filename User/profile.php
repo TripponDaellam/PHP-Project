@@ -41,7 +41,7 @@ $user = $stmt->fetch();
     <!-- Profile Header -->
     <section class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center gap-4">
       <!-- Avatar Upload -->
-      <form id="avatarForm" action="../Controller/updateProfile.php" method="POST" enctype="multipart/form-data">
+      <form id="avatarForm" action="../Controller/uploadPhoto.php" method="POST" enctype="multipart/form-data">
         <input type="file" id="profileInput" name="profile_image" accept="image/*" class="hidden" onchange="document.getElementById('avatarForm').submit();">
         <div class="cursor-pointer" onclick="document.getElementById('profileInput').click();">
           <?php if (!empty($user['profile_image'])): ?>
