@@ -109,21 +109,22 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
               </a>
 
 
-<?php
-if (!function_exists('word_limiter')) {
-    function word_limiter($text, $limit = 20) {
-        $words = explode(' ', strip_tags($text));
-        if (count($words) > $limit) {
-            return implode(' ', array_slice($words, 0, $limit)) . '...';
-        }
-        return $text;
-    }
-}
-?>
+              <?php
+              if (!function_exists('word_limiter')) {
+                function word_limiter($text, $limit = 20)
+                {
+                  $words = explode(' ', strip_tags($text));
+                  if (count($words) > $limit) {
+                    return implode(' ', array_slice($words, 0, $limit)) . '...';
+                  }
+                  return $text;
+                }
+              }
+              ?>
 
 
               <p class="text-gray-700 mt-2">
-               <?= htmlspecialchars(word_limiter($q['description'], 20)); ?>
+                <?= htmlspecialchars(word_limiter($q['description'], 20)); ?>
               </p>
               <!-- Meta -->
               <p class="text-xs text-gray-500 mt-4">
@@ -132,22 +133,22 @@ if (!function_exists('word_limiter')) {
               </p>
 
               <!-- Voting -->
-            <div class="flex items-center gap-4 mt-2">
-  <form method="POST" action="../Controller/voteController.php">
-    <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
-    <input type="hidden" name="vote_type" value="up">
-    <button type="submit" class="text-orange-600 hover:text-orange-800">▲</button>
-  </form>
-  <span class="text-sm font-semibold text-gray-700">
-    <?= (int)$q['upvotes'] ?>
-  </span>
-  <form method="POST" action="../Controller/voteController.php">
-    <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
-    <input type="hidden" name="vote_type" value="down">
-    <button type="submit" class="text-gray-600 hover:text-gray-800">▼ </button>
-      <?= (int)$q['downvotes'] ?>
-  </form>
-</div>
+              <div class="flex items-center gap-4 mt-2">
+                <form method="POST" action="../Controller/voteController.php">
+                  <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
+                  <input type="hidden" name="vote_type" value="up">
+                  <button type="submit" class="text-orange-600 hover:text-orange-800">▲</button>
+                </form>
+                <span class="text-sm font-semibold text-gray-700">
+                  <?= (int)$q['upvotes'] ?>
+                </span>
+                <form method="POST" action="../Controller/voteController.php">
+                  <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
+                  <input type="hidden" name="vote_type" value="down">
+                  <button type="submit" class="text-gray-600 hover:text-gray-800">▼ </button>
+                  <?= (int)$q['downvotes'] ?>
+                </form>
+              </div>
               <!-- Comments -->
               <?php if (isset($allComments[$q['id']])): ?>
                 <div class="mt-4 border-t pt-3">
@@ -203,28 +204,30 @@ if (!function_exists('word_limiter')) {
     <?php include 'Partials/footer.php'; ?>
   </footer>
   <script>
-  document.querySelectorAll('.upvote, .downvote').forEach(button => {
-    button.addEventListener('click', function () {
-      const container = this.closest('[data-question-id]');
-      const questionId = container.getAttribute('data-question-id');
-      const voteType = this.classList.contains('upvote') ? 'up' : 'down';
+    document.querySelectorAll('.upvote, .downvote').forEach(button => {
+      button.addEventListener('click', function() {
+        const container = this.closest('[data-question-id]');
+        const questionId = container.getAttribute('data-question-id');
+        const voteType = this.classList.contains('upvote') ? 'up' : 'down';
 
-      fetch('Controller/voteController.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `question_id=${questionId}&vote_type=${voteType}`
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          container.querySelector('.vote-score').textContent = data.score;
-        } else {
-          alert(data.error);
-        }
+        fetch('Controller/voteController.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `question_id=${questionId}&vote_type=${voteType}`
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              container.querySelector('.vote-score').textContent = data.score;
+            } else {
+              alert(data.error);
+            }
+          });
       });
     });
-  });
-</script>
+  </script>
 
 </body>
 
