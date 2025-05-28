@@ -119,7 +119,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
               </p>
 
               <!-- Tags -->
-              <div class="absolute top-30 p-2">
+              <div class="mt-1">
                 <?php foreach (explode(',', $q['tags']) as $tag): ?>
                   <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded mr-1"><?= htmlspecialchars(trim($tag)); ?></span>
                 <?php endforeach; ?>
