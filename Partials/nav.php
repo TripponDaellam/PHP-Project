@@ -2,7 +2,9 @@
 if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
+
 require_once __DIR__ . '/../DBConnection/DBConnector.php';
+
 $userId = $_SESSION['user_id'] ?? null;
 $profileImage = '';
 
@@ -13,6 +15,7 @@ if ($userId) {
   $profileImage = $result['profile_image'] ?? '';
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

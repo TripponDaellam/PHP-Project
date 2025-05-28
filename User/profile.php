@@ -205,7 +205,6 @@ $user = $stmt->fetch();
       </div>
 
   </main>
-
   <!-- Tabs Script -->
   <script>
     function showTab(tabId) {

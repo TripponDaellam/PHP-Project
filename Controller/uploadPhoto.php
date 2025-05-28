@@ -12,7 +12,7 @@ if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPL
     
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     if(!in_array($_FILES['profile_image']['type'], $allowedTypes)) {
-        echo "Invalid file type.";
+        
         exit;
     }
     if($_FILES['profile_image']['size'] > 5 * 1024 * 1024) { // 5MB limit
