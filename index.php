@@ -7,10 +7,10 @@ require_once 'DBConnection/DBConnector.php';
 require_once 'DBConnection/DBLocal.php';
 
 // Fetch questions with usernames
-$query = "SELECT q.id, q.title, q.description, q.tags, q.created_at, u.username 
+$query = "SELECT q.id, q.title, q.description, q.tags, q.created_at, q.upvotes, q.downvotes, u.username 
           FROM questions q 
           JOIN users u ON q.user_id = u.id 
-          ORDER BY q.created_at DESC LIMIT 10";
+          ORDER BY q.created_at DESC";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -116,19 +116,22 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
               </p>
 
               <!-- Voting -->
-              <div class="flex items-center gap-3 mt-2">
-                <form method="POST" action="vote.php">
-                  <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
-                  <input type="hidden" name="vote_type" value="up">
-                  <button type="submit" class="text-orange-600 hover:text-orange-800">▲ Up</button>
-                </form>
-                <form method="POST" action="vote.php">
-                  <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
-                  <input type="hidden" name="vote_type" value="down">
-                  <button type="submit" class="text-gray-600 hover:text-gray-800">▼ Down</button>
-                </form>
-              </div>
-
+            <div class="flex items-center gap-4 mt-2">
+  <form method="POST" action="../Controller/voteController.php">
+    <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
+    <input type="hidden" name="vote_type" value="up">
+    <button type="submit" class="text-orange-600 hover:text-orange-800">▲</button>
+  </form>
+  <span class="text-sm font-semibold text-gray-700">
+    <?= (int)$q['upvotes'] ?>
+  </span>
+  <form method="POST" action="../Controller/voteController.php">
+    <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
+    <input type="hidden" name="vote_type" value="down">
+    <button type="submit" class="text-gray-600 hover:text-gray-800">▼ </button>
+      <?= (int)$q['downvotes'] ?>
+  </form>
+</div>
               <!-- Comments -->
               <?php if (isset($allComments[$q['id']])): ?>
                 <div class="mt-4 border-t pt-3">
@@ -183,6 +186,30 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   <footer class="mt-10">
     <?php include 'Partials/footer.php'; ?>
   </footer>
+  <script>
+  document.querySelectorAll('.upvote, .downvote').forEach(button => {
+    button.addEventListener('click', function () {
+      const container = this.closest('[data-question-id]');
+      const questionId = container.getAttribute('data-question-id');
+      const voteType = this.classList.contains('upvote') ? 'up' : 'down';
+
+      fetch('Controller/voteController.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `question_id=${questionId}&vote_type=${voteType}`
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          container.querySelector('.vote-score').textContent = data.score;
+        } else {
+          alert(data.error);
+        }
+      });
+    });
+  });
+</script>
+
 </body>
 
 </html>
