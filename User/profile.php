@@ -41,25 +41,26 @@ $user = $stmt->fetch();
     <!-- Profile Header -->
     <section class="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center gap-4">
       <!-- Avatar Upload -->
-      <form id="avatarForm" action="../Controller/uploadPhoto.php" method="POST" enctype="multipart/form-data">
-        <input type="file" id="profileInput" name="profile_image" accept="image/*" class="hidden" onchange="document.getElementById('avatarForm').submit();">
-        <div class="cursor-pointer" onclick="document.getElementById('profileInput').click();">
-          <?php if (!empty($user['profile_image'])): ?>
-            <img src="../uploads/<?= htmlspecialchars($user['profile_image']) ?>"
-                 alt="Profile" class="w-28 h-28 rounded-full object-cover border-4 border-yellow-400 shadow" />
-          <?php else: ?>
-            <div class="w-28 h-28 rounded-full bg-yellow-400 flex items-center justify-center border-4 border-white shadow">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                   stroke-width="1.5" stroke="white" class="w-14 h-14">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 
-                         0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 
-                         9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
-              </svg>
-            </div>
-          <?php endif; ?>
-        </div>
-      </form>
+    <form id="avatarForm" action="../Controller/uploadPhoto.php" method="POST" enctype="multipart/form-data">
+  <input type="file" id="profileInput" name="profile_image" accept="image/*" class="hidden">
+  <div class="cursor-pointer" onclick="document.getElementById('profileInput').click();">
+    <?php if (!empty($user['profile_image'])): ?>
+      <img src="../uploads/<?= htmlspecialchars($user['profile_image']) ?>"
+           alt="Profile" class="w-28 h-28 rounded-full object-cover border-4 border-yellow-400 shadow" />
+    <?php else: ?>
+      <div class="w-28 h-28 rounded-full bg-yellow-400 flex items-center justify-center border-4 border-white shadow">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke-width="1.5" stroke="white" class="w-14 h-14">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 
+                   0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 
+                   9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+        </svg>
+      </div>
+    <?php endif; ?>
+  </div>
+</form>
+
 
       <h2 class="text-xl font-semibold text-gray-800"><?= htmlspecialchars($user['username']) ?></h2>
 
@@ -163,7 +164,6 @@ $user = $stmt->fetch();
     </div>
 
   </main>
-
   <!-- Tabs Script -->
   <script>
     function showTab(tabId) {
@@ -197,6 +197,16 @@ $user = $stmt->fetch();
       window.location.href = "../Controller/logout.php";
     }
   }
+document.getElementById('profileInput').addEventListener('change', function () {
+    if (this.files.length > 0) {
+        const confirmUpload = confirm("Are you sure you want to upload this photo?");
+        if (confirmUpload) {
+            document.getElementById('avatarForm').submit();
+        } else {
+            this.value = ''; 
+        }
+    }
+});
   </script>
 </body>
 </html>

@@ -106,7 +106,18 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
 </a>
 
               <!-- Description -->
-              <p class="text-gray-700 mt-2"><?= htmlspecialchars($q['description']); ?></p>
+<?php
+if (!function_exists('word_limiter')) {
+    function word_limiter($text, $limit = 20) {
+        $words = explode(' ', strip_tags($text));
+        if (count($words) > $limit) {
+            return implode(' ', array_slice($words, 0, $limit)) . '...';
+        }
+        return $text;
+    }
+}
+?>
+              <p class="text-gray-700 mt-2"><?= htmlspecialchars(word_limiter($q['description'],20)); ?></p>
 
               <!-- Asked by + Date -->
               <p class="text-xs text-gray-500 mt-4">
