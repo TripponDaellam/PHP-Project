@@ -138,9 +138,22 @@ $user = $stmt->fetch();
       <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">Theme</h3>
       <p class="text-sm text-gray-500 dark:text-gray-400">Toggle between Light and Dark mode</p>
     </div>
+    <!-- Light Mode / Dark Mode -->
     <label class="relative inline-flex items-center cursor-pointer">
       <input type="checkbox" value="" id="theme-toggle" class="sr-only peer">
-      <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+      <div class="w-14 h-8 bg-gray-300 rounded-full peer-focus:outline-none dark:bg-gray-700 peer-checked:bg-yellow-400 transition-colors duration-300 relative">
+      </div> 
+    <!-- Sun Icon -->
+      <svg class="absolute left-1 top-1 w-6 h-6 text-yellow-500 transition-opacity 
+    duration-300 peer-checked:opacity-0" xmlns="http://www.w3.org/2000/svg" fill="none" 
+    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+      </svg>
+
+      <!-- Moon Icon -->
+      <svg class="absolute right-1 top-1 w-6 h-6 text-gray-100 opacity-0 peer-checked:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M17.293 13.293a8 8 0 01-10.586-10.586A8 8 0 1017.293 13.293z"/>
+      </svg>
     </label>
   </div>
  <!-- Logout -->
