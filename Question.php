@@ -16,11 +16,11 @@ $isLoggedIn = isset($_SESSION['user_id']);
 
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
   <?php include 'Partials/nav.php'; ?>
-  <aside class="hidden lg:block fixed top-[60px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
-  <?php include 'Partials/left_nav.php'; ?>
-</aside>
+  <aside class="hidden lg:block fixed top-[65px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
+    <?php include 'Partials/left_nav.php'; ?>
+  </aside>
 
-  <main class="flex-1 min-w-[500px] max-w-screen-full px-0 py-0 md:ml-50 lg:mr-4 lg:ml-[200px]">
+  <main class="flex-1 min-w-[500px] max-w-screen-full md:ml-50 lg:mr-10 lg:ml-[250px]">
     <div class="flex flex-wrap gap-2 items-center relative text-sm">
       <button class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Newest</button>
       <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Active</button>
@@ -139,7 +139,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
       });
     }
   </script>
-   <div class="mt-auto z-10">
+  <div class="mt-auto z-10">
     <?php include 'Partials/footer.php'; ?>
   </div>
 </body>
