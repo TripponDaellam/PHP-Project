@@ -107,8 +107,24 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
               <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-xl font-semibold text-orange-600 hover:underline block mt-6">
                 <?= htmlspecialchars($q['title']); ?>
               </a>
-              <p class="text-gray-700 mt-2 text-sm"><?= htmlspecialchars($q['description']); ?></p>
 
+
+<?php
+if (!function_exists('word_limiter')) {
+    function word_limiter($text, $limit = 20) {
+        $words = explode(' ', strip_tags($text));
+        if (count($words) > $limit) {
+            return implode(' ', array_slice($words, 0, $limit)) . '...';
+        }
+        return $text;
+    }
+}
+?>
+
+
+              <p class="text-gray-700 mt-2">
+               <?= htmlspecialchars(word_limiter($q['description'], 20)); ?>
+              </p>
               <!-- Meta -->
               <p class="text-xs text-gray-500 mt-4">
                 Asked by <span class="font-semibold text-orange-700"><?= htmlspecialchars($q['username']) ?></span>
