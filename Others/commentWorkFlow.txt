@@ -1,0 +1,25 @@
+| Layer          | Strategy                                    |
+| -------------- | ------------------------------------------- |
+| Database       | Adjacency list with parent\_id              |
+| Querying       | Recursive CTE or iterative fetch            |
+| In-Memory Tree | Rebuilt in backend or frontend              |
+| Performance    | Caching, lazy loading, denormalized trees   |
+| Moderation     | Flags, shadow bans, auto-moderation systems 
+
+
+| Step | What to Do                                        | Why                     |
+| ---- | ------------------------------------------------- | ----------------------- |
+| 1    | Add `parent_id` to your `comments` table          | Enables threading       |
+| 2    | Save `parent_id` when users reply                 | Links replies to parent |
+| 3    | Fetch comments, then rebuild the hierarchy in PHP | For display             |
+| 4    | Use Tailwind to visually indent replies           | UI/UX clarity           |
+| 5    | Optimize performance and UX as needed             | Scalability             |
+
+
+posts      users
+  ↑          ↑
+  |          |
+  |       +--------+
+  |       | comments |
+  +------→|          |
+          +----------+

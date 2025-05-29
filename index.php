@@ -16,7 +16,7 @@ $stmt->execute();
 $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch comments from local DB
-$commentStmt = $localPdo->query("SELECT * FROM comments ORDER BY created_at DESC");
+$commentStmt = $pdo->query("SELECT * FROM comments ORDER BY created_at DESC");
 $allComments = [];
 while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   $allComments[$c['question_id']][] = $c;
@@ -41,7 +41,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   <div class="flex flex-col lg:flex-row min-h-screen">
 
     <!-- Left Sidebar -->
-    <aside class="hidden lg:block fixed top-[65px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
+    <aside class="hidden lg:block fixed top-[90px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
       <?php include 'Partials/left_nav.php'; ?>
     </aside>
 
@@ -154,7 +154,7 @@ if (!function_exists('word_limiter')) {
                   <h3 class="text-sm font-semibold text-gray-700 mb-2">Answers:</h3>
                   <?php foreach (array_slice($allComments[$q['id']], 0, 2) as $comment): ?>
                     <div class="mb-2 bg-gray-100 p-2 rounded text-sm">
-                      <?= htmlspecialchars($comment['comment']) ?>
+                      <?= htmlspecialchars($comment['content']) ?>
                       <div class="text-xs text-gray-500 mt-1">Posted on <?= date('F j, Y H:i', strtotime($comment['created_at'])) ?></div>
                     </div>
                   <?php endforeach; ?>

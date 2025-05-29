@@ -29,7 +29,7 @@ if (!$question) {
 }
 
 // Fetch comments from local DB
-$commentStmt = $localPdo->prepare("SELECT * FROM comments WHERE question_id = :qid ORDER BY created_at DESC");
+$commentStmt = $pdo->prepare("SELECT * FROM comments WHERE question_id = :qid ORDER BY created_at DESC");
 $commentStmt->execute(['qid' => $question_id]);
 $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -120,7 +120,7 @@ if (!empty($comments)) {
             <div>
               <div class="text-sm font-medium"><?= htmlspecialchars($comment['username']) ?></div>
               <div class="text-xs text-gray-500 mb-1">Posted on <?= date('F j, Y H:i', strtotime($comment['created_at'])) ?></div>
-              <div class="bg-gray-100 p-2 rounded text-sm"><?= htmlspecialchars($comment['comment']) ?></div>
+              <div class="bg-gray-100 p-2 rounded text-sm"><?= htmlspecialchars($comment['content']) ?></div>
             </div>
           </div>
         <?php endforeach; ?>

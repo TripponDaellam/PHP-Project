@@ -6,10 +6,11 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once '../DBConnection/DBLocal.php';
+require_once '../DBConnection/DBConnector.php';
 
 $userId = $_SESSION['user_id'];
 $questionId = isset($_POST['question_id']) ? (int)$_POST['question_id'] : null;
+$parentId = isset($_POST['parent_id']) ? (int)$_POST['parent_id'] : null; // <-- new line
 $content = trim($_POST['comment'] ?? '');
 
 if (!$questionId || $content === '') {
@@ -18,8 +19,11 @@ if (!$questionId || $content === '') {
 }
 
 try {
-    $stmt = $localPdo->prepare("INSERT INTO comments (question_id, user_id, comment, created_at) VALUES (?, ?, ?, NOW())");
-    $stmt->execute([$questionId, $userId, $content]);
+    $stmt = $pdo->prepare("
+        INSERT INTO comments (question_id, user_id, content, parent_id, created_at)
+        VALUES (?, ?, ?, ?, NOW())
+    ");
+    $stmt->execute([$questionId, $userId, $content, $parentId]); // <-- added $parentId
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
     exit();
