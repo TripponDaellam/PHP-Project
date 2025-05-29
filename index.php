@@ -67,13 +67,6 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
         <?php if (!empty($questions)): ?>
           <?php foreach ($questions as $q): ?>
             <div class="relative bg-white shadow p-4 rounded">
-              <!-- Tags -->
-              <div class="absolute top-0 left-2 p-2">
-                <?php foreach (explode(',', $q['tags']) as $tag): ?>
-                  <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded mr-1"><?= htmlspecialchars(trim($tag)); ?></span>
-                <?php endforeach; ?>
-              </div>
-
               <!-- Options -->
               <div class="absolute top-2 right-4 flex flex-wrap gap-1 max-w-[50%] justify-end">
                 <button onclick="toggleDropdown(this)" class="p-1 rounded hover:bg-gray-200">
@@ -88,7 +81,6 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
                   <a href="#" class="block px-4 py-2 hover:bg-gray-100">Save</a>
                   <a href="#" class="block px-4 py-2 hover:bg-gray-100">Report</a>
                 </div>
-
               </div>
 
               <script>
@@ -109,22 +101,30 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
               </a>
 
 
-<?php
-if (!function_exists('word_limiter')) {
-    function word_limiter($text, $limit = 20) {
-        $words = explode(' ', strip_tags($text));
-        if (count($words) > $limit) {
-            return implode(' ', array_slice($words, 0, $limit)) . '...';
-        }
-        return $text;
-    }
-}
-?>
-
+              <?php
+              if (!function_exists('word_limiter')) {
+                function word_limiter($text, $limit = 20)
+                {
+                  $words = explode(' ', strip_tags($text));
+                  if (count($words) > $limit) {
+                    return implode(' ', array_slice($words, 0, $limit)) . '...';
+                  }
+                  return $text;
+                }
+              }
+              ?>
 
               <p class="text-gray-700 mt-2">
-               <?= htmlspecialchars(word_limiter($q['description'], 20)); ?>
+                <?= htmlspecialchars(word_limiter($q['description'], 20)); ?>
               </p>
+
+              <!-- Tags -->
+              <div class="mt-1">
+                <?php foreach (explode(',', $q['tags']) as $tag): ?>
+                  <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded mr-1"><?= htmlspecialchars(trim($tag)); ?></span>
+                <?php endforeach; ?>
+              </div>
+
               <!-- Meta -->
               <p class="text-xs text-gray-500 mt-4">
                 Asked by <span class="font-semibold text-orange-700"><?= htmlspecialchars($q['username']) ?></span>
@@ -132,22 +132,22 @@ if (!function_exists('word_limiter')) {
               </p>
 
               <!-- Voting -->
-            <div class="flex items-center gap-4 mt-2">
-  <form method="POST" action="../Controller/voteController.php">
-    <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
-    <input type="hidden" name="vote_type" value="up">
-    <button type="submit" class="text-orange-600 hover:text-orange-800">▲</button>
-  </form>
-  <span class="text-sm font-semibold text-gray-700">
-    <?= (int)$q['upvotes'] ?>
-  </span>
-  <form method="POST" action="../Controller/voteController.php">
-    <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
-    <input type="hidden" name="vote_type" value="down">
-    <button type="submit" class="text-gray-600 hover:text-gray-800">▼ </button>
-      <?= (int)$q['downvotes'] ?>
-  </form>
-</div>
+              <div class="flex items-center gap-4 mt-2">
+                <form method="POST" action="../Controller/voteController.php">
+                  <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
+                  <input type="hidden" name="vote_type" value="up">
+                  <button type="submit" class="text-orange-600 hover:text-orange-800">▲</button>
+                </form>
+                <span class="text-sm font-semibold text-gray-700">
+                  <?= (int)$q['upvotes'] ?>
+                </span>
+                <form method="POST" action="../Controller/voteController.php">
+                  <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
+                  <input type="hidden" name="vote_type" value="down">
+                  <button type="submit" class="text-gray-600 hover:text-gray-800">▼ </button>
+                  <?= (int)$q['downvotes'] ?>
+                </form>
+              </div>
               <!-- Comments -->
               <?php if (isset($allComments[$q['id']])): ?>
                 <div class="mt-4 border-t pt-3">
@@ -203,28 +203,30 @@ if (!function_exists('word_limiter')) {
     <?php include 'Partials/footer.php'; ?>
   </footer>
   <script>
-  document.querySelectorAll('.upvote, .downvote').forEach(button => {
-    button.addEventListener('click', function () {
-      const container = this.closest('[data-question-id]');
-      const questionId = container.getAttribute('data-question-id');
-      const voteType = this.classList.contains('upvote') ? 'up' : 'down';
+    document.querySelectorAll('.upvote, .downvote').forEach(button => {
+      button.addEventListener('click', function() {
+        const container = this.closest('[data-question-id]');
+        const questionId = container.getAttribute('data-question-id');
+        const voteType = this.classList.contains('upvote') ? 'up' : 'down';
 
-      fetch('Controller/voteController.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `question_id=${questionId}&vote_type=${voteType}`
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          container.querySelector('.vote-score').textContent = data.score;
-        } else {
-          alert(data.error);
-        }
+        fetch('Controller/voteController.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `question_id=${questionId}&vote_type=${voteType}`
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              container.querySelector('.vote-score').textContent = data.score;
+            } else {
+              alert(data.error);
+            }
+          });
       });
     });
-  });
-</script>
+  </script>
 
 </body>
 
