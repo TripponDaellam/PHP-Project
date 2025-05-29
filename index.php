@@ -7,7 +7,7 @@ require_once 'DBConnection/DBConnector.php';
 require_once 'DBConnection/DBLocal.php';
 
 // Fetch questions with usernames
-$query = "SELECT q.id, q.title, q.description, q.tags, q.created_at, q.upvotes, q.downvotes, u.username 
+$query = "SELECT q.id, q.title, q.description, q.tags, q.created_at, q.upvotes, q.downvotes, u.username, u.profile_image
           FROM questions q 
           JOIN users u ON q.user_id = u.id 
           ORDER BY q.created_at DESC";
@@ -16,7 +16,7 @@ $stmt->execute();
 $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch comments from local DB
-$commentStmt = $pdo->query("SELECT * FROM comments ORDER BY created_at DESC");
+$commentStmt = $pdo->query("SELECT * FROM comments WHERE parent_id IS NULL ORDER BY created_at DESC");
 $allComments = [];
 while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   $allComments[$c['question_id']][] = $c;
