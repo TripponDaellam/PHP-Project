@@ -65,18 +65,51 @@ if ($userId) {
         <a href="#" class="bg-orange-500 text-white px-4 py-1.5 rounded hover:bg-orange-600 text-sm">Ask</a>
 
         <!-- Notifications Icon -->
-        <a href="/notifications" class="text-gray-700 hover:text-orange-500">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 
-           2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 
-           2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 
-           2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 
-           5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 
-           1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" />
-          </svg>
-        </a>
+        <!-- Include Alpine.js if not already included -->
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+        <!-- Notification Bell with Dropdown -->
+        <div class="relative" x-data="{ open: false }">
+          <!-- Notification Icon -->
+          <a @click="open = !open" class="cursor-pointer text-gray-700 hover:text-orange-500">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 
+             2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 
+             2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 
+             2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 
+             5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 
+             1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" />
+            </svg>
+          </a>
+
+          <!-- Dropdown Notification Box -->
+          <div
+            x-show="open"
+            @click.outside="open = false"
+            x-transition
+            class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+            <div class="p-4 border-b font-semibold text-gray-800">
+              Notifications
+            </div>
+            <ul class="max-h-60 overflow-y-auto">
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700">
+                🔔 New comment on your post
+              </li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700">
+                📦 Your order has been shipped
+              </li>
+              <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700">
+                ✅ Your profile was updated
+              </li>
+            </ul>
+            <div class="text-center p-2 border-t">
+              <a href="/notifications" class="text-sm text-orange-500 hover:underline">View all</a>
+            </div>
+          </div>
+        </div>
+
 
         <!-- Settings Icon -->
         <a href="#" class="text-gray-700 hover:text-orange-500">
