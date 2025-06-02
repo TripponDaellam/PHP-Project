@@ -6,14 +6,14 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once '../DBConnection/DBConnector.php';
+require_once '../DBConnection/DBConnector.php'; // remote DB for questions/users/comments
 
 $userId = $_SESSION['user_id'];
 $questionId = isset($_POST['question_id']) ? (int)$_POST['question_id'] : null;
-$parentId = isset($_POST['parent_id']) ? (int)$_POST['parent_id'] : null; // <-- new line
-$content = trim($_POST['comment'] ?? '');
+$parentId = isset($_POST['parent_comment_id']) ? (int)$_POST['parent_comment_id'] : null;
+$content = trim($_POST['reply_content'] ?? '');
 
-if (!$questionId || $content === '') {
+if (!$questionId || !$parentId || $content === '') {
     header("Location: ../questionDetails.php?id=" . ($questionId ?: ''));
     exit();
 }
@@ -23,7 +23,7 @@ try {
         INSERT INTO comments (question_id, user_id, content, parent_id, created_at)
         VALUES (?, ?, ?, ?, NOW())
     ");
-    $stmt->execute([$questionId, $userId, $content, $parentId]); // <-- added $parentId
+    $stmt->execute([$questionId, $userId, $content, $parentId]);
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
     exit();
