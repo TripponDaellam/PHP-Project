@@ -16,7 +16,14 @@ $stmt->execute();
 $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch comments from local DB
-$commentStmt = $pdo->query("SELECT * FROM comments WHERE parent_id IS NULL ORDER BY created_at DESC");
+$commentStmt = $pdo->query("
+  SELECT c.*, u.username, u.profile_image 
+  FROM comments c
+  JOIN users u ON c.user_id = u.id
+  WHERE c.parent_id IS NULL
+  ORDER BY c.created_at DESC
+");
+
 $allComments = [];
 while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   $allComments[$c['question_id']][] = $c;
@@ -149,17 +156,25 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
                 </form>
               </div>
               <!-- Comments -->
-              <?php if (isset($allComments[$q['id']])): ?>
-                <div class="mt-4 border-t pt-3">
-                  <h3 class="text-sm font-semibold text-gray-700 mb-2">Answers:</h3>
-                  <?php foreach (array_slice($allComments[$q['id']], 0, 2) as $comment): ?>
-                    <div class="mb-2 bg-gray-100 p-2 rounded text-sm">
-                      <?= htmlspecialchars($comment['content']) ?>
-                      <div class="text-xs text-gray-500 mt-1">Posted on <?= date('F j, Y H:i', strtotime($comment['created_at'])) ?></div>
-                    </div>
-                  <?php endforeach; ?>
-                </div>
-              <?php endif; ?>
+             <?php if (isset($allComments[$q['id']])): ?>
+  <div class="mt-4 border-t pt-3">
+    <h3 class="text-sm font-semibold text-gray-700 mb-2">Answers:</h3>
+    <?php foreach (array_slice($allComments[$q['id']], 0, 2) as $comment): ?>
+      <div class="mb-2 bg-gray-100 p-2 rounded text-sm flex items-start">
+        <img src="<?= $comment['profile_image'] ? htmlspecialchars($comment['profile_image']) : 'assets/default-user.png' ?>"
+             class="w-8 h-8 rounded-full mr-3" alt="User">
+        <div>
+          <div class="font-medium text-xs mb-1"><?= htmlspecialchars($comment['username']) ?></div>
+          <div><?= htmlspecialchars($comment['content']) ?></div>
+          <div class="text-xs text-gray-500 mt-1">
+            Posted on <?= date('F j, Y H:i', strtotime($comment['created_at'])) ?>
+          </div>
+        </div>
+      </div>
+    <?php endforeach; ?>
+  </div>
+<?php endif; ?>
+
             </div>
           <?php endforeach; ?>
         <?php else: ?>

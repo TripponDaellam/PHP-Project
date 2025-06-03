@@ -1,6 +1,14 @@
 <?php
 session_start();
 $isLoggedIn = isset($_SESSION['user_id']);
+require_once 'DBConnection/DBConnector.php'; // Remote DB (questions, users)
+try {
+  $stmt = $pdo->query("SELECT id, title, description, tags, created_at, upvotes FROM questions ORDER BY created_at DESC");
+  $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+  echo "<div class='text-red-500'>Error fetching questions: " . $e->getMessage() . "</div>";
+  $questions = [];
+}
 ?>
 
 
@@ -16,7 +24,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
 
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
   <?php include 'Partials/nav.php'; ?>
-  <aside class="hidden lg:block fixed top-[65px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
+  <aside class="hidden lg:block fixed top-[90px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
@@ -90,34 +98,40 @@ $isLoggedIn = isset($_SESSION['user_id']);
     </div>
 
     <!-- Question List -->
-    <div class="mt-4 space-y-4">
-      <?php
-      $questions = [
-        ['id' => 1, 'title' => 'How to solve quadratic equations?', 'slug' => 'how-to-solve-quadratic-equations', 'tags' => ['math', 'algebra'], 'views' => 3, 'votes' => 0, 'answers' => 0],
-        ['id' => 2, 'title' => 'Customize Navigation Title in SwiftUI', 'slug' => 'customize-navigation-title-swiftui', 'tags' => ['swiftui'], 'views' => 3, 'votes' => 0, 'answers' => 0],
-      ];
-      foreach ($questions as $q): ?>
-        <div class="bg-white shadow p-4 rounded flex flex-col sm:flex-row gap-4">
-          <div class="flex sm:flex-col text-sm text-center w-full sm:w-16 text-gray-500">
-            <div class="sm:mb-2"><strong><?php echo $q['votes']; ?></strong><br class="hidden sm:block">votes</div>
-            <div class="sm:mb-2"><strong><?php echo $q['answers']; ?></strong><br class="hidden sm:block">answers</div>
-            <div><strong><?php echo $q['views']; ?></strong><br class="hidden sm:block">views</div>
-          </div>
-          <div class="flex-1">
-            <a href="/question/<?php echo $q['id'] . '-' . $q['slug']; ?>" class="text-lg font-semibold text-orange-600 hover:underline">
-              <?php echo htmlspecialchars($q['title']); ?>
-            </a>
-            <p class="text-sm text-gray-600 mt-1">Short description preview goes here...</p>
-            <div class="mt-2 flex flex-wrap gap-2">
-              <?php foreach ($q['tags'] as $tag): ?>
-                <span class="inline-block bg-orange-100 text-orange-700 text-sm px-2 py-1 rounded"><?php echo $tag; ?></span>
-              <?php endforeach; ?>
-            </div>
-            <div class="text-xs text-gray-400 text-right mt-2">asked 2 mins ago</div>
-          </div>
+   <div class="mt-4 space-y-4">
+  <?php foreach ($questions as $q): 
+    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $q['title'])));
+    $tags = array_filter(array_map('trim', explode(',', $q['tags'])));
+  ?>
+    <div class="bg-white shadow p-4 rounded flex flex-col sm:flex-row gap-4">
+      <div class="flex sm:flex-col text-sm text-center w-full sm:w-16 text-gray-500">
+      <div class="sm:mb-2">
+    <strong><?php echo (int)$q['upvotes']; ?></strong>
+    <br class="hidden sm:block">votes
+  </div>
+        <div class="sm:mb-2"><strong>0</strong><br class="hidden sm:block">answers</div>
+        <div><strong>0</strong><br class="hidden sm:block">views</div>
+      </div>
+      <div class="flex-1">
+          <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline">
+          <?php echo htmlspecialchars($q['title']); ?>
+        </a>
+        <p class="text-sm text-gray-600 mt-1">
+          <?php echo htmlspecialchars(substr($q['description'], 0, 100)) . '...'; ?>
+        </p>
+        <div class="mt-2 flex flex-wrap gap-2">
+          <?php foreach ($tags as $tag): ?>
+            <span class="inline-block bg-orange-100 text-orange-700 text-sm px-2 py-1 rounded"><?php echo htmlspecialchars($tag); ?></span>
+          <?php endforeach; ?>
         </div>
-      <?php endforeach; ?>
+        <div class="text-xs text-gray-400 text-right mt-2">
+          asked <?php echo date("M j, Y g:i a", strtotime($q['created_at'])); ?>
+        </div>
+      </div>
     </div>
+  <?php endforeach; ?>
+</div>
+
   </main>
 
   <!-- Script for toggling -->
