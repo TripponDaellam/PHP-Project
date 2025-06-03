@@ -49,11 +49,12 @@ foreach ($allComments as $comment) {
 // Fetch all related users (same logic you already have)
 $userMap = [];
 if (!empty($allComments)) {
-  $userIds = array_values(array_unique(array_column($comments, 'user_id'))); // ✅ Reindex array
-$placeholders = implode(',', array_fill(0, count($userIds), '?'));
+  $userIds = array_column($allComments, 'user_id');
+  $userIds = array_values(array_unique($userIds));
+  $placeholders = implode(',', array_fill(0, count($userIds), '?'));
 
-$userStmt = $pdo->prepare("SELECT id, username, profile_image FROM users WHERE id IN ($placeholders)");
-$userStmt->execute($userIds); // ✅ Now it matches the placeholders
+  $userStmt = $pdo->prepare("SELECT id, username, profile_image FROM users WHERE id IN ($placeholders)");
+  $userStmt->execute($userIds);
 
   $users = $userStmt->fetchAll(PDO::FETCH_ASSOC);
   foreach ($users as $user) {
@@ -77,7 +78,7 @@ foreach ($comments as &$comment) {
     }
   }
 }
-unset($comment); // Avoid reference issues
+unset($comment);
 ?>
 
 
@@ -92,7 +93,7 @@ unset($comment); // Avoid reference issues
 
 <body class="bg-gray-50 pt-20">
   <?php include 'Partials/nav.php'; ?>
-  <aside class="hidden lg:block fixed top-[60px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
+  <aside class="hidden lg:block fixed top-[90px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
@@ -151,9 +152,9 @@ unset($comment); // Avoid reference issues
         <form method="POST" action="../Controller/addReply.php" class="mt-2 hidden" id="reply-form-<?= $comment['id'] ?>">
 
         <input type="hidden" name="question_id" value="<?= $question_id ?>">
-  <input type="hidden" name="parent_comment_id" value="<?= $comment['id'] ?>">
-  <textarea name="reply_content" rows="2" class="w-full p-2 border rounded text-sm mb-1" placeholder="Write a reply..."></textarea>
-  <button type="submit" class="bg-orange-500 text-white text-xs px-3 py-1 rounded hover:bg-orange-600">Submit</button>
+        <input type="hidden" name="parent_comment_id" value="<?= $comment['id'] ?>">
+        <textarea name="reply_content" rows="2" class="w-full p-2 border rounded text-sm mb-1" placeholder="Write a reply..."></textarea>
+        <button type="submit" class="bg-orange-500 text-white text-xs px-3 py-1 rounded hover:bg-orange-600">Submit</button>
 </form>
 
 

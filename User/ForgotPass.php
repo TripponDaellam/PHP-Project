@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $expiry = date("Y-m-d H:i:s", time() + 60 * 30);
 
     // Save token to DB
-    $sql = "UPDATE users SET reset_token = ?, token_expire = ? WHERE email = ?";
+    $sql = "UPDATE users SET reset_token = ?, token_expire = ? WHERE email = ?"; 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$token_hash, $expiry, $email]);
 
