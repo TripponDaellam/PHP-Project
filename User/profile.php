@@ -160,7 +160,7 @@ $user = $stmt->fetch();
       </form>
     </div>
     <div id="setting" class="tab-content bg-white shadow rounded-xl p-6">
-  
+
       <!-- Theme Toggle -->
       <div class="flex items-center justify-between p-4 border rounded bg-white dark:bg-gray-800">
         <div>
