@@ -16,6 +16,16 @@ $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
+
+$savedStmt = $pdo->prepare("
+    SELECT q.id, q.title, q.description, q.created_at
+    FROM savedQuestions s
+    JOIN questions q ON s.question_id = q.id
+    WHERE s.user_id = ?
+    ORDER BY s.created_at DESC
+");
+$savedStmt->execute([$user_id]);
+$savedQuestions = $savedStmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -83,7 +93,6 @@ $user = $stmt->fetch();
           <button class="tab-button whitespace-nowrap text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('setting')">Setting</button>
         </div>
       </div>
-
     </section>
 
     <!-- Tabs Content -->
@@ -113,7 +122,49 @@ $user = $stmt->fetch();
       </div>
       <a href="change_password.php" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change Password</a>
     </div>
+    
+    <div id="post" class="tab-content bg-white shadow rounded-xl p-6">
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Posts</h3>
+      <p class="text-gray-700 text-sm">This section will display your posts.</p>
+      <!-- Placeholder for posts -->
+      <div class="mt-4">
+        <p class="text-gray-500">No posts available yet.</p>
+      </div>
+    </div>
 
+  <?php
+if (!function_exists('word_limiter')) {
+  function word_limiter($text, $limit = 20)
+  {
+    $words = explode(' ', strip_tags($text));
+    if (count($words) > $limit) {
+      return implode(' ', array_slice($words, 0, $limit)) . '...';
+    }
+    return $text;
+  }
+}
+?>
+
+<div id="save" class="tab-content bg-white shadow rounded-xl p-6">
+  <h3 class="text-xl font-semibold text-gray-800 mb-4">Saved Items</h3>
+
+  <?php if (count($savedQuestions) > 0): ?>
+    <div class="space-y-4">
+      <?php foreach ($savedQuestions as $question): ?>
+        <div class="border border-gray-200 rounded-lg p-4 shadow-sm">
+          <h4 class="text-lg font-medium text-orange-600"><?= htmlspecialchars($question['title']) ?></h4>
+          <p class="text-gray-700 mt-1"><?= htmlspecialchars(word_limiter($question['description'], 20)) ?></p>
+          <p class="text-gray-400 text-xs mt-2">Saved on <?= date('F j, Y', strtotime($question['created_at'])) ?></p>
+          <a href="../questionDetails.php?id=<?= $question['id'] ?>" class="text-sm text-indigo-500 hover:underline mt-2 inline-block">View Question</a>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  <?php else: ?>
+    <p class="text-gray-500">No saved items available yet.</p>
+  <?php endif; ?>
+</div>
+
+    
     <div id="about" class="tab-content bg-white shadow rounded-xl p-6">
       <h3 class="text-xl font-semibold text-gray-800 mb-4">About Me</h3>
       <p class="text-gray-700 text-sm leading-relaxed">
