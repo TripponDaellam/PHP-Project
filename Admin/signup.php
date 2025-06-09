@@ -28,7 +28,7 @@
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
         <input type="password" name="confirm_password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400" required>
-      </div>
+      </div>    
 
       <button type="submit" class="bg-orange-500 text-white w-full py-2 rounded hover:bg-orange-600 transition duration-200">
         Sign Up

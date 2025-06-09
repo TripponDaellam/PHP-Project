@@ -19,7 +19,7 @@ if (!isset($_SESSION['user_id'])) {
   <?php include 'Partials/nav.php'; ?>
 
   <!-- Left Sidebar for large screens -->
-  <aside class="hidden lg:block fixed top-[60px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
+  <aside class="hidden lg:block fixed top-[90px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
