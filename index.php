@@ -85,8 +85,8 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
                   </svg>
                 </button>
                 <div class="dropdown absolute right-0 top-full mt-2 hidden bg-white shadow rounded text-sm z-50 w-36 md:w-32">
-                  <a href="#" class="block px-4 py-2 hover:bg-gray-100">Save</a>
-                  <a href="#" class="block px-4 py-2 hover:bg-gray-100">Report</a>
+                 <a href="../Actions/save.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Save</a>
+                 <a href="../Actions/report.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Report</a>
                 </div>
               </div>
 

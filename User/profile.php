@@ -16,6 +16,16 @@ $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
 $user = $stmt->fetch();
+
+$savedStmt = $pdo->prepare("
+    SELECT q.id, q.title, q.description, q.created_at
+    FROM savedQuestions s
+    JOIN questions q ON s.question_id = q.id
+    WHERE s.user_id = ?
+    ORDER BY s.created_at DESC
+");
+$savedStmt->execute([$user_id]);
+$savedQuestions = $savedStmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
