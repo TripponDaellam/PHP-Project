@@ -40,20 +40,20 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   <script src="https://unpkg.com/alpinejs" defer></script>
 </head>
 
-<body class="bg-gray-50 text-black pt-16">
+<body class="bg-gray-100 text-black pt-16">
 
   <!-- Top Nav -->
   <?php include 'Partials/nav.php'; ?>
 
-  <div class="flex flex-col lg:flex-row min-h-screen">
+  <div class="flex flex-col lg:flex-row min-h-screen bg-gray-100">
 
     <!-- Left Sidebar -->
-    <aside class="hidden lg:block fixed top-[90px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
+    <aside class="hidden lg:block fixed top-0 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
       <?php include 'Partials/left_nav.php'; ?>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full md:ml-5 lg:ml-[230px] lg:mr-10 p-4 overflow-x-auto">
+    <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full ml-[220px] lg:mr-10 p-4 overflow-x-auto">
       <?php if ($isLoggedIn): ?>
         <div class="mb-6">
           <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Welcome back, <?= htmlspecialchars($username) ?>!</h2>
@@ -64,16 +64,16 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2 flex-wrap">
         <h1 class="text-2xl sm:text-3xl font-bold">Recent Questions</h1>
         <?php if ($isLoggedIn): ?>
-          <a href="ask.php" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 text-sm sm:text-base">Ask a Question</a>
+          <a href="ask.php" class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 text-sm">Ask a Question</a>
         <?php else: ?>
-          <a href="../User/Login.php" class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 text-sm sm:text-base">Login to Ask</a>
+          <a href="../User/Login.php" class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 text-sm">Login to Ask</a>
         <?php endif; ?>
       </div>
 
       <div class="space-y-6">
         <?php if (!empty($questions)): ?>
           <?php foreach ($questions as $q): ?>
-            <div class="relative bg-white shadow p-4 rounded">
+            <div class="relative bg-white shadow px-8 pt-4 pb-8 rounded-sm">
               <!-- Options -->
               <div class="absolute top-2 right-4 flex flex-wrap gap-1 max-w-[50%] justify-end">
                 <button onclick="toggleDropdown(this)" class="p-1 rounded hover:bg-gray-200">
@@ -103,7 +103,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
               </script>
 
               <!-- Title & Description -->
-              <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-xl font-semibold text-orange-600 hover:underline block mt-6">
+              <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-xl font-semibold text-orange-600 hover:underline block">
                 <?= htmlspecialchars($q['title']); ?>
               </a>
 
@@ -121,8 +121,8 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
               }
               ?>
 
-              <p class="text-gray-700 mt-2">
-                <?= htmlspecialchars(word_limiter($q['description'], 20)); ?>
+              <p class="text-gray-700 mt-2 text-sm">
+                <?= htmlspecialchars(word_limiter($q['description'], 55)); ?>
               </p>
 
               <!-- Tags -->
@@ -155,25 +155,26 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
                   <?= (int)$q['downvotes'] ?>
                 </form>
               </div>
+
               <!-- Comments -->
-             <?php if (isset($allComments[$q['id']])): ?>
-  <div class="mt-4 border-t pt-3">
-    <h3 class="text-sm font-semibold text-gray-700 mb-2">Answers:</h3>
-    <?php foreach (array_slice($allComments[$q['id']], 0, 2) as $comment): ?>
-      <div class="mb-2 bg-gray-100 p-2 rounded text-sm flex items-start">
-        <img src="<?= $comment['profile_image'] ? htmlspecialchars($comment['profile_image']) : 'assets/default-user.png' ?>"
-             class="w-8 h-8 rounded-full mr-3" alt="User">
-        <div>
-          <div class="font-medium text-xs mb-1"><?= htmlspecialchars($comment['username']) ?></div>
-          <div><?= htmlspecialchars($comment['content']) ?></div>
-          <div class="text-xs text-gray-500 mt-1">
-            Posted on <?= date('F j, Y H:i', strtotime($comment['created_at'])) ?>
-          </div>
-        </div>
-      </div>
-    <?php endforeach; ?>
-  </div>
-<?php endif; ?>
+              <?php if (isset($allComments[$q['id']])): ?>
+                <div class="mt-4 border-t pt-3">
+                  <h3 class="text-sm font-semibold text-gray-700 mb-2">Answers:</h3>
+                  <?php foreach (array_slice($allComments[$q['id']], 0, 2) as $comment): ?>
+                    <div class="mb-2 bg-gray-100 p-2 rounded text-sm flex items-start">
+                      <img src="<?= $comment['profile_image'] ? htmlspecialchars($comment['profile_image']) : 'assets/default-user.png' ?>"
+                        class="w-8 h-8 rounded-full mr-3" alt="User">
+                      <div>
+                        <div class="font-medium text-xs mb-1"><?= htmlspecialchars($comment['username']) ?></div>
+                        <div><?= htmlspecialchars($comment['content']) ?></div>
+                        <div class="text-xs text-gray-500 mt-1">
+                          Posted on <?= date('F j, Y H:i', strtotime($comment['created_at'])) ?>
+                        </div>
+                      </div>
+                    </div>
+                  <?php endforeach; ?>
+                </div>
+              <?php endif; ?>
 
             </div>
           <?php endforeach; ?>
@@ -184,7 +185,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
     </main>
 
     <!-- Right Sidebar -->
-    <aside class="w-full md:w-1/3 lg:w-72 px-4 py-6 bg-gray-100 rounded shadow mt-10 lg:mt-[75px] lg:mr-6 h-fit sticky top-24 hidden lg:block">
+    <aside class="w-full md:w-1/3 lg:w-72 px-4 py-6 bg-white rounded shadow mt-10 lg:mt-[75px] lg:mr-6 h-fit sticky top-24 hidden lg:block">
       <h3 class="text-xl font-bold text-gray-900 mb-4">Your Tags</h3>
       <div class="flex flex-wrap gap-2">
         <?php
@@ -201,7 +202,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
         arsort($allTags);
         foreach (array_slice($allTags, 0, 12) as $tag => $count): ?>
           <a href="/tag/<?= urlencode($tag) ?>"
-            class="inline-flex items-center gap-1 bg-orange-600 text-white text-xs px-3 py-1 rounded-full shadow hover:bg-orange-700">
+            class="inline-flex items-center gap-1 bg-gray-100 text-black text-xs px-3 py-1 rounded-full shadow">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
               stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />

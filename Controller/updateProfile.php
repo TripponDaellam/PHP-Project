@@ -10,9 +10,13 @@ if (!$userId) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name  = $_POST['name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
+    $name  = trim($_POST['name']);
+    $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
+    $phone = trim($_POST['phone']);
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        die("Invalid email format.");
+    }
 
     try {
         $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?");
@@ -21,7 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: ../User/profile.php?success=1");
         exit;
     } catch (PDOException $e) {
-        echo "Update Error: " . $e->getMessage();
+        error_log("Update Error: " . $e->getMessage());
+        header("Location: ../User/profile.php?error=1");
+        exit;
     }
 }
 ?>

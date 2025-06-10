@@ -47,11 +47,11 @@ $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <?php include 'Partials/nav.php'; ?>
 
-    <aside class="hidden lg:block fixed top-[90px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
+    <aside class="hidden lg:block fixed top-0 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
         <?php include 'Partials/left_nav.php'; ?>
     </aside>
 
-    <main class="flex-1 min-w-[500px] max-w-screen-full md:ml-50 lg:mr-10 lg:ml-[250px]">
+    <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full ml-[220px] lg:mr-10 p-4 overflow-x-auto">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Tags</h1>
             <!-- <select class="bg-orange-500 text-white px-5 py-2 rounded text-sm">

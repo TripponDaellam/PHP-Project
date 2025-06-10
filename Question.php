@@ -24,11 +24,11 @@ try {
 
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
   <?php include 'Partials/nav.php'; ?>
-  <aside class="hidden lg:block fixed top-[90px] left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
+  <aside class="hidden lg:block fixed top-0 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
-  <main class="flex-1 min-w-[500px] max-w-screen-full md:ml-50 lg:mr-10 lg:ml-[250px]">
+  <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full ml-[220px] lg:mr-10 p-4 overflow-x-auto">
     <div class="flex flex-wrap gap-2 items-center relative text-sm">
       <button class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Newest</button>
       <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Active</button>
@@ -117,7 +117,7 @@ try {
           <?php echo htmlspecialchars($q['title']); ?>
         </a>
         <p class="text-sm text-gray-600 mt-1">
-          <?php echo htmlspecialchars(substr($q['description'], 0, 100)) . '...'; ?>
+          <?php echo htmlspecialchars(substr($q['description'], 0, 150)) . '...'; ?>
         </p>
         <div class="mt-2 flex flex-wrap gap-2">
           <?php foreach ($tags as $tag): ?>

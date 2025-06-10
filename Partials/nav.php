@@ -21,36 +21,40 @@ if ($userId) {
 
 <head>
   <meta charset="UTF-8">
-  <title>Responsive Stack Overflow Navbar</title>
+  <title>Stack Overflow Navbar</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/alpinejs" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body class="bg-white text-black">
 
-  <nav x-data="{ open: false }" class="fixed bg-white top-0 left-0 w-full shadow px-6 py-4 z-50">
+  <nav x-data="{ open: false }" class="fixed bg-white top-0 left-0 w-full px-6 py-2 z-50 h-14 shadow">
     <div class="flex items-center justify-between">
 
       <!-- Logo -->
       <div class="flex items-center space-x-3">
-        <img src="" alt="Logo" class="w-8 h-8">
-        <span class="text-lg font-semibold">Method Flow</span>
+        <!-- <img src="" alt="Logo" class="w-8 h-8"> -->
+        <span class="text-2xl font-semibold pl-10 font-poppins">Method Flow</span>
+
+        <!-- Desktop Menu -->
+        <!-- <div class="flex items-center space-x-3 pl-10 pt-1">
+          <a href="../index.php" class="text-dark-600 text-md px-2">Home</a>
+          <a href="../Question.php" class="text-dark-600 text-md px-2">Questions</a>
+          <a href="../tag.php" class="text-dark-600 text-md px-2">Tags</a>
+          <a href="#" class="text-dark-600 text-md px-2">Saved</a>
+          <a href="#" class="text-dark-600 text-md px-2">Community</a>
+          <a href="#" class="text-dark-600 text-md px-2">About</a>
+        </div> -->
+
       </div>
 
-      <!-- Desktop Menu -->
-      <!-- <div class="hidden md:flex items-center space-x-3">
-        <a href="../index.php" class="text-orange-600 text-sm px-2">Home</a>
-        <a href="../Question.php" class="text-orange-600 text-sm px-2">Questions</a>
-        <a href="../tag.php" class="text-orange-600 text-sm px-2">Tags</a>
-        <a href="#" class="text-orange-600 text-sm px-2">Saved</a>
-        <a href="#" class="text-orange-600 text-sm px-2">Community</a>
-        <a href="#" class="text-orange-600 text-sm px-2">About</a>
-      </div> -->
 
       <!-- Right Side (Ask, Icons, Auth Buttons) -->
       <div class="hidden md:flex items-center space-x-6">
+
         <!-- Search Bar (Desktop) -->
-        <div class="relative hidden md:block">
+        <!-- <div class="relative hidden md:block">
           <input
             type="text"
             placeholder="Search..."
@@ -61,12 +65,20 @@ if ($userId) {
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1 0 6.5 6.5a7.5 7.5 0 0 0 10.6 10.6Z" />
           </svg>
-        </div>
-        <a href="#" class="bg-orange-500 text-white px-4 py-1.5 rounded hover:bg-orange-600 text-sm">Ask</a>
+        </div> -->
 
-        <!-- Notifications Icon -->
-        <!-- Include Alpine.js if not already included -->
+        <!-- Ask Button -->
+        <a href="#" class="text-white px-5 py-1 rounded-md bg-orange-600 border-2 border-orange-600 text-sm">Ask</a>
+
+        <!-- Alpine.js (make sure this is in your <head> or before closing </body>) -->
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+        <!-- x-cloak CSS to hide elements before Alpine initializes -->
+        <style>
+          [x-cloak] {
+            display: none !important;
+          }
+        </style>
 
         <!-- Notification Bell with Dropdown -->
         <div class="relative" x-data="{ open: false }">
@@ -76,23 +88,26 @@ if ($userId) {
               stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 
-             2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 
-             2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 
-             2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 
-             5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 
-             1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" />
+         2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 
+         2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 
+         2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 
+         5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 
+         1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" />
             </svg>
           </a>
 
           <!-- Dropdown Notification Box -->
           <div
             x-show="open"
+            x-cloak
             @click.outside="open = false"
             x-transition
             class="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+
             <div class="p-4 border-b font-semibold text-gray-800">
               Notifications
             </div>
+
             <ul class="max-h-60 overflow-y-auto">
               <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700">
                 🔔 New comment on your post
@@ -104,6 +119,7 @@ if ($userId) {
                 ✅ Your profile was updated
               </li>
             </ul>
+
             <div class="text-center p-2 border-t">
               <a href="/notifications" class="text-sm text-orange-500 hover:underline">View all</a>
             </div>
@@ -133,14 +149,14 @@ if ($userId) {
               0-5.216-.584-7.499-1.632Z" />
               </svg>
             <?php else: ?>
-              <img src="<?php echo htmlspecialchars($profileImage); ?>" class="w-8 h-8 rounded-full border-2 border-orange-500" alt="Profile">
+              <img src="<?php echo htmlspecialchars($profileImage); ?>" class="w-10 h-10 rounded-full border-2 border-gray-100" alt="Profile">
             <?php endif; ?>
             <!-- </div> -->
           </a>
         <?php else: ?>
           <div class="pl-3">
-            <a href="User/Login.php" class="text-orange-600 text-sm hover:underline pr-2">Login</a>
-            <a href="User/SignUp.php" class="bg-orange-500 text-white px-3.5 py-2 rounded hover:bg-orange-600 text-sm">Sign Up</a>
+            <a href="User/Login.php" class="text-orange-600 text-sm hover:underline pr-5">Login</a>
+            <a href="User/SignUp.php" class="border-2 border-gray-300 text-black px-4 py-1.5 rounded-md hover:bg-orange-600 hover:text-white hover:border-orange-600 text-sm">Sign Up</a>
           </div>
         <?php endif; ?>
       </div>
@@ -169,7 +185,7 @@ if ($userId) {
       <a href="#" class="block text-orange-600 text-sm">Community</a>
       <a href="#" class="block text-orange-600 text-sm">About</a>
 
-      <a href="#" class="block bg-orange-500 text-white text-center py-2 rounded hover:bg-orange-600">Ask</a>
+      <a href="#" class="block bg-orange-500 text-white text-center py-2 rounded">Ask</a>
 
       <div class="flex space-x-4 items-center">
         <a href="/notifications" class="text-gray-700 hover:text-orange-500">
