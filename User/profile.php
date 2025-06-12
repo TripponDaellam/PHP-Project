@@ -7,11 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once '../DBConnection/DBConnector.php';
 
-if (!isset($_SESSION['user_id'])) {
-  header('Location: login.php');
-  exit;
-}
-
 $user_id = $_SESSION['user_id'];
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$user_id]);
@@ -52,10 +47,8 @@ $savedQuestions = $savedStmt->fetchAll();
   </style>
 </head>
 
-<body class="bg-gray-100 text-black pt-14">
-
+<body class="bg-gray-100 text-black pt-20">
   <?php include '../Partials/nav.php'; ?>
-
   <div class="flex flex-col lg:flex-row min-h-screen bg-gray-100">
     <aside class="hidden lg:block fixed top-0 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
       <?php include '../Partials/left_nav.php'; ?>
@@ -107,39 +100,35 @@ $savedQuestions = $savedStmt->fetchAll();
       <!-- Tabs Content -->
       <div id="info" class="tab-content active bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Profile Information</h3>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-red-50 p-4 rounded-md border">
+        <div class="bg-red-50 p-4 rounded-md border">
           <div>
-            <p class="text-sm text-gray-500">Full Name</p>
-            <p class="font-medium text-gray-800"><?= htmlspecialchars($user['full_name'] ?? 'N/A') ?></p>
+            <label class="text-sm text-gray-500">Full Name</label>
+            <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1 mb-3" />
           </div>
           <div>
-            <p class="text-sm text-gray-500">Username</p>
-            <p class="font-medium text-gray-800"><?= htmlspecialchars($user['username']) ?></p>
+            <label class="text-sm text-gray-500">Email</label>
+            <input type="text" name="email" value="<?= htmlspecialchars($user['email'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1 mb-3" />
           </div>
           <div>
-            <p class="text-sm text-gray-500">Email</p>
-            <p class="font-medium text-gray-800"><?= htmlspecialchars($user['email']) ?></p>
+            <label class="text-sm text-gray-500">Phone</label>
+            <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1 mb-3" />
           </div>
           <div>
-            <p class="text-sm text-gray-500">Phone</p>
-            <p class="font-medium text-gray-800"><?= htmlspecialchars($user['phone'] ?? 'N/A') ?></p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500">Password</p>
-            <p class="font-medium text-gray-800">************</p>
+            <label class="text-sm text-gray-500">Password</label>
+            <input type="text" name="password" value="" class="w-full border rounded px-3 py-2 mt-1 mb-3" />
           </div>
         </div>
         <a href="change_password.php" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change Password</a>
       </div>
 
-      <div id="about" class="tab-content bg-white shadow rounded-xl p-6">
+      <div id="about" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">About Me</h3>
         <p class="text-gray-700 text-sm leading-relaxed">
           <?= nl2br(htmlspecialchars($user['about_me'] ?? 'No bio provided.')) ?>
         </p>
       </div>
 
-      <div id="links" class="tab-content bg-white shadow rounded-xl p-6 space-y-4">
+      <div id="links" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Links</h3>
         <div>
           <p class="text-sm text-gray-500">Website</p>
@@ -151,34 +140,34 @@ $savedQuestions = $savedStmt->fetchAll();
         </div>
       </div>
 
-      <div id="edit" class="tab-content bg-white shadow rounded-xl p-6">
+      <div id="edit" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Edit Profile</h3>
         <form action="../Controller/updateProfile.php" method="POST" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium">Full Name</label>
+            <label class="text-sm text-gray-500">Full Name</label>
             <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
           </div>
           <div>
-            <label class="block text-sm font-medium">Phone</label>
+            <label class="text-sm text-gray-500">Phone</label>
             <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
           </div>
-          <div>
-            <label class="block text-sm font-medium">About Me</label>
+          <!-- <div>
+            <label class="text-sm text-gray-500">About Me</label>
             <textarea name="about_me" rows="4" class="w-full border rounded px-3 py-2 mt-1"><?= htmlspecialchars($user['about_me'] ?? 'N/A') ?></textarea>
           </div>
           <div>
-            <label class="block text-sm font-medium">Website</label>
+            <label class="text-sm text-gray-500">Website</label>
             <input type="url" name="website" value="<?= htmlspecialchars($user['website'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
           </div>
           <div>
-            <label class="block text-sm font-medium">GitHub</label>
+            <label class="text-sm text-gray-500">GitHub</label>
             <input type="url" name="github" value="<?= htmlspecialchars($user['github'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
-          </div>
+          </div> -->
           <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Save Changes</button>
         </form>
       </div>
 
-      <div id="setting" class="tab-content bg-white shadow rounded-xl p-6">
+      <div id="setting" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <!-- Theme Toggle -->
         <div class="flex items-center justify-between p-4 border rounded bg-white">
           <div>
@@ -208,17 +197,6 @@ $savedQuestions = $savedStmt->fetchAll();
           </label>
         </div>
 
-        <!-- Logout -->
-        <!-- <div class="p-4 border rounded bg-white">
-        <h3 class="text-lg font-medium text-gray-800 mb-2">Account</h3>
-        <a href="#"
-          onclick="confirmLogout(event)"
-          class="block w-full text-center text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded transition">
-          Log Out
-        </a>
-      </div> -->
-
-
         <!-- Delete -->
         <div class="flex flex-row space-x-4 mt-4">
           <form action="../Controller/deleteAccount.php" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
@@ -235,14 +213,24 @@ $savedQuestions = $savedStmt->fetchAll();
 
   <!-- Tabs Script -->
   <script>
-    function showTab(tabId) {
+    function showTab(tabId, event) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
 
       document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('border-orange-500', 'text-orange-600'));
-      event.target.classList.add('border-orange-500', 'text-orange-600');
+      if (event) {
+        event.target.classList.add('border-orange-500', 'text-orange-600');
+      }
     }
 
+    // Add event listeners to tab buttons after DOM loaded
+    document.querySelectorAll('.tab-button').forEach(btn => {
+      btn.addEventListener('click', e => {
+        showTab(btn.getAttribute('onclick').match(/'(\w+)'/)[1], e);
+      });
+    });
+
+    // Dark mode toggle setup
     const toggle = document.getElementById('toggle-dark');
     const root = document.documentElement;
 
@@ -250,6 +238,9 @@ $savedQuestions = $savedStmt->fetchAll();
     if (localStorage.theme === 'dark') {
       root.classList.add('dark');
       toggle.checked = true;
+    } else {
+      root.classList.remove('dark');
+      toggle.checked = false;
     }
 
     toggle.addEventListener('change', () => {

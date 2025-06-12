@@ -23,11 +23,18 @@ try {
         INSERT INTO comments (question_id, user_id, content, parent_id, created_at)
         VALUES (?, ?, ?, ?, NOW())
     ");
-    $stmt->execute([$questionId, $userId, $content, $parentId]); // <-- added $parentId
+    $stmt->execute([$questionId, $userId, $content, $parentId]);
+
+    if (is_null($parentId)) {
+        $stmt = $pdo->prepare("UPDATE questions SET answer = answer + 1 WHERE id = ?");
+        $stmt->execute([$questionId]);
+
+        if ($stmt->rowCount() === 0) {
+            echo "⚠️ Update affected 0 rows. Question may not exist.";
+        }
+    }
 } catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
+    echo "❌ Error: " . $e->getMessage();
     exit();
 }
 
-header("Location: ../questionDetails.php?id=" . $questionId);
-exit();

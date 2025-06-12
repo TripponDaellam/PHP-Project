@@ -27,7 +27,7 @@ if ($userId) {
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="bg-white text-black">
+<!-- <body class="bg-white text-black"> -->
 
   <nav x-data="{ open: false }" class="fixed bg-white top-0 left-0 w-full px-6 py-2 z-50 h-14 shadow">
     <div class="flex items-center justify-between">
@@ -217,6 +217,6 @@ if ($userId) {
     </div>
   </nav>
 
-</body>
+<!-- </body> -->
 
 </html>
