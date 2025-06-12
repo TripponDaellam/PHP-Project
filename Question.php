@@ -21,14 +21,12 @@ try {
   $query = "SELECT id, title, description, tags, created_at, upvotes, downvotes, answer FROM questions $orderBy";
   $stmt = $pdo->query($query);
   $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
+}catch (PDOException $e) {
   echo "<div class='text-red-500'>Error fetching questions: " . $e->getMessage() . "</div>";
   $questions = [];
 }
 
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
