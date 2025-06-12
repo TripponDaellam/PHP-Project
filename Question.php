@@ -1,17 +1,32 @@
 <?php
 session_start();
 $isLoggedIn = isset($_SESSION['user_id']);
-require_once 'DBConnection/DBConnector.php'; // Remote DB (questions, users)
-try {
-  $stmt = $pdo->query("SELECT id, title, description, tags, created_at, upvotes FROM questions ORDER BY created_at DESC");
+require_once 'DBConnection/DBConnector.php';
+try{
+  $sort = $_GET['sort'] ?? 'newest';
+  $order = strtoupper($_GET['order'] ?? 'DESC');
+  $order = $order === 'ASC' ? 'ASC' : 'DESC'; // prevent SQL injection
+
+  switch ($sort) {
+    case 'votes':
+      $orderBy = "ORDER BY upvotes $order";
+      break;
+    case 'answers':
+      $$orderBy = "ORDER BY answer $$order";
+      break;
+    case 'newest': 
+    default:
+      $orderBy = "ORDER BY created_at $order";
+      break;
+  }
+  $query = "SELECT id, title, description, tags, created_at, upvotes,downvotes, answer FROM questions $orderBy";
+  $stmt = $pdo->query($query);
   $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
+}catch (PDOException $e) {
   echo "<div class='text-red-500'>Error fetching questions: " . $e->getMessage() . "</div>";
   $questions = [];
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,10 +45,9 @@ try {
 
   <main class="flex-1 min-w-[500px] max-w-screen-full md:ml-50 lg:mr-10 lg:ml-[250px]">
     <div class="flex flex-wrap gap-2 items-center relative text-sm">
-      <button class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Newest</button>
-      <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Active</button>
-      <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Bountied</button>
-      <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Unanswered</button>
+      <button onclick="sortBy('newest')" class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Newest</button>
+      <button onclick="sortBy('votes')" class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Votes</button>
+      <button onclick="sortBy('answer')" class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Answers</button>
 
       <!-- More Dropdown -->
       <div class="relative">
@@ -98,44 +112,56 @@ try {
     </div>
 
     <!-- Question List -->
-   <div class="mt-4 space-y-4">
-  <?php foreach ($questions as $q): 
-    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $q['title'])));
-    $tags = array_filter(array_map('trim', explode(',', $q['tags'])));
-  ?>
-    <div class="bg-white shadow p-4 rounded flex flex-col sm:flex-row gap-4">
-      <div class="flex sm:flex-col text-sm text-center w-full sm:w-16 text-gray-500">
-      <div class="sm:mb-2">
-    <strong><?php echo (int)$q['upvotes']; ?></strong>
-    <br class="hidden sm:block">votes
-  </div>
-        <div class="sm:mb-2"><strong>0</strong><br class="hidden sm:block">answers</div>
-        <div><strong>0</strong><br class="hidden sm:block">views</div>
-      </div>
-      <div class="flex-1">
-          <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline">
-          <?php echo htmlspecialchars($q['title']); ?>
-        </a>
-        <p class="text-sm text-gray-600 mt-1">
-          <?php echo htmlspecialchars(substr($q['description'], 0, 100)) . '...'; ?>
-        </p>
-        <div class="mt-2 flex flex-wrap gap-2">
-          <?php foreach ($tags as $tag): ?>
-            <span class="inline-block bg-orange-100 text-orange-700 text-sm px-2 py-1 rounded"><?php echo htmlspecialchars($tag); ?></span>
-          <?php endforeach; ?>
+    <div class="mt-4 space-y-4">
+      <?php foreach ($questions as $q):
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $q['title'])));
+        $tags = array_filter(array_map('trim', explode(',', $q['tags'])));
+      ?>
+        <div class="bg-white shadow p-4 rounded flex flex-col sm:flex-row gap-4">
+          <div class="flex sm:flex-col text-sm text-center w-full sm:w-16 text-gray-500">
+            <div class="sm:mb-2"><strong><?php echo (int)$q['upvotes']; ?></strong><br class="hidden sm:block">up</div>
+            <div class="sm:mb-2"><strong><?php echo (int)$q['downvotes']; ?></strong><br class="hidden sm:block">down</div>
+            <div class="sm:mb-2"><strong><?php echo (int)$q['answer']; ?></strong><br class="hidden sm:block">answers</div>
+          </div>
+          <div class="flex-1">
+            <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline">
+              <?php echo htmlspecialchars($q['title']); ?>
+            </a>
+            <p class="text-sm text-gray-600 mt-1">
+              <?php echo htmlspecialchars(substr($q['description'], 0, 100)) . '...'; ?>
+            </p>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <?php foreach ($tags as $tag): ?>
+                <span class="inline-block bg-orange-100 text-orange-700 text-sm px-2 py-1 rounded"><?php echo htmlspecialchars($tag); ?></span>
+              <?php endforeach; ?>
+            </div>
+            <div class="text-xs text-gray-400 text-right mt-2">
+              asked <?php echo date("M j, Y g:i a", strtotime($q['created_at'])); ?>
+            </div>
+          </div>
         </div>
-        <div class="text-xs text-gray-400 text-right mt-2">
-          asked <?php echo date("M j, Y g:i a", strtotime($q['created_at'])); ?>
-        </div>
-      </div>
+      <?php endforeach; ?>
     </div>
-  <?php endforeach; ?>
-</div>
 
   </main>
 
   <!-- Script for toggling -->
   <script>
+    function sortBy(type) {
+      const url = new URL(window.location.href);
+      const currentSort = url.searchParams.get('sort');
+      const currentOrder = url.searchParams.get('order') || 'desc';
+
+      // If clicking the same sort type again, toggle the order
+      if (currentSort === type) {
+        const newOrder = currentOrder === 'desc' ? 'asc' : 'desc';
+        url.searchParams.set('order', newOrder);
+      } else {
+        url.searchParams.set('order', 'desc'); // default to DESC on new sort type
+      }
+      url.searchParams.set('sort', type);
+      window.location.href = url.toString();
+    }
     function toggleFilter() {
       const panel = document.getElementById("filterPanel");
       panel.classList.toggle("hidden");
