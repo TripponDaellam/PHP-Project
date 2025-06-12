@@ -1,39 +1,32 @@
 <?php
 session_start();
 $isLoggedIn = isset($_SESSION['user_id']);
-require_once 'DBConnection/DBConnector.php'; // Remote DB (questions, users)
-try {
-  $stmt = $pdo->query("SELECT id, title, description, tags, created_at, upvotes FROM questions ORDER BY created_at DESC");
-  $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-  echo "<div class='text-red-500'>Error fetching questions: " . $e->getMessage() . "</div>";
-  $questions = [];
-}
-?>
-<!-- <?php
-session_start();
-$isLoggedIn = isset($_SESSION['user_id']);
 require_once 'DBConnection/DBConnector.php';
-?>
-<?php
-require_once 'DBConnection/DBConnector.php'; // Make sure this sets $pdo
-// STEP 1: Get sort column from URL if present, default to 'created_at'
-$sort = $_GET['sort'] ?? 'created_at';
-// STEP 2: Sanitize input (only allow safe column names)
-$allowed = ['upvotes', 'created_at', 'title'];
-if (!in_array($sort, $allowed)) {
-  $sort = 'created_at';
-}
-// STEP 3: Query database
-try {
-  $stmt = $pdo->query("SELECT id, title, description, tags, created_at, upvotes FROM questions ORDER BY $sort DESC");
+try{
+  $sort = $_GET['sort'] ?? 'newest';
+  $order = strtoupper($_GET['order'] ?? 'DESC');
+  $order = $order === 'ASC' ? 'ASC' : 'DESC'; // prevent SQL injection
+
+  switch ($sort) {
+    case 'votes':
+      $orderBy = "ORDER BY upvotes $order";
+      break;
+    case 'answers':
+      $$orderBy = "ORDER BY answer $$order";
+      break;
+    case 'newest': 
+    default:
+      $orderBy = "ORDER BY created_at $order";
+      break;
+  }
+  $query = "SELECT id, title, description, tags, created_at, upvotes,downvotes, answer FROM questions $orderBy";
+  $stmt = $pdo->query($query);
   $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
+}catch (PDOException $e) {
   echo "<div class='text-red-500'>Error fetching questions: " . $e->getMessage() . "</div>";
   $questions = [];
 }
-?> -->
-
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,11 +45,9 @@ try {
 
   <main class="flex-1 min-w-[500px] max-w-screen-full md:ml-50 lg:mr-10 lg:ml-[250px]">
     <div class="flex flex-wrap gap-2 items-center relative text-sm">
-      <a href="?sort=upvotes" class="px-3 py-1 border rounded hover:bg-gray-200 <?= ($_GET['sort'] ?? '') == 'upvotes' ? 'bg-orange-100' : '' ?>">Votes</a>
-      <a href="?sort=created_at" class="px-3 py-1 border rounded hover:bg-gray-200 <?= ($_GET['sort'] ?? '') == 'created_at' ? 'bg-orange-100' : '' ?>">Newest</a>
-      <a href="?sort=title" class="px-3 py-1 border rounded hover:bg-gray-200 <?= ($_GET['sort'] ?? '') == 'title' ? 'bg-orange-100' : '' ?>">Title</a>
-      <a href="?sort=title" class="px-3 py-1 border rounded hover:bg-gray-200 <?= ($_GET['sort'] ?? '') == 'title' ? 'bg-orange-100' : '' ?>">Bountied</a>
-      <a href="?sort=title" class="px-3 py-1 border rounded hover:bg-gray-200 <?= ($_GET['sort'] ?? '') == 'title' ? 'bg-orange-100' : '' ?>">Unanswered</a>
+      <button onclick="sortBy('newest')" class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Newest</button>
+      <button onclick="sortBy('votes')" class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Votes</button>
+      <button onclick="sortBy('answer')" class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Answers</button>
 
       <!-- More Dropdown -->
       <div class="relative">
@@ -128,12 +119,9 @@ try {
       ?>
         <div class="bg-white shadow p-4 rounded flex flex-col sm:flex-row gap-4">
           <div class="flex sm:flex-col text-sm text-center w-full sm:w-16 text-gray-500">
-            <div class="sm:mb-2">
-              <strong><?php echo (int)$q['upvotes']; ?></strong>
-              <br class="hidden sm:block">votes
-            </div>
-            <div class="sm:mb-2"><strong>0</strong><br class="hidden sm:block">answers</div>
-            <div><strong>0</strong><br class="hidden sm:block">views</div>
+            <div class="sm:mb-2"><strong><?php echo (int)$q['upvotes']; ?></strong><br class="hidden sm:block">up</div>
+            <div class="sm:mb-2"><strong><?php echo (int)$q['downvotes']; ?></strong><br class="hidden sm:block">down</div>
+            <div class="sm:mb-2"><strong><?php echo (int)$q['answer']; ?></strong><br class="hidden sm:block">answers</div>
           </div>
           <div class="flex-1">
             <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline">
@@ -159,6 +147,21 @@ try {
 
   <!-- Script for toggling -->
   <script>
+    function sortBy(type) {
+      const url = new URL(window.location.href);
+      const currentSort = url.searchParams.get('sort');
+      const currentOrder = url.searchParams.get('order') || 'desc';
+
+      // If clicking the same sort type again, toggle the order
+      if (currentSort === type) {
+        const newOrder = currentOrder === 'desc' ? 'asc' : 'desc';
+        url.searchParams.set('order', newOrder);
+      } else {
+        url.searchParams.set('order', 'desc'); // default to DESC on new sort type
+      }
+      url.searchParams.set('sort', type);
+      window.location.href = url.toString();
+    }
     function toggleFilter() {
       const panel = document.getElementById("filterPanel");
       panel.classList.toggle("hidden");
