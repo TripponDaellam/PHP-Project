@@ -155,7 +155,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
                   <?= (int)$q['downvotes'] ?>
                 </form>
               </div>
-              <!-- Comments -->
+              <!-- Comments --> 
              <?php if (isset($allComments[$q['id']])): ?>
   <div class="mt-4 border-t pt-3">
     <h3 class="text-sm font-semibold text-gray-700 mb-2">Answers:</h3>
