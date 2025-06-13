@@ -68,7 +68,7 @@ if ($userId) {
         </div> -->
 
         <!-- Ask Button -->
-        <a href="#" class="text-white px-5 py-1 rounded-md bg-orange-600 border-2 border-orange-600 text-sm">Ask</a>
+        <a href="ask.php" class="text-white px-5 py-1 rounded-md bg-orange-600 border-2 border-orange-600 text-sm">Ask</a>
 
         <!-- Alpine.js (make sure this is in your <head> or before closing </body>) -->
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

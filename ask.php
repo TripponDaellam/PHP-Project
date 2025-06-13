@@ -62,7 +62,7 @@ if (!isset($_SESSION['user_id'])) {
       <!-- Submit -->
       <div>
         <button type="submit"
-          class="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition">
+          class="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700 transition">
           Post Question
         </button>
       </div>

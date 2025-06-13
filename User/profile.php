@@ -144,14 +144,22 @@ $savedQuestions = $savedStmt->fetchAll();
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Edit Profile</h3>
         <form action="../Controller/updateProfile.php" method="POST" class="space-y-4">
           <div>
+            <label class="text-sm text-gray-500">Username</label>
+            <input type="text" name="username" value="<?= htmlspecialchars($user['username'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
+          </div>
+          <div>
             <label class="text-sm text-gray-500">Full Name</label>
             <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
           </div>
           <div>
             <label class="text-sm text-gray-500">Phone</label>
-            <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
+            <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" disabled/>
           </div>
-          <!-- <div>
+          <div>
+            <label class="text-sm text-gray-500">Email</label>
+            <input type="text" name="email" value="<?= htmlspecialchars($user['email'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" disabled/>
+          </div>
+          <div>
             <label class="text-sm text-gray-500">About Me</label>
             <textarea name="about_me" rows="4" class="w-full border rounded px-3 py-2 mt-1"><?= htmlspecialchars($user['about_me'] ?? 'N/A') ?></textarea>
           </div>
@@ -162,7 +170,7 @@ $savedQuestions = $savedStmt->fetchAll();
           <div>
             <label class="text-sm text-gray-500">GitHub</label>
             <input type="url" name="github" value="<?= htmlspecialchars($user['github'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
-          </div> -->
+          </div>
           <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Save Changes</button>
         </form>
       </div>
