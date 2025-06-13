@@ -70,22 +70,26 @@ $addUsers = $addStmt->fetchAll();
   <main class="lg:ml-[220px] p-6 screen  -w-3xl mx-auto">
   <div class="mb-4 border-b border-gray-200">
     <h1 class="text-2xl font-bold mb-4">Friends</h1>
-    <ul class="flex space-x-4 text-sm font-medium text-gray-600">
-      <li><a href="?tab=all" class="<?= $activeTab === 'all' ? 'text-orange-600' : '' ?>">All</a></li>
-      <li><a href="?tab=pending" class="<?= $activeTab === 'pending' ? 'text-orange-600' : '' ?>">Pending</a></li>
-      <li><a href="?tab=requests" class="<?= $activeTab === 'requests' ? 'text-orange-600' : '' ?>">Requests</a></li>
-      <li><a href="?tab=friends" class="<?= $activeTab === 'friends' ? 'text-orange-600' : '' ?>">Friends</a></li>
-      <li><a href="?tab=add" class="<?= $activeTab === 'add' ? 'text-orange-600' : '' ?>">Add Friends</a></li>
+    <ul class="flex space-x-4 text-sm  text-gray-600 hover:">
+      <li><a href="?tab=all" class="<?= $activeTab === 'all' ? 'text-orange-600' : 'hover:text-orange-600' ?>">All</a></li>
+      <li><a href="?tab=pending" class="<?= $activeTab === 'pending' ? 'text-orange-600' : 'hover:text-orange-600' ?>">Pending</a></li>
+      <li><a href="?tab=requests" class="<?= $activeTab === 'requests' ? 'text-orange-600' : 'hover:text-orange-600' ?>">Requests</a></li>
+      <li><a href="?tab=friends" class="<?= $activeTab === 'friends' ? 'text-orange-600' : 'hover:text-orange-600' ?>">Friends</a></li>
+      <li><a href="?tab=add" class="<?= $activeTab === 'add' ? 'text-orange-600' : 'hover:text-orange-600' ?>">Add Friends</a></li>
     </ul>
   </div>
 
   <?php if ($activeTab === 'pending'): ?>
     <h2 class="text-xl font-semibold mb-2">Pending Sent</h2>
     <ul>
-      <?php foreach ($pending as $p): ?>
-        <li class="bg-white p-3 mb-2 rounded shadow"><?= htmlspecialchars($p['username']) ?> (Sent)</li>
-      <?php endforeach; ?>
-    </ul>
+  <?php foreach ($pending as $p): ?>
+    <li class="bg-white p-3 mb-2 rounded shadow flex justify-between items-center">
+      <span><?= htmlspecialchars($p['username']) ?> (Sent)</span>
+      <a href="Controller/friendAction.php?action=cancel&id=<?= $p['id'] ?>&from=pending" class="text-red-600 hover:text-red-800">Cancel</a>
+    </li>
+  <?php endforeach; ?>
+</ul>
+
 
   <?php elseif ($activeTab === 'requests'): ?>
     <h2 class="text-xl font-semibold mb-2">Friend Requests</h2>
@@ -114,8 +118,7 @@ $addUsers = $addStmt->fetchAll();
     <ul>
       <?php foreach ($addUsers as $u): ?>
         <li class="bg-white p-3 mb-2 rounded shadow flex justify-between">
-          <span><?= htmlspecialchars($u['username']) ?></span>
-          <a href="Controller/friendAction.php?action=request&id=<?= $u['id'] ?>" class="text-orange-600">Add Friend</a>
+          <span><?= htmlspecialchars($u['username']) ?></span><a href="../Controller/friendAction.php?action=request&id=<?= $u['id'] ?>&from=add" class="text-orange-600">Add Friend</a>
         </li>
       <?php endforeach; ?>
     </ul>
