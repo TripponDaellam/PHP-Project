@@ -35,8 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $mail->addAddress($email);
       $mail->isHTML(true);
       $mail->Subject = 'Reset your Method Flow password';
-      // $reset_link = "localhost/User/resetPassword.php?token=$token&email=$email";
-      $reset_link = "https://www.youporn.com/";
+      $reset_link = "localhost/User/resetPassword.php?token=$token&email=$email";
+      //$reset_link = "https://www.youporn.com/";
       $mail->Body = "
       <html>
       <head>

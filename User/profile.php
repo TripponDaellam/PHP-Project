@@ -26,6 +26,10 @@ $savedStmt = $pdo->prepare("
 ");
 $savedStmt->execute([$user_id]);
 $savedQuestions = $savedStmt->fetchAll();
+
+$stmt = $pdo->prepare("SELECT * FROM questions WHERE user_id = ? ORDER BY created_at DESC");
+$stmt->execute([$user_id]);
+$userPosts = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -123,14 +127,31 @@ $savedQuestions = $savedStmt->fetchAll();
       <a href="change_password.php" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change Password</a>
     </div>
     
-    <div id="post" class="tab-content bg-white shadow rounded-xl p-6">
-      <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Posts</h3>
-      <p class="text-gray-700 text-sm">This section will display your posts.</p>
-      <!-- Placeholder for posts -->
-      <div class="mt-4">
-        <p class="text-gray-500">No posts available yet.</p>
-      </div>
-    </div>
+<div id="post" class="tab-content bg-white shadow rounded-xl p-6">
+  <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Posts</h3>
+
+  <?php if (count($userPosts) > 0): ?>
+    <ul class="space-y-4">
+      <?php foreach ($userPosts as $post): ?>
+        <li class="bg-gray-50 p-4 rounded shadow">
+          <a href="../questionDetails.php?id=<?= $post['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline block">
+  <?= htmlspecialchars($post['title']) ?>
+</a>
+          <p class="text-gray-600 text-sm mb-2"><?= htmlspecialchars(substr($post['description'], 0, 100)) ?>...</p>
+          <div class="flex justify-between items-center text-sm">
+            <span class="text-gray-500"><?= date("F j, Y", strtotime($post['created_at'])) ?></span>
+            <form method="POST" action="../Controller/deletePostController.php" onsubmit="return confirm('Are you sure you want to delete this post?');">
+              <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+              <button type="submit" class="text-red-600 hover:underline">Delete</button>
+            </form>
+          </div>
+        </li>
+      <?php endforeach; ?>
+    </ul>
+  <?php else: ?>
+    <p class="text-gray-500 mt-4">No posts available yet.</p>
+  <?php endif; ?>
+</div>
 
   <?php
 if (!function_exists('word_limiter')) {
