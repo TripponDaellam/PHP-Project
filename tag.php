@@ -55,7 +55,7 @@ if ($tag) {
 
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
     <?php include 'Partials/nav.php'; ?>
-    <aside class="hidden lg:block fixed top-0 left-0 h-full w-[200px] bg-white shadow">
+    <aside class="hidden lg:block fixed top-16 left-0 h-full w-[200px] bg-white shadow">
         <?php include 'Partials/left_nav.php'; ?>
     </aside>
 
