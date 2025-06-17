@@ -21,6 +21,10 @@ $savedStmt = $pdo->prepare("
 ");
 $savedStmt->execute([$user_id]);
 $savedQuestions = $savedStmt->fetchAll();
+
+$stmt = $pdo->prepare("SELECT * FROM questions WHERE user_id = ? ORDER BY created_at DESC");
+$stmt->execute([$user_id]);
+$userPosts = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
