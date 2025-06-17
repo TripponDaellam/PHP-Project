@@ -85,8 +85,8 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
                   </svg>
                 </button>
                 <div class="dropdown absolute right-0 top-full mt-2 hidden bg-white shadow rounded text-sm z-50 w-36 md:w-32">
-                 <a href="../Actions/save.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Save</a>
-                 <a href="../Actions/report.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Report</a>
+                  <a href="../Actions/save.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Save</a>
+                  <a href="../Actions/report.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Report</a>
                 </div>
               </div>
 
@@ -127,7 +127,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
 
               <!-- Tags -->
               <div class="mt-1">
-                <?php foreach (explode(',', $q['tags']) as $tag): ?>
+                <?php foreach (explode(',', $q['tags'] ?? '') as $tag): ?>
                   <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded mr-1"><?= htmlspecialchars(trim($tag)); ?></span>
                 <?php endforeach; ?>
               </div>
@@ -189,16 +189,18 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
       <h3 class="text-xl font-bold text-gray-900 mb-4">Your Tags</h3>
       <div class="flex flex-wrap gap-2">
         <?php
-        $tagStmt = $pdo->query("SELECT tags FROM questions");
+        $tagStmt = $pdo->query("SELECT distinct tags FROM questions");
         $allTags = [];
+
         while ($row = $tagStmt->fetch(PDO::FETCH_ASSOC)) {
-          foreach (explode(',', $row['tags']) as $tag) {
+          foreach (explode(',', $row['tags'] ?? '') as $tag) {
             $tag = trim($tag);
             if ($tag !== '') {
               $allTags[$tag] = ($allTags[$tag] ?? 0) + 1;
             }
           }
         }
+
         arsort($allTags);
         foreach (array_slice($allTags, 0, 12) as $tag => $count): ?>
           <a href="/tag/<?= urlencode($tag) ?>"
@@ -211,7 +213,9 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
           </a>
         <?php endforeach; ?>
       </div>
-    </aside>
+
+  </div>
+  </aside>
   </div>
 
   <!-- Footer -->

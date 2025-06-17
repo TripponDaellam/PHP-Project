@@ -1,25 +1,43 @@
 <?php
-session_start(); // ✅ Start session to access user_id
+session_start(); // Start session
 
-// Ensure the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    // Not logged in – prevent unauthorized posting
     header("Location: ../User/Login.php");
     exit();
 }
 
-require_once '../DBConnection/DBConnector.php'; // adjust path if needed
+require_once '../DBConnection/DBConnector.php';
 
+// Get form data
 $title = $_POST['title'];
 $description = $_POST['description'];
-$tags = $_POST['tags'];
-$userId = $_SESSION['user_id']; // ✅ Use session, not POST!
+$tags = $_POST['selected_tags'] ?? '';
+$userId = $_SESSION['user_id'];
 
-// Insert into DB
+// Convert tags to array
+$submittedTags = array_filter(array_map('trim', explode(',', $tags)));
+
+// Fetch valid tags from DB
+$stmt = $pdo->query("SELECT tag_name FROM tags");
+$allowedTags = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+// Check for invalid tags
+$invalidTags = array_diff($submittedTags, $allowedTags);
+
+if (!empty($invalidTags)) {
+    $_SESSION['error'] = "Invalid tag(s): " . implode(', ', $invalidTags);
+    header("Location: ../ask.php"); // Redirect back to form
+    exit();
+}
+
+// Prepare tags string for DB
+$validTagsString = implode(',', $submittedTags);
+
+// Insert question
 $stmt = $pdo->prepare("INSERT INTO questions (title, description, tags, user_id, created_at) VALUES (?, ?, ?, ?, NOW())");
-$stmt->execute([$title, $description, $tags, $userId]);
+$stmt->execute([$title, $description, $validTagsString, $userId]);
 
-// Handle image upload if needed
+// Handle image upload
 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     $imgTmp = $_FILES['image']['tmp_name'];
     $imgName = basename($_FILES['image']['name']);
@@ -27,7 +45,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     move_uploaded_file($imgTmp, $targetPath);
 }
 
-// Redirect to home
+// Redirect after successful post
 header("Location: ../index.php");
 exit();
 ?>

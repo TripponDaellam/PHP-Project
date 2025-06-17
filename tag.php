@@ -2,7 +2,8 @@
 session_start();
 $isLoggedIn = isset($_SESSION['user_id']);
 
-require_once 'DBConnection/DBConnector.php';
+require_once 'DBConnection/DBConnector.php'; // Remote DB (questions, users)
+require_once 'Partials/Limiter.php';
 
 if (!$pdo) {
     die("❌ Database connection failed. Check DBConnector.php.");
@@ -31,6 +32,15 @@ if (!empty($search)) {
 
 $stmt->execute();
 $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$tag = $_GET['tag'] ?? null;
+$questions = [];
+
+if ($tag) {
+    $stmt = $pdo->prepare("SELECT id, title, description, tags, created_at, upvotes, downvotes, answer FROM questions WHERE tags LIKE ?");
+    $stmt->execute(["%$tag%"]);
+    $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 <!DOCTYPE html>
@@ -44,121 +54,98 @@ $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body class="flex flex-col min-h-screen bg-gray-50 text-black pt-20 overflow-x-hidden">
-
     <?php include 'Partials/nav.php'; ?>
-
-    <aside class="hidden lg:block fixed top-0 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
+    <aside class="hidden lg:block fixed top-0 left-0 h-full w-[200px] bg-white shadow">
         <?php include 'Partials/left_nav.php'; ?>
     </aside>
 
-    <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full ml-[220px] lg:mr-10 p-4 overflow-x-auto">
+    <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full ml-[220px] p-4">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Tags</h1>
-            <!-- <select class="bg-orange-500 text-white px-5 py-2 rounded text-sm">
-                <option>Popular</option>
-                <option>Newest</option>
-            </select> -->
-
-            <!-- Dropdown -->
-            <div class="relative inline-block text-left">
-                <button id="selectedItem"
-                    class="inline-flex justify-between items-center w-[7.5rem] h-10 px-3 py-1.5 text-sm text-white bg-orange-500 rounded-md hover:bg-orange-600 focus:outline-none"
-                    onclick="toggleItemDropdown()">
-                    Sort by
-                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-
-                <!-- Dropdown Options -->
-                <div id="itemDropdown"
-                    class="hidden absolute z-10 mt-1 w-[7.5rem] bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
-                    <ul class="py-1 text-sm text-gray-700">
-                        <li><button onclick="selectItem('Popular')"
-                                class="block w-full text-left px-3 py-1 hover:bg-gray-100">Popular</button></li>
-                        <li><button onclick="selectItem('Newest')"
-                                class="block w-full text-left px-3 py-1 hover:bg-gray-100">Newest</button></li>
-                    </ul>
-                </div>
-            </div>
-
-            <script>
-                function toggleItemDropdown() {
-                    document.getElementById("itemDropdown").classList.toggle("hidden");
-                }
-
-                function selectItem(item) {
-                    document.getElementById("selectedItem").innerHTML = `
-      ${item}
-      <svg class="w-4 h-4 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M19 9l-7 7-7-7" />
-      </svg>`;
-                    toggleItemDropdown();
-                }
-
-                window.addEventListener('click', function(e) {
-                    const dropdown = document.getElementById("itemDropdown");
-                    const button = document.getElementById("selectedItem");
-                    if (!button.contains(e.target) && !dropdown.contains(e.target)) {
-                        dropdown.classList.add("hidden");
-                    }
-                });
-            </script>
-
         </div>
 
         <div class="mb-6">
             <form method="GET" action="tag.php" class="flex items-center space-x-2">
-                <input
-                    type="text"
-                    name="search"
-                    placeholder="Search by tags"
-                    value="<?= htmlspecialchars($search) ?>"
-                    class="px-3.5 py-1.5 border border-gray-300 rounded w-72 focus:outline-none focus:ring-2 focus:ring-orange-400">
-                <button type="submit" class="px-3.5 py-2.5 bg-orange-500 text-white rounded hover:bg-orange-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                    </svg>
-                </button>
+                <input type="text" name="search" placeholder="Search by tags" value="<?= htmlspecialchars($search) ?>" class="px-3.5 py-1.5 border border-gray-300 rounded w-72 focus:outline-none focus:ring-2 focus:ring-orange-400">
+                <button type="submit" class="px-3.5 py-2.5 bg-orange-500 text-white rounded hover:bg-orange-600">Search</button>
             </form>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <?php if (!empty($tags)): ?>
-                <?php foreach ($tags as $tag): ?>
-                    <div class="bg-white shadow rounded-lg p-4 hover:shadow-md transition">
-                        <span class="inline-block bg-orange-100 text-orange-600 text-xs font-semibold px-2 py-1 rounded mb-2">
-                            <?= htmlspecialchars($tag['tag_name']) ?>
-                        </span>
-                        <p class="text-gray-700 text-sm mb-1 line-clamp-3">
-                            <?= htmlspecialchars($tag['description']) ?>
-                        </p>
-                        <p class="text-xs text-gray-500">
-                            <?= htmlspecialchars($tag['question_count']) ?> questions
-                        </p>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p class="text-gray-500 col-span-full">No tags found.</p>
-            <?php endif; ?>
-        </div>
 
-        <div class="flex justify-center items-center mt-8 space-x-2 text-sm">
-            <a href="#" class="px-3 py-1 bg-orange-500 text-white rounded">1</a>
-            <a href="#" class="px-3 py-1 hover:bg-orange-100 rounded">2</a>
-            <a href="#" class="px-3 py-1 hover:bg-orange-100 rounded">3</a>
-            <span>...</span>
-            <a href="#" class="px-3 py-1 hover:bg-orange-100 rounded">68</a>
-        </div>
+        <?php if (!$tag): ?>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <?php if (!empty($tags)): ?>
+                    <?php foreach ($tags as $tagItem): ?>
+                        <a href="tag.php?tag=<?= urlencode($tagItem['tag_name']) ?>" class="block bg-white shadow rounded-lg p-4 hover:shadow-md transition">
+                            <span class="inline-block bg-orange-100 text-orange-600 text-xs font-semibold px-2 py-1 rounded mb-2">
+                                <?= htmlspecialchars($tagItem['tag_name']) ?>
+                            </span>
+                            <p class="text-gray-700 text-sm mb-1 line-clamp-3">
+                                <?= htmlspecialchars($tagItem['description']) ?>
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                <?= htmlspecialchars($tagItem['question_count']) ?> questions
+                            </p>
+                        </a>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-gray-500 col-span-full">No tags found.</p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($tag): ?>
+            <div class="mt-4 space-y-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-orange-600">Showing results for tag: <?= htmlspecialchars($tag) ?></h2>
+                    <a href="tag.php" class="text-blue-600">&larr; Back to Tags</a>
+                </div>
+
+                <?php if (empty($questions)): ?>
+                    <p class="text-gray-500">No questions found for <strong><?= htmlspecialchars($tag) ?></strong>.</p>
+                <?php else: ?>
+                    <?php foreach ($questions as $q):
+                        $qTags = array_filter(array_map('trim', explode(',', $q['tags'])));
+                    ?>
+                        <div class="bg-white shadow p-4 rounded flex flex-col sm:flex-row gap-4">
+                            <div class="flex sm:flex-col text-sm text-center w-full sm:w-16 text-gray-500">
+                                <div class="sm:mb-2">
+                                    <strong><?= (int)$q['upvotes']; ?></strong><br class="hidden sm:block">upvotes
+                                </div>
+                                <div class="sm:mb-2">
+                                    <strong><?= (int)$q['downvotes']; ?></strong><br class="hidden sm:block">downvotes
+                                </div>
+                                <div class="sm:mb-2">
+                                    <strong><?= (int)$q['answer']; ?></strong><br class="hidden sm:block">answers
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline">
+                                    <?= htmlspecialchars($q['title']); ?>
+                                </a>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    <?= word_limiter($q['description'], 100); ?>
+                                </p>
+                                <div class="mt-2 flex flex-wrap gap-2">
+                                    <?php foreach ($qTags as $qt): ?>
+                                        <span class="inline-block bg-orange-100 text-orange-700 text-sm px-2 py-1 rounded">
+                                            <?= htmlspecialchars($qt); ?>
+                                        </span>
+                                    <?php endforeach; ?>
+                                </div>
+                                <div class="text-xs text-gray-400 text-right mt-2">
+                                    asked <?= date("M j, Y g:i a", strtotime($q['created_at'])); ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
     </main>
 
-    <div class="mt-auto z-10">
+    <div class="mt-auto">
         <?php include 'Partials/footer.php'; ?>
     </div>
-
 </body>
 
 </html>
