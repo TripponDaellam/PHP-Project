@@ -25,6 +25,31 @@ $savedQuestions = $savedStmt->fetchAll();
 $stmt = $pdo->prepare("SELECT * FROM questions WHERE user_id = ? ORDER BY created_at DESC");
 $stmt->execute([$user_id]);
 $userPosts = $stmt->fetchAll();
+
+//save
+$user_id = $_SESSION['user_id'];
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
+
+// Fetch saved questions
+$savedStmt = $pdo->prepare("
+    SELECT q.id, q.title, q.description, q.created_at
+    FROM savedQuestions s
+    JOIN questions q ON s.question_id = q.id
+    WHERE s.user_id = ?
+    ORDER BY s.created_at DESC
+");
+$savedStmt->execute([$user_id]);
+$savedQuestions = $savedStmt->fetchAll();
+
+//posts
+$user_id = $_SESSION['user_id'];
+
+// Fetch user posts
+$stmt = $pdo->prepare("SELECT * FROM questions WHERE user_id = ? ORDER BY created_at DESC");
+$stmt->execute([$user_id]);
+$userPosts = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -131,6 +156,51 @@ $userPosts = $stmt->fetchAll();
           <?= nl2br(htmlspecialchars($user['about_me'] ?? 'No bio provided.')) ?>
         </p>
       </div>
+      <div id="post" class="tab-content bg-white shadow rounded-xl p-6">
+  <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Posts</h3>
+
+  <?php if (count($userPosts) > 0): ?>
+    <ul class="space-y-4">
+      <?php foreach ($userPosts as $post): ?>
+        <li class="bg-gray-50 p-4 rounded shadow">
+         <a href="../questionDetails.php?id=<?= $post['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline block">
+  <?= htmlspecialchars($post['title']) ?>
+</a>
+
+          <p class="text-gray-600 text-sm mb-2"><?= htmlspecialchars(substr($post['description'], 0, 100)) ?>...</p>
+          <div class="flex justify-between items-center text-sm">
+            <span class="text-gray-500"><?= date("F j, Y", strtotime($post['created_at'])) ?></span>
+            <form method="POST" action="../Controller/deletePostController.php" onsubmit="return confirm('Are you sure you want to delete this post?');">
+              <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+              <button type="submit" class="text-red-600 hover:underline">Delete</button>
+            </form>
+          </div>
+        </li>
+      <?php endforeach; ?>
+    </ul>
+  <?php else: ?>
+    <p class="text-gray-500 mt-4">No posts available yet.</p>
+  <?php endif; ?>
+</div>
+
+<div id="save" class="tab-content bg-white shadow rounded-xl p-6">
+  <h3 class="text-xl font-semibold text-gray-800 mb-4">Saved Items</h3>
+
+  <?php if (count($savedQuestions) > 0): ?>
+    <div class="space-y-4">
+      <?php foreach ($savedQuestions as $question): ?>
+        <div class="border border-gray-200 rounded-lg p-4 shadow-sm">
+          <h4 class="text-lg font-medium text-orange-600"><?= htmlspecialchars($question['title']) ?></h4>
+          <p class="text-gray-700 mt-1"><?= htmlspecialchars($question['description']) ?></p>
+          <p class="text-gray-400 text-xs mt-2">Saved on <?= date('F j, Y', strtotime($question['created_at'])) ?></p>
+          <a href="../Question/question_detail.php?id=<?= $question['id'] ?>" class="text-sm text-indigo-500 hover:underline mt-2 inline-block">View Question</a>
+        </div>
+      <?php endforeach; ?>
+    </div>
+  <?php else: ?>
+    <p class="text-gray-500">No saved items available yet.</p>
+  <?php endif; ?>
+</div>
 
       <div id="links" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Links</h3>
