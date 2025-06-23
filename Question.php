@@ -9,9 +9,19 @@ try {
   $order = $order === 'ASC' ? 'ASC' : 'DESC'; // prevent SQL injection
 
   switch ($sort) {
-    // case 'active':
-    //   $orderBy = "ORDER BY updated_at $order";
-    //   break;
+    case 'upvotes':
+      $orderBy = "ORDER BY upvotes $order";
+      break;
+    case 'downvotes':
+      $orderBy = "ORDER BY downvotes $order";
+      break;
+    case 'answers':
+      $orderBy = "ORDER BY answer $order";
+      break;
+    case 'in 24 hours':
+      $orderBy = "WHERE created_at >= NOW() - INTERVAL 1 DAY
+      ORDER BY created_at $order";
+      break;
     case 'newest':
     default:
       $orderBy = "ORDER BY created_at $order";
@@ -45,18 +55,19 @@ try {
 
   <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full ml-[220px] lg:mr-10 p-4 overflow-x-auto">
     <div class="flex flex-wrap gap-2 items-center relative text-sm">
-      <button onclick="sortBy('newest')" class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200">Newest</button>
-      <button onclick="sortBy('active')" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Active</button>
-      <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Bountied</button>
-      <button class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Unanswered</button>
+      <button onclick="sortBy('newest')" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Newest</button>
+      <button onclick="sortBy('upvotes')" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Upvote</button>
+      <button onclick="sortBy('downvotes')" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Downvote</button>
+      <button onclick="sortBy('answers')" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200">Answer</button>
 
       <!-- More Dropdown -->
       <div class="relative">
         <button onclick="toggleMore()" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200" id="moreBtn">More</button>
-        <div id="moreMenu" class="absolute hidden bg-white border border-gray-300 rounded shadow mt-1 w-48 z-50">
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Trending</a>
+        <div id="moreMenu" class="absolute hidden bg-white border border-gray-300 rounded shadow mt-1 w-[130px] z-50">
+          <button onclick="sortBy('in 24 hours')" class="block px-4 py-2 text-sm text-gray-700 w-[130px] hover:bg-gray-200">In 24 Hours</button>
+          <!-- <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">In 24 hours</a>
           <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Most frequent</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Most activity</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Most activity</a> -->
         </div>
       </div>
 
