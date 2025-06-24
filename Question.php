@@ -9,9 +9,19 @@ try {
   $order = $order === 'ASC' ? 'ASC' : 'DESC'; // prevent SQL injection
 
   switch ($sort) {
-    // case 'active':
-    //   $orderBy = "ORDER BY updated_at $order";
-    //   break;
+    case 'upvotes':
+      $orderBy = "ORDER BY upvotes $order";
+      break;
+    case 'downvotes':
+      $orderBy = "ORDER BY downvotes $order";
+      break;
+    case 'answers':
+      $orderBy = "ORDER BY answer $order";
+      break;
+    case 'in 24 hours':
+      $orderBy = "WHERE created_at >= NOW() - INTERVAL 1 DAY
+      ORDER BY created_at $order";
+      break;
     case 'newest':
     default:
       $orderBy = "ORDER BY created_at $order";
@@ -79,7 +89,7 @@ try {
         <div id="moreMenu" class="absolute hidden bg-white border border-gray-300 rounded shadow mt-1 w-48 z-50">
           <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Trending</a>
           <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Most frequent</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Most activity</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Most activity</a> -->
         </div>
       </div>
 
