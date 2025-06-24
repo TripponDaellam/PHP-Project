@@ -1,10 +1,12 @@
-<div class="">
-  <a href="../index.php" class="flex text-black-600 hover:bg-[#F1F2F3] px-4 pl-16 h-9 items-center text-md">Home</a>
-  <a href="../Question.php" class="flex text-black-600 hover:bg-[#F1F2F3] px-4 pl-16 h-9 items-center text-md">Questions</a>
-  <a href="../tag.php" class="flex text-black-600 hover:bg-[#F1F2F3] px-4 pl-16 h-9 items-center text-md">Tags</a>
-  <a href="../save.php" class="flex text-black-600 hover:bg-[#F1F2F3] px-4 pl-16 h-9 items-center text-md">Saved</a>
-  <a href="#" class="flex text-black-600 hover:bg-[#F1F2F3] px-4 pl-16 h-9 items-center text-md">Community</a>
-  <a href="friend.php" class="flex text-black-600 hover:bg-[#F1F2F3] px-4 pl-16 h-9 items-center text-md">Friends</a>
-  <a href="ai.php" class="flex text-black-600 hover:bg-[#F1F2F3] px-4 pl-16 h-9 items-center text-md">AI</a>
-  <a href="#" class="flex text-black-600 hover:bg-[#F1F2F3] px-4 pl-16 h-9 items-center text-md">About</a>
+<div class="relative pt-[5px]">
+  <div class="z-10 space-y-1">
+    <a href="../index.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Home</a>
+    <a href="../Question.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Questions</a>
+    <a href="../tag.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Tags</a>
+    <a href="../save.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Saved</a>
+    <a href="#" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Community</a>
+    <a href="friend.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Friends</a>
+    <a href="ai.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">AI</a>
+    <a href="#" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">About</a>
+  </div>
 </div>

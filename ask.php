@@ -23,7 +23,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
   <?php include 'Partials/nav.php'; ?>
 
   <!-- Left Sidebar -->
-  <aside class="hidden lg:block fixed top-0 left-0 h-full w-[200px] bg-white z-10 shadow">
+  <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 

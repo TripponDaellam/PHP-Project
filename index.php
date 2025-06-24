@@ -48,12 +48,13 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   <div class="flex flex-col lg:flex-row min-h-screen bg-gray-100">
 
     <!-- Left Sidebar -->
-    <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
+    <aside class="hidden lg:block lg:fixed top-16 left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow">
       <?php include 'Partials/left_nav.php'; ?>
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full ml-[220px] lg:mr-10 p-4 overflow-x-auto">
+    <main class="flex-1 w-full lg:ml-[220px] lg:mr-5 p-4 overflow-x-auto
+           min-w-full md:min-w-[500px] max-w-screen-full">
       <?php if ($isLoggedIn): ?>
         <div class="mb-6">
           <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Welcome back, <?= htmlspecialchars($username) ?>!</h2>
@@ -61,7 +62,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
         </div>
       <?php endif; ?>
 
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2 flex-wrap">
+      <div class="flex flex-row justify-between items-start mb-4 gap-2 flex-wrap">
         <h1 class="text-2xl sm:text-3xl font-bold">Recent Questions</h1>
         <?php if ($isLoggedIn): ?>
           <a href="ask.php" class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 text-sm">Ask a Question</a>
@@ -103,7 +104,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
               </script>
 
               <!-- Title & Description -->
-              <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-xl font-semibold text-orange-600 hover:underline block">
+              <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-xl font-semibold text-orange-600 hover:text-orange-700 block underline">
                 <?= htmlspecialchars($q['title']); ?>
               </a>
 
@@ -121,7 +122,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
               }
               ?>
 
-              <p class="text-gray-700 mt-2 text-sm">
+              <p class="text-gray-700 mt-2 text-md">
                 <?= htmlspecialchars(word_limiter($q['description'], 55)); ?>
               </p>
 
@@ -185,7 +186,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
     </main>
 
     <!-- Right Sidebar -->
-    <aside class="w-full md:w-1/3 lg:w-72 px-4 py-6 bg-white rounded shadow mt-10 lg:mt-[75px] lg:mr-6 h-fit sticky top-24 hidden lg:block">
+    <aside class="hidden lg:block w-full lg:w-72 px-4 py-6 bg-white rounded shadow mt-10 lg:mt-[75px] lg:mr-6 h-fit sticky top-24">
       <h3 class="text-xl font-bold text-gray-900 mb-4">Your Tags</h3>
       <div class="flex flex-wrap gap-2">
         <?php
@@ -201,9 +202,8 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
           }
         }
 
-        arsort($allTags);
         foreach (array_slice($allTags, 0, 12) as $tag => $count): ?>
-          <a href="/tag/<?= urlencode($tag) ?>"
+          <a href="tag.php?tag=<?= urlencode($tag) ?>"
             class="inline-flex items-center gap-1 bg-gray-100 text-black text-xs px-3 py-1 rounded-full shadow">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
               stroke="currentColor" stroke-width="2">
@@ -212,6 +212,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
             <?= htmlspecialchars($tag) ?>
           </a>
         <?php endforeach; ?>
+
       </div>
 
   </div>
@@ -222,6 +223,7 @@ while ($c = $commentStmt->fetch(PDO::FETCH_ASSOC)) {
   <footer class="mt-10">
     <?php include 'Partials/footer.php'; ?>
   </footer>
+
   <script>
     document.querySelectorAll('.upvote, .downvote').forEach(button => {
       button.addEventListener('click', function() {

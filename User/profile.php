@@ -76,7 +76,7 @@ $userPosts = $stmt->fetchAll();
   </style>
 </head>
 
-<body class="bg-gray-100 text-black pt-20">
+<body class="bg-gray-100 text-black pt-16">
   <?php include '../Partials/nav.php'; ?>
   <div class="flex flex-col lg:flex-row min-h-screen bg-gray-100">
     <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
@@ -129,22 +129,22 @@ $userPosts = $stmt->fetchAll();
       <!-- Tabs Content -->
       <div id="info" class="tab-content active bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Profile Information</h3>
-        <div class="bg-red-50 p-4 rounded-md border">
+        <div class="p-4 rounded-md border">
           <div>
             <label class="text-sm text-gray-500">Full Name</label>
-            <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1 mb-3" />
+            <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1 mb-3" disabled />
           </div>
           <div>
             <label class="text-sm text-gray-500">Email</label>
-            <input type="text" name="email" value="<?= htmlspecialchars($user['email'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1 mb-3" />
+            <input type="text" name="email" value="<?= htmlspecialchars($user['email'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1 mb-3" disabled />
           </div>
           <div>
             <label class="text-sm text-gray-500">Phone</label>
-            <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1 mb-3" />
+            <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1 mb-3" disabled />
           </div>
           <div>
             <label class="text-sm text-gray-500">Password</label>
-            <input type="text" name="password" value="" class="w-full border rounded px-3 py-2 mt-1 mb-3" />
+            <input type="text" name="password" value="" class="w-full border rounded px-3 py-2 mt-1 mb-3" disabled />
           </div>
         </div>
         <a href="change_password.php" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change Password</a>
@@ -156,51 +156,52 @@ $userPosts = $stmt->fetchAll();
           <?= nl2br(htmlspecialchars($user['about_me'] ?? 'No bio provided.')) ?>
         </p>
       </div>
+
       <div id="post" class="tab-content bg-white shadow rounded-xl p-6">
-  <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Posts</h3>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Posts</h3>
 
-  <?php if (count($userPosts) > 0): ?>
-    <ul class="space-y-4">
-      <?php foreach ($userPosts as $post): ?>
-        <li class="bg-gray-50 p-4 rounded shadow">
-         <a href="../questionDetails.php?id=<?= $post['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline block">
-  <?= htmlspecialchars($post['title']) ?>
-</a>
+        <?php if (count($userPosts) > 0): ?>
+          <ul class="space-y-4">
+            <?php foreach ($userPosts as $post): ?>
+              <li class="bg-gray-50 p-4 rounded shadow">
+                <a href="../questionDetails.php?id=<?= $post['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline block">
+                  <?= htmlspecialchars($post['title']) ?>
+                </a>
 
-          <p class="text-gray-600 text-sm mb-2"><?= htmlspecialchars(substr($post['description'], 0, 100)) ?>...</p>
-          <div class="flex justify-between items-center text-sm">
-            <span class="text-gray-500"><?= date("F j, Y", strtotime($post['created_at'])) ?></span>
-            <form method="POST" action="../Controller/deletePostController.php" onsubmit="return confirm('Are you sure you want to delete this post?');">
-              <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-              <button type="submit" class="text-red-600 hover:underline">Delete</button>
-            </form>
+                <p class="text-gray-600 text-md mb-1 mt-1"><?= htmlspecialchars(substr($post['description'], 0, 100)) ?>...</p>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-500 text-xs"><?= date("F j, Y", strtotime($post['created_at'])) ?></span>
+                  <form method="POST" action="../Controller/deletePostController.php" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                    <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                    <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                  </form>
+                </div>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        <?php else: ?>
+          <p class="text-gray-500 mt-4">No posts available yet.</p>
+        <?php endif; ?>
+      </div>
+
+      <div id="save" class="tab-content bg-white shadow rounded-xl p-6">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Saved Items</h3>
+
+        <?php if (count($savedQuestions) > 0): ?>
+          <div class="space-y-4">
+            <?php foreach ($savedQuestions as $question): ?>
+              <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-gray-50">
+                <h4 class="text-lg font-medium text-orange-600"><?= htmlspecialchars($question['title']) ?></h4>
+                <p class="text-gray-700 mt-1"><?= htmlspecialchars($question['description']) ?></p>
+                <p class="text-gray-400 text-xs mt-2">Saved on <?= date('F j, Y', strtotime($question['created_at'])) ?></p>
+                <a href="../questionDetails.php?id=<?= $question['id'] ?>" class="text-sm text-indigo-500 hover:underline mt-2 inline-block">View Question</a>
+              </div>
+            <?php endforeach; ?>
           </div>
-        </li>
-      <?php endforeach; ?>
-    </ul>
-  <?php else: ?>
-    <p class="text-gray-500 mt-4">No posts available yet.</p>
-  <?php endif; ?>
-</div>
-
-<div id="save" class="tab-content bg-white shadow rounded-xl p-6">
-  <h3 class="text-xl font-semibold text-gray-800 mb-4">Saved Items</h3>
-
-  <?php if (count($savedQuestions) > 0): ?>
-    <div class="space-y-4">
-      <?php foreach ($savedQuestions as $question): ?>
-        <div class="border border-gray-200 rounded-lg p-4 shadow-sm">
-          <h4 class="text-lg font-medium text-orange-600"><?= htmlspecialchars($question['title']) ?></h4>
-          <p class="text-gray-700 mt-1"><?= htmlspecialchars($question['description']) ?></p>
-          <p class="text-gray-400 text-xs mt-2">Saved on <?= date('F j, Y', strtotime($question['created_at'])) ?></p>
-          <a href="../Question/question_detail.php?id=<?= $question['id'] ?>" class="text-sm text-indigo-500 hover:underline mt-2 inline-block">View Question</a>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  <?php else: ?>
-    <p class="text-gray-500">No saved items available yet.</p>
-  <?php endif; ?>
-</div>
+        <?php else: ?>
+          <p class="text-gray-500">No saved items available yet.</p>
+        <?php endif; ?>
+      </div>
 
       <div id="links" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Links</h3>
@@ -227,11 +228,11 @@ $userPosts = $stmt->fetchAll();
           </div>
           <div>
             <label class="text-sm text-gray-500">Phone</label>
-            <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" disabled/>
+            <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" disabled />
           </div>
           <div>
             <label class="text-sm text-gray-500">Email</label>
-            <input type="text" name="email" value="<?= htmlspecialchars($user['email'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" disabled/>
+            <input type="text" name="email" value="<?= htmlspecialchars($user['email'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" disabled />
           </div>
           <div>
             <label class="text-sm text-gray-500">About Me</label>

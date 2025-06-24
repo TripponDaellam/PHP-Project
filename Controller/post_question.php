@@ -37,6 +37,10 @@ $validTagsString = implode(',', $submittedTags);
 $stmt = $pdo->prepare("INSERT INTO questions (title, description, tags, user_id, created_at) VALUES (?, ?, ?, ?, NOW())");
 $stmt->execute([$title, $description, $validTagsString, $userId]);
 
+// Insert question count
+$stmt = $pdo->prepare("UPDATE tags SET question_count = question_count + 1 WHERE tag_name = ?");
+$stmt->execute([$validTagsString]);
+
 // Handle image upload
 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     $imgTmp = $_FILES['image']['tmp_name'];
@@ -48,4 +52,3 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 // Redirect after successful post
 header("Location: ../index.php");
 exit();
-?>
