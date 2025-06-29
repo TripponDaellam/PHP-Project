@@ -26,26 +26,32 @@ $invalidTags = array_diff($submittedTags, $allowedTags);
 
 if (!empty($invalidTags)) {
     $_SESSION['error'] = "Invalid tag(s): " . implode(', ', $invalidTags);
-    header("Location: ../ask.php"); // Redirect back to form
+    header("Location: ../ask.php");
     exit();
 }
 
-// Prepare tags string for DB
 $validTagsString = implode(',', $submittedTags);
 
-// Insert question
-$stmt = $pdo->prepare("INSERT INTO questions (title, description, tags, user_id, created_at) VALUES (?, ?, ?, ?, NOW())");
-$stmt->execute([$title, $description, $validTagsString, $userId]);
+// Default to null
+$imageData = null;
 
-// Handle image upload
+// Handle image upload (as binary BLOB)
 if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
     $imgTmp = $_FILES['image']['tmp_name'];
-    $imgName = basename($_FILES['image']['name']);
-    $targetPath = 'uploads/' . time() . '_' . $imgName;
-    move_uploaded_file($imgTmp, $targetPath);
+    $imageData = file_get_contents($imgTmp); // Read binary content
 }
 
-// Redirect after successful post
+// Insert question with image BLOB
+$stmt = $pdo->prepare("INSERT INTO questions (title, description, tags, user_id, created_at, image) VALUES (?, ?, ?, ?, NOW(), ?)");
+$stmt->bindParam(1, $title);
+$stmt->bindParam(2, $description);
+$stmt->bindParam(3, $validTagsString);
+$stmt->bindParam(4, $userId);
+$stmt->bindParam(5, $imageData, PDO::PARAM_LOB); // Bind as binary
+
+$stmt->execute();
+
+// Redirect to home
 header("Location: ../index.php");
 exit();
 ?>

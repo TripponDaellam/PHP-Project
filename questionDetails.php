@@ -93,9 +93,9 @@ unset($comment);
 
 <body class="bg-gray-50 pt-20">
   <?php include 'Partials/nav.php'; ?>
-  <aside class="hidden lg:block fixed top-0 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
-    <?php include 'Partials/left_nav.php'; ?>
-  </aside>
+ <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
+      <?php include 'Partials/left_nav.php'; ?>
+    </aside>
 
   <main class="max-w-4xl mx-auto p-6 bg-white rounded shadow mt-8">
     <div class="flex items-center mb-4">
@@ -109,6 +109,13 @@ unset($comment);
 
     <h1 class="text-3xl font-bold text-orange-600 mb-2"><?= htmlspecialchars($question['title']) ?></h1>
     <p class="text-gray-700 mb-4"><?= htmlspecialchars($question['description']) ?></p>
+    <?php if (!empty($question['image'])): ?>
+      <div class="mt-4">
+      <img src="data:image/jpeg;base64,<?= base64_encode($question['image']) ?>" class="w-full h-auto mb-4 rounded"
+        alt="Question Image"
+        class="rounded shadow max-w-full h-auto">
+    </div>
+    <?php endif; ?>
 
     <div class="mb-4 text-sm text-gray-500">
       Upvotes: <?= $question['upvotes'] ?? 0 ?> | Downvotes: <?= $question['downvotes'] ?? 0 ?>
