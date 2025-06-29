@@ -193,7 +193,7 @@ $userPosts = $stmt->fetchAll();
           <h4 class="text-lg font-medium text-orange-600"><?= htmlspecialchars($question['title']) ?></h4>
           <p class="text-gray-700 mt-1"><?= htmlspecialchars($question['description']) ?></p>
           <p class="text-gray-400 text-xs mt-2">Saved on <?= date('F j, Y', strtotime($question['created_at'])) ?></p>
-          <a href="../Question/question_detail.php?id=<?= $question['id'] ?>" class="text-sm text-indigo-500 hover:underline mt-2 inline-block">View Question</a>
+          <a href="../questionDetails.php?id=<?= $question['id'] ?>" class="text-sm text-indigo-500 hover:underline mt-2 inline-block">View Question</a>
         </div>
       <?php endforeach; ?>
     </div>
