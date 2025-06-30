@@ -94,6 +94,9 @@ unset($comment);
   <aside class="hidden lg:block fixed top-16 left-0 h-full w-[200px] bg-white z-10 shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
+ <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
+      <?php include 'Partials/left_nav.php'; ?>
+    </aside>
 
   <main class="flex-1 min-w-[500px] md:min-w-[600px] max-w-screen-full ml-0 lg:ml-[220px] mr-0 lg:mr-10 p-10 overflow-x-auto transition-all duration-300 ease-in-out bg-white shadow-md rounded-lg">
     <!-- Question header -->
@@ -105,10 +108,16 @@ unset($comment);
       </div>
     </div>
 
-    <h1 class="text-2xl font-bold text-orange-600 mb-2"><?= htmlspecialchars($question['title']) ?></h1>
-    <p class="text-gray-700 mb-4"><?= nl2br(htmlspecialchars($question['description'])) ?></p>
+    <h1 class="text-3xl font-bold text-orange-600 mb-2"><?= htmlspecialchars($question['title']) ?></h1>
+    <p class="text-gray-700 mb-4"><?= htmlspecialchars($question['description']) ?></p>
+    <?php if (!empty($question['image'])): ?>
+      <div class="mt-4">
+      <img src="data:image/jpeg;base64,<?= base64_encode($question['image']) ?>" class="w-full h-auto mb-4 rounded"
+        alt="Question Image"
+        class="rounded shadow max-w-full h-auto">
+    </div>
+    <?php endif; ?>
 
-    <!-- Vote Info -->
     <div class="mb-4 text-sm text-gray-500">
       Upvotes: <?= $question['upvotes'] ?? 0 ?> | Downvotes: <?= $question['downvotes'] ?? 0 ?>
     </div>

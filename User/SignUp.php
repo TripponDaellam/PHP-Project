@@ -19,7 +19,10 @@
       <input type="email" name="email" placeholder="Email" class="w-full mb-3 px-4 py-2 border rounded" required>
       <input type="password" name="password" placeholder="Password" class="w-full mb-3 px-4 py-2 border rounded" required>
       <input type="password" name="confirm_password" placeholder="Confirm Password" class="w-full mb-3 px-4 py-2 border rounded" required>
-
+       <div class="mb-3">
+     <div class="mb-3">
+        <div class="g-recaptcha" data-sitekey="6LdR0GQrAAAAAL_6dcXo9ptTFjaMvXnMaGUwVs5e"></div>
+      </div>
       <button type="submit" class="bg-orange-500 text-white px-4 py-2 w-full rounded hover:bg-orange-600">Sign Up</button>
     </form>
 
@@ -27,5 +30,8 @@
       <a href="login.php" class="text-orange-500 hover:underline">Login</a>
     </p>
   </div>
+
+ <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+   
 </body>
 </html>
