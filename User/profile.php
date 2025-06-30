@@ -252,33 +252,33 @@ $userPosts = $stmt->fetchAll();
 
       <div id="setting" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <!-- Theme Toggle -->
-        <div class="flex items-center justify-between p-4 border rounded bg-white">
+        <!-- <div class="flex items-center justify-between p-4 border rounded bg-white">
           <div>
             <h3 class="text-lg font-medium text-gray-800">Theme</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400">Toggle between Light and Dark mode</p>
-          </div>
+          </div> -->
 
           <!-- Light Mode / Dark Mode -->
-          <label class="relative inline-flex items-center cursor-pointer">
+          <!-- <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" id="toggle-dark" class="sr-only peer" />
             <div class="w-16 h-9 bg-gray-300 rounded-full peer-focus:outline-none dark:bg-gray-700 peer-checked:bg-yellow-400 transition-colors duration-300 relative">
-            </div>
+            </div> -->
 
             <!-- Sun Icon -->
-            <svg class="absolute left-1 w-7 h-7 text-yellow-500 transition-opacity 
+            <!-- <svg class="absolute left-1 w-7 h-7 text-yellow-500 transition-opacity 
              duration-300 peer-checked:opacity-0" xmlns="http://www.w3.org/2000/svg" fill="none"
               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M12 3v2m6.364.636l-1.414 1.414M21 12h-2M18.364 18.364l-1.414-1.414M12 21v-2m-4.95-.636l-1.414 1.414M3 12h2m1.222-6.364l1.414 1.414M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-            </svg>
+            </svg> -->
 
             <!-- Moon Icon -->
-            <svg class="absolute right-1 w-7 h-7 text-gray-100 opacity-0 peer-checked:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+            <!-- <svg class="absolute right-1 w-7 h-7 text-gray-100 opacity-0 peer-checked:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
               viewBox="0 0 20 20">
               <path d="M17.293 13.293a8 8 0 01-10.586-10.586A8 8 0 1017.293 13.293z" />
             </svg>
           </label>
-        </div>
+        </div> -->
 
         <!-- Delete -->
         <div class="flex flex-row space-x-4 mt-4">

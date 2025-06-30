@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Strong password validation
     if ($password !== $confirm) {
         $_SESSION['signup_error'] = "Passwords do not match.";
-        header("Location: ../Admin/SignUp.php");
+        header("Location: ../Admin/signup.php");
         exit;
     }
 
@@ -48,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } catch (PDOException $e) {
         $_SESSION['signup_error'] = "Signup failed: " . $e->getMessage();
-        header("Location: ../Admin/sigup.php");
+        header("Location: ../Admin/signup.php");
         exit;
     }
 } else {
-    header("Location: ../Admin/sigup.php");
+    header("Location: ../Admin/signup.php");
     exit;
 }

@@ -38,7 +38,7 @@ if ($userId) {
     <!-- Logo -->
     <div class="flex items-center space-x-3">
       <img src="" alt="Logo" class="w-8 h-8" />
-      <span class="text-2xl font-semibold pl-5">Method Flow</span>
+      <span class="text-2xl font-semibold pl-2">Method Flow</span>
     </div>
 
     <!-- Desktop Right Side -->
@@ -61,6 +61,8 @@ if ($userId) {
           <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </div>
+
+      <a href="ask.php" class="bg-orange-600 text-white px-4 py-1.5 rounded-md hover:bg-orange-700 text-sm">Ask</a>
 
       <!-- Notification Dropdown -->
       <div class="relative" x-data="{ open: false }">
@@ -157,7 +159,7 @@ if ($userId) {
           x-cloak
           x-transition
           @click.outside="openSearch = false"
-          class="absolute -right-[140px] mt-3 min-w-[470px] p-2 bg-white border border-gray-300 rounded shadow-lg"
+          class="absolute -right-[210px] mt-3 min-w-[470px] p-2 bg-white border border-gray-300 rounded shadow-lg"
           style="display: none">
           <input
             type="text"
@@ -165,6 +167,8 @@ if ($userId) {
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm" />
         </div>
       </div>
+
+      <a href="ask.php" class="bg-orange-600 text-white px-4 py-1.5 rounded-md hover:bg-orange-700 text-sm">Ask</a>
 
       <!-- Mobile Notification Dropdown -->
       <div x-data="{ openNoti: false }" class="relative">
