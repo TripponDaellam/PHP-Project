@@ -28,7 +28,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
   </aside>
 
   <!-- Main Content -->
-  <main class="p-6 max-w-4xl mx-auto lg:ml-60">
+  <main class="p-6 max-w-4xl mx-auto lg:ml-[210px]">
     <h1 class="text-3xl font-bold mb-6">Ask a New Question</h1>
 
     <!-- Error Message -->

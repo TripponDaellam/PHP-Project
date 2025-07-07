@@ -10,6 +10,7 @@ require_once 'DBConnection/DBLocal.php';
 $query = "SELECT q.id, q.title, q.description, q.tags, q.created_at, q.upvotes, q.downvotes, u.username, u.profile_image
           FROM questions q
           JOIN users u ON q.user_id = u.id
+          WHERE q.banned = 0 and q.is_approved = 1
           ORDER BY q.created_at DESC";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
@@ -97,7 +98,11 @@ if (!function_exists('word_limiter')) {
                 </button>
                 <div class="dropdown absolute right-0 top-full mt-2 hidden bg-white shadow rounded text-sm z-50 w-36 md:w-32">
                   <a href="../Actions/save.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Save</a>
-                  <a href="../Actions/report.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Report</a>
+                  <button
+                    class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    onclick="openReportModal(<?= $q['id'] ?>)">
+                    Report
+                  </button>
                 </div>
               </div>
 
@@ -160,6 +165,22 @@ if (!function_exists('word_limiter')) {
       </div>
     </main>
 
+    <!-- Report Modal -->
+    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+        <button id="closeReportModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-xl font-bold">&times;</button>
+        <h2 class="text-xl font-semibold mb-4">Report Question</h2>
+        <form id="reportForm" class="space-y-4">
+          <textarea name="reason" placeholder="Reason for reporting..." required rows="5"
+            class="w-full p-3 border border-gray-300 rounded resize-none focus:outline-none focus:ring focus:border-blue-300"></textarea>
+          <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded shadow transition">
+            Submit Report
+          </button>
+        </form>
+        <div id="reportMessage" class="mt-4 text-center"></div>
+      </div>
+    </div>
+
     <!-- Right Sidebar -->
     <aside class="hidden lg:block w-full lg:w-72 px-4 py-6 bg-white rounded shadow mt-10 lg:mt-[75px] lg:mr-6 h-fit sticky top-24">
       <h3 class="text-xl font-bold text-gray-900 mb-4">Your Tags</h3>
@@ -175,18 +196,23 @@ if (!function_exists('word_limiter')) {
             }
           }
         }
-        arsort($allTags);
-        foreach (array_slice($allTags, 0, 12) as $tag => $count): ?>
-          <a href="tag.php?tag=<?= urlencode($tag) ?>"
-            class="inline-flex items-center gap-1 bg-gray-100 text-black text-xs px-3 py-1 rounded-full shadow hover:bg-gray-200">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-            <?= htmlspecialchars($tag) ?>
-          </a>
-        <?php endforeach; ?>
+        if (empty($allTags)): ?>
+          <p class="text-sm text-gray-500">No tags found.</p>
+          <?php else:
+          arsort($allTags);
+          foreach (array_slice($allTags, 0, 12) as $tag => $count): ?>
+            <a href="tag.php?tag=<?= urlencode($tag) ?>"
+              class="inline-flex items-center gap-1 bg-gray-100 text-black text-xs px-3 py-1 rounded-full shadow hover:bg-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <?= htmlspecialchars($tag) ?>
+            </a>
+        <?php endforeach;
+        endif; ?>
       </div>
+
     </aside>
 
   </div>
@@ -197,6 +223,68 @@ if (!function_exists('word_limiter')) {
   </footer>
 
   <script>
+    let currentReportQuestionId = null;
+
+    function openReportModal(questionId) {
+      currentReportQuestionId = questionId;
+      document.getElementById('reportModal').classList.remove('hidden');
+      document.getElementById('reportMessage').textContent = '';
+      document.getElementById('reportForm').reset();
+    }
+
+    document.getElementById('closeReportModal').addEventListener('click', () => {
+      document.getElementById('reportModal').classList.add('hidden');
+    });
+
+    // Optional: close modal on clicking outside modal content
+    document.getElementById('reportModal').addEventListener('click', (e) => {
+      if (e.target.id === 'reportModal') {
+        document.getElementById('reportModal').classList.add('hidden');
+      }
+    });
+
+    document.getElementById('reportForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const reason = this.reason.value.trim();
+      const messageDiv = document.getElementById('reportMessage');
+      messageDiv.textContent = '';
+      messageDiv.className = '';
+
+      if (!reason) {
+        messageDiv.textContent = 'Please provide a reason for reporting.';
+        messageDiv.className = 'text-red-600 mt-2';
+        return;
+      }
+
+      try {
+        const response = await fetch(`../Actions/report.php?id=${currentReportQuestionId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            reason
+          })
+        });
+
+        const text = await response.text();
+
+        if (response.ok) {
+          messageDiv.textContent = 'Report submitted successfully. Closing modal...';
+          messageDiv.className = 'text-green-600 mt-2';
+          setTimeout(() => {
+            document.getElementById('reportModal').classList.add('hidden');
+          }, 2000);
+        } else {
+          messageDiv.textContent = text || 'Error submitting report.';
+          messageDiv.className = 'text-red-600 mt-2';
+        }
+      } catch (err) {
+        messageDiv.textContent = 'Network error. Please try again later.';
+        messageDiv.className = 'text-red-600 mt-2';
+      }
+    });
+
     function toggleDropdown(button) {
       const dropdown = button.parentElement.querySelector('.dropdown');
       dropdown.classList.toggle('hidden');

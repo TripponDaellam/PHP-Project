@@ -55,7 +55,7 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
 }
 
 // Insert question with image BLOB
-$stmt = $pdo->prepare("INSERT INTO questions (title, description, tags, user_id, created_at, image) VALUES (?, ?, ?, ?, NOW(), ?)");
+$stmt = $pdo->prepare("INSERT INTO questions (title, description, tags, user_id, created_at, image, is_approved) VALUES (?, ?, ?, ?, NOW(), ?, 0)");
 $stmt->bindParam(1, $title);
 $stmt->bindParam(2, $description);
 $stmt->bindParam(3, $validTagsString);

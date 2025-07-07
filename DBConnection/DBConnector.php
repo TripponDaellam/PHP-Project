@@ -6,6 +6,7 @@ try {
         "AVNS_KazazPwStUrRMEUKKgH"
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->exec("SET time_zone = '+06:30'");
    // echo "✅ Connected successfully to Aiven MySQL!";
 } catch (PDOException $e) {
     echo "❌ Connection failed: " . $e->getMessage();

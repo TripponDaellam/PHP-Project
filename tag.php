@@ -19,11 +19,10 @@ if (!$tag) {
             SELECT 
         t.tag_name, 
         t.description,
-        (SELECT COUNT(*) FROM questions q WHERE FIND_IN_SET(t.tag_name, q.tags)) AS question_count
+        (SELECT COUNT(*) FROM questions q WHERE FIND_IN_SET(t.tag_name, q.tags) AND q.banned = 0) AS question_count
       FROM tags t
       WHERE t.tag_name LIKE :search
       ORDER BY question_count
-      LIMIT 8
         ");
     $stmt->bindValue(':search', $searchParam, PDO::PARAM_STR);
   } else {
@@ -31,10 +30,9 @@ if (!$tag) {
             SELECT 
         t.tag_name, 
         t.description,
-        (SELECT COUNT(*) FROM questions q WHERE FIND_IN_SET(t.tag_name, q.tags)) AS question_count
+        (SELECT COUNT(*) FROM questions q WHERE FIND_IN_SET(t.tag_name, q.tags) AND q.banned = 0) AS question_count
       FROM tags t
       ORDER BY question_count
-      LIMIT 8
         ");
   }
   $stmt->execute();
