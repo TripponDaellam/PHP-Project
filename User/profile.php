@@ -201,13 +201,12 @@ $userPosts = $stmt->fetchAll();
     <p class="text-gray-500">No saved items available yet.</p>
   <?php endif; ?>
 </div>
-
       <div id="links" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Links</h3>
         <div>
-          <p class="text-sm text-gray-500">Website</p>
+          <p class="text-sm text-gray-500">Website</p>  
           <p class="font-medium text-blue-600 underline"><?= htmlspecialchars($user['website'] ?? 'N/A') ?></p>
-        </div>
+        </div>   
         <div>
           <p class="text-sm text-gray-500">GitHub</p>
           <p class="font-medium text-blue-600 underline"><?= htmlspecialchars($user['github'] ?? 'N/A') ?></p>
@@ -253,7 +252,7 @@ $userPosts = $stmt->fetchAll();
         <!-- Theme Toggle -->
         <div class="flex items-center justify-between p-4 border rounded bg-white">
           <div>
-            <h3 class="text-lg font-medium text-gray-800">Theme</h3>
+            <h3 class="text-lg font-medium text-gray-800">Theme</h3>    
             <p class="text-sm text-gray-500 dark:text-gray-400">Toggle between Light and Dark mode</p>
           </div>
 
@@ -270,7 +269,7 @@ $userPosts = $stmt->fetchAll();
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M12 3v2m6.364.636l-1.414 1.414M21 12h-2M18.364 18.364l-1.414-1.414M12 21v-2m-4.95-.636l-1.414 1.414M3 12h2m1.222-6.364l1.414 1.414M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
             </svg>
-
+   
             <!-- Moon Icon -->
             <svg class="absolute right-1 w-7 h-7 text-gray-100 opacity-0 peer-checked:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
               viewBox="0 0 20 20">
@@ -292,8 +291,6 @@ $userPosts = $stmt->fetchAll();
         </div>
     </main>
   </div>
-
-  <!-- Tabs Script -->
   <script>
     function showTab(tabId, event) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -338,5 +335,4 @@ $userPosts = $stmt->fetchAll();
     }
   </script>
 </body>
-
 </html>

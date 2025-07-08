@@ -4,7 +4,6 @@ if (!isset($_SESSION['user_id'])) {
   header('Location: ../User/Login.php');
   exit;
 }
-
 require_once 'DBConnection/DBConnector.php';
 $stmt = $pdo->query("SELECT tag_name FROM tags");
 $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
@@ -80,7 +79,6 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <input type="file" name="image" accept="image/*"
           class="w-full px-4 py-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-orange-400 outline-none">
       </div>
-
       <!-- Submit -->
       <div>
         <button type="submit"
@@ -109,15 +107,12 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
         suggestionsDiv.classList.add('hidden');
         return;
       }
-
       const filtered = tags.filter(tag => tag.toLowerCase().includes(input) && !selectedTags.includes(tag));
-
       if (filtered.length === 0) {
         suggestionsDiv.innerHTML = '<div class="p-2 text-gray-500">No matches</div>';
         suggestionsDiv.classList.remove('hidden');
         return;
       }
-
       suggestionsDiv.innerHTML = '';
       filtered.forEach(tag => {
         const div = document.createElement('div');
@@ -190,6 +185,6 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
       }
     });
   </script>
+  
 </body>
-
 </html>

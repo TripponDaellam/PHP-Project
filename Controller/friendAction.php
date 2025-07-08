@@ -44,7 +44,8 @@ switch ($action) {
     // Cancel a pending request you sent
     $stmt = $pdo->prepare("DELETE FROM friend_requests WHERE sender_id = ? AND receiver_id = ? AND status = 'pending'");
     $stmt->execute([$user_id, $other_id]);
-    break;
+    break;  
+    
 
 
     default:
