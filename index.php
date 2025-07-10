@@ -97,7 +97,11 @@ if (!function_exists('word_limiter')) {
                   </svg>
                 </button>
                 <div class="dropdown absolute right-0 top-full mt-2 hidden bg-white shadow rounded text-sm z-50 w-36 md:w-32">
-                  <a href="../Actions/save.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Save</a>
+                  <button
+                    class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    onclick="saveQuestion(<?= $q['id'] ?>)">
+                    Save
+                  </button>
                   <button
                     class="block w-full text-left px-4 py-2 hover:bg-gray-100"
                     onclick="openReportModal(<?= $q['id'] ?>)">
@@ -323,6 +327,17 @@ if (!function_exists('word_limiter')) {
           .catch(() => alert('Failed to connect to server.'));
       });
     });
+
+    function saveQuestion(questionId) {
+      fetch(`../Actions/save.php?id=${questionId}`)
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message);
+        })
+        .catch(() => {
+          alert('Network error. Please try again later.');
+        });
+    }
   </script>
 
 </body>

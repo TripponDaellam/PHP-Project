@@ -70,7 +70,7 @@ function word_limiter($string, $limit)
                                     <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded"><?= htmlspecialchars($tag) ?></span>
                                 <?php endforeach; ?>
                             </div>
-                            <button onclick="unsaveQuestion(<?= $q['id'] ?>, this)" class="absolute top-2 right-6 text-sm text-red-600 hover:underline">
+                            <button onclick="unsaveQuestion(<?= $q['id'] ?>, this)" class="absolute top-4 right-6 text-sm text-red-600 hover:underline">
                                 Unsave
                             </button>
                             <div class="text-xs text-gray-400 text-right mt-4">
