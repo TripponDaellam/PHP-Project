@@ -14,7 +14,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
 <head>
   <meta charset="UTF-8" />
   <title>Ask a Question - Method Flow</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -22,15 +22,24 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
   <?php include 'Partials/nav.php'; ?>
 
   <!-- Left Sidebar -->
-  <aside class="hidden lg:block fixed top-0 left-0 h-full w-[200px] bg-white z-10 shadow">
+  <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
-  <!-- Main Container -->
-  <div class="ml-[220px] p-6 max-w-4xl">
+  <!-- Main Content -->
+  <main class="p-6 max-w-4xl mx-auto lg:ml-[210px]">
     <h1 class="text-3xl font-bold mb-6">Ask a New Question</h1>
 
-    <form action="../Controller/post_question.php" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white p-6 rounded shadow" onsubmit="updateSelectedTagsInput()">
+    <!-- Error Message -->
+    <?php if (isset($_SESSION['error'])): ?>
+      <div class="bg-red-100 text-red-700 p-3 rounded mb-4 border border-red-300">
+        <?= htmlspecialchars($_SESSION['error']) ?>
+      </div>
+      <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+
+    <!-- Form -->
+    <form action="../Controller/post_question.php" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white p-6 rounded shadow" onsubmit="return validateForm()">
 
       <!-- Title -->
       <div>
@@ -46,30 +55,19 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
           class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-orange-400 outline-none"></textarea>
       </div>
 
-      <!-- Tag Input -->
+      <!-- Tags -->
       <div>
         <label class="block text-lg font-medium mb-1">Tags</label>
-
-        <!-- Tag input container -->
         <div id="tagInputContainer"
-          tabindex="0"
-          class="flex flex-wrap items-center gap-2 min-h-[40px] px-3 py-2 border border-gray-300 rounded cursor-text bg-white"
-          onclick="document.getElementById('tagInput').focus()">
-          <!-- Tags inserted before the input -->
-          <input
-            id="tagInput"
-            type="text"
-            placeholder="Type and select tags..."
-            autocomplete="off"
+          class="flex flex-wrap items-center gap-2 min-h-[40px] px-3 py-2 border border-gray-300 rounded bg-white cursor-text"
+          onclick="tagInput.focus()">
+          <input id="tagInput" type="text" placeholder="Type and select tags..." autocomplete="off"
             class="flex-grow min-w-[100px] focus:outline-none"
-            onkeyup="filterTags(event)"
-            onkeydown="handleBackspace(event)" />
+            onkeyup="filterTags()" onkeydown="handleBackspace(event)">
         </div>
 
-        <!-- Suggestions box -->
         <div id="suggestions" class="border border-gray-300 rounded bg-white max-h-48 overflow-y-auto mt-2 hidden shadow-lg"></div>
 
-        <!-- Hidden input to hold CSV tags -->
         <input type="hidden" id="selectedTagsInput" name="selected_tags" value="">
       </div>
 
@@ -87,54 +85,50 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
         </button>
       </div>
     </form>
-  </div>
+  </main>
 
-  <!-- JavaScript -->
   <script>
     const tags = <?php echo json_encode($tags); ?>;
-    const suggestionsDiv = document.getElementById('suggestions');
     const tagInput = document.getElementById('tagInput');
     const tagInputContainer = document.getElementById('tagInputContainer');
+    const suggestionsDiv = document.getElementById('suggestions');
     const selectedTagsInput = document.getElementById('selectedTagsInput');
-
     let selectedTags = [];
 
-    function filterTags(event) {
+    function filterTags() {
       const input = tagInput.value.toLowerCase().trim();
-
-      if (input.length === 0) {
+      if (input === '') {
         suggestionsDiv.innerHTML = '';
         suggestionsDiv.classList.add('hidden');
         return;
       }
-      const filtered = tags.filter(tag => tag.toLowerCase().includes(input) && !selectedTags.includes(tag));
+
+      const filtered = tags.filter(tag =>
+        tag.toLowerCase().includes(input) &&
+        !selectedTags.includes(tag)
+      );
+
+      suggestionsDiv.innerHTML = '';
       if (filtered.length === 0) {
         suggestionsDiv.innerHTML = '<div class="p-2 text-gray-500">No matches</div>';
-        suggestionsDiv.classList.remove('hidden');
-        return;
+      } else {
+        filtered.forEach(tag => {
+          const div = document.createElement('div');
+          div.textContent = tag;
+          div.className = 'p-2 hover:bg-gray-100 cursor-pointer';
+          div.onclick = () => addTag(tag);
+          suggestionsDiv.appendChild(div);
+        });
       }
-      suggestionsDiv.innerHTML = '';
-      filtered.forEach(tag => {
-        const div = document.createElement('div');
-        div.textContent = tag;
-        div.className = 'p-2 hover:bg-gray-100 cursor-pointer';
-        div.onclick = (e) => {
-          e.stopPropagation();
-          addTag(tag);
-        };
-        suggestionsDiv.appendChild(div);
-      });
-
       suggestionsDiv.classList.remove('hidden');
     }
 
     function addTag(tag) {
       if (selectedTags.includes(tag)) return;
-
       selectedTags.push(tag);
 
       const tagPill = document.createElement('div');
-      tagPill.className = 'flex items-center bg-blue-100 text-dark-700 rounded-full px-3 py-1 text-sm shadow';
+      tagPill.className = 'flex items-center bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm shadow';
       tagPill.textContent = tag;
 
       const closeBtn = document.createElement('button');
@@ -144,26 +138,18 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
         tagInputContainer.removeChild(tagPill);
         selectedTags = selectedTags.filter(t => t !== tag);
         updateSelectedTagsInput();
-        updateInputPlaceholder();
       };
 
       tagPill.appendChild(closeBtn);
       tagInputContainer.insertBefore(tagPill, tagInput);
 
       tagInput.value = '';
-      suggestionsDiv.innerHTML = ''; // 👈 Remove all suggestions
-      suggestionsDiv.classList.add('hidden'); // 👈 Hide box after tag added
+      suggestionsDiv.classList.add('hidden');
       updateSelectedTagsInput();
-      updateInputPlaceholder();
-      tagInput.focus();
     }
 
     function updateSelectedTagsInput() {
       selectedTagsInput.value = selectedTags.join(',');
-    }
-
-    function updateInputPlaceholder() {
-      tagInput.placeholder = selectedTags.length === 0 ? 'Type and select tags...' : '';
     }
 
     function handleBackspace(event) {
@@ -173,12 +159,19 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
           tagInputContainer.removeChild(tagPills[tagPills.length - 1]);
           selectedTags.pop();
           updateSelectedTagsInput();
-          updateInputPlaceholder();
         }
       }
     }
 
-    // Hide suggestions if clicked outside
+    function validateForm() {
+      if (selectedTags.length === 0) {
+        alert("Please select at least one valid tag.");
+        return false;
+      }
+      return true;
+    }
+
+    // Hide suggestions when clicking outside
     document.addEventListener('click', (e) => {
       if (!tagInputContainer.contains(e.target) && !suggestionsDiv.contains(e.target)) {
         suggestionsDiv.classList.add('hidden');

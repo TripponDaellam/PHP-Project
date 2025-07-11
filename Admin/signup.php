@@ -17,7 +17,7 @@
 
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-        <input id="password" type="email" name="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400" required>
+        <input type="email" name="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-400" required>
       </div>
 
       <div>
