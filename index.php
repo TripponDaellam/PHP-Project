@@ -187,7 +187,7 @@ if (!function_exists('word_limiter')) {
 
     <!-- Right Sidebar -->
     <aside class="hidden lg:block w-full lg:w-72 px-4 py-6 bg-white rounded shadow mt-10 lg:mt-[75px] lg:mr-6 h-fit sticky top-24">
-      <h3 class="text-xl font-bold text-gray-900 mb-4">Your Tags</h3>
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Tags</h3>
       <div class="flex flex-wrap gap-2">
         <?php
         $tagStmt = $pdo->query("SELECT DISTINCT tags FROM questions");

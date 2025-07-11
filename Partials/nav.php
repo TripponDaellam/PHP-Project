@@ -36,8 +36,8 @@ if ($userId) {
 
   <nav x-data="{ open: false }" class="fixed bg-white top-0 left-0 w-full px-6 py-2 z-50 h-14 shadow flex items-center justify-between">
     <!-- Logo -->
-    <div class="flex items-center space-x-3">
-      <img src="" alt="Logo" class="w-8 h-8" />
+    <div class="flex items-center">
+      <img src="../Logo_Light-removebg-preview.png" alt="Logo" class="w-16 h-16" />
       <span class="text-2xl font-semibold pl-2">Method Flow</span>
     </div>
 

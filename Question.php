@@ -19,8 +19,8 @@ try {
       $orderBy = "ORDER BY answer $order";
       break;
     case 'in 24 hours':
-      $orderBy = "WHERE created_at >= NOW() - INTERVAL 1 DAY
-      ORDER BY created_at $order";
+      $orderBy = "AND created_at >= NOW() - INTERVAL 1 DAY
+                  ORDER BY created_at $order";
       break;
     case 'newest':
     default:

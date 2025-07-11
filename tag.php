@@ -13,45 +13,53 @@ $search = $_GET['search'] ?? '';
 $searchParam = '%' . $search . '%';
 $tag = $_GET['tag'] ?? null;
 
+// Pagination setup
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+$tagsPerPage = 8;
+$offset = ($page - 1) * $tagsPerPage;
+
 if (!$tag) {
+  // Count total tags
+  $countSql = "SELECT COUNT(*) FROM tags" . (!empty($search) ? " WHERE tag_name LIKE :search" : "");
+  $totalTagsStmt = $pdo->prepare($countSql);
   if (!empty($search)) {
-    $stmt = $pdo->prepare("
-            SELECT 
-        t.tag_name, 
-        t.description,
-        (SELECT COUNT(*) FROM questions q WHERE FIND_IN_SET(t.tag_name, q.tags) AND q.banned = 0) AS question_count
-      FROM tags t
-      WHERE t.tag_name LIKE :search
-      ORDER BY question_count
-        ");
-    $stmt->bindValue(':search', $searchParam, PDO::PARAM_STR);
-  } else {
-    $stmt = $pdo->prepare("
-            SELECT 
-        t.tag_name, 
-        t.description,
-        (SELECT COUNT(*) FROM questions q WHERE FIND_IN_SET(t.tag_name, q.tags) AND q.banned = 0) AS question_count
-      FROM tags t
-      ORDER BY question_count
-        ");
+    $totalTagsStmt->bindValue(':search', $searchParam, PDO::PARAM_STR);
   }
+  $totalTagsStmt->execute();
+  $totalTags = $totalTagsStmt->fetchColumn();
+  $totalPages = ceil($totalTags / $tagsPerPage);
+
+  // Fetch paginated tags
+  $query = "
+    SELECT 
+      t.tag_name, 
+      t.description,
+      (SELECT COUNT(*) FROM questions q WHERE FIND_IN_SET(t.tag_name, q.tags) AND q.banned = 0) AS question_count
+    FROM tags t
+    " . (!empty($search) ? " WHERE t.tag_name LIKE :search" : "") . "
+    ORDER BY question_count
+    LIMIT :limit OFFSET :offset
+  ";
+  $stmt = $pdo->prepare($query);
+  if (!empty($search)) {
+    $stmt->bindValue(':search', $searchParam, PDO::PARAM_STR);
+  }
+  $stmt->bindValue(':limit', $tagsPerPage, PDO::PARAM_INT);
+  $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
   $stmt->execute();
   $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-$questions = [];
-if ($tag) {
+} else {
+  // Fetch questions by tag
   $stmt = $pdo->prepare("
-        SELECT id, title, description, tags, created_at, upvotes, downvotes, answer 
-        FROM questions 
-        WHERE FIND_IN_SET(:tag, tags)
-        ORDER BY created_at DESC
-    ");
+    SELECT id, title, description, tags, created_at, upvotes, downvotes, answer 
+    FROM questions 
+    WHERE FIND_IN_SET(:tag, tags)
+    ORDER BY created_at DESC
+  ");
   $stmt->execute(['tag' => $tag]);
   $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -70,11 +78,7 @@ if ($tag) {
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
-  <main class="flex-1 min-w-[500px] md:min-w-[600px] max-w-screen-fullml-0 lg:ml-[220px] mr-0 lg:mr-10 p-4 overflow-x-auto transition-all duration-300 ease-in-out">
-    <!-- <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold text-gray-800"><?= $tag ? 'Questions with Your tags' : 'Tags' ?></h1>
-    </div> -->
-
+  <main class="flex-1 min-w-[500px] md:min-w-[600px] max-w-screen-full ml-0 lg:ml-[220px] mr-0 lg:mr-10 p-4 overflow-x-auto transition-all duration-300 ease-in-out">
     <?php if (!$tag): ?>
       <!-- Tag Search -->
       <div class="mb-6">
@@ -89,7 +93,6 @@ if ($tag) {
             Search
           </button>
         </form>
-        
       </div>
 
       <!-- Tags Grid -->
@@ -112,9 +115,55 @@ if ($tag) {
           <p class="text-gray-500 col-span-full">No tags found.</p>
         <?php endif; ?>
       </div>
-    <?php endif; ?>
 
-    <?php if ($tag): ?>
+      <!-- Pagination -->
+      <?php if ($totalPages > 1): ?>
+        <div class="fixed bottom-28 left-1/2 flex justify-center mt-6 space-x-2">
+          <?php if ($page > 1): ?>
+            <a href="tag.php?page=<?= $page - 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>"
+              class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-orange-500 hover:text-white">
+              &laquo;
+            </a>
+          <?php endif; ?>
+
+          <?php
+          $start = max(2, $page - 2);
+          $end = min($totalPages - 1, $page + 2);
+
+          if ($start > 2) {
+            // show first page
+            echo '<a href="tag.php?page=1' . (!empty($search) ? '&search=' . urlencode($search) : '') . '" class="px-3 py-1 rounded ' . ($page == 1 ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-orange-500 hover:text-white') . '">1</a>';
+            echo '<span class="px-2">...</span>';
+          } else {
+            for ($i = 1; $i < $start; $i++) {
+              echo '<a href="tag.php?page=' . $i . (!empty($search) ? '&search=' . urlencode($search) : '') . '" class="px-3 py-1 rounded ' . ($i == $page ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-orange-500 hover:text-white') . '">' . $i . '</a>';
+            }
+          }
+
+          for ($i = $start; $i <= $end; $i++) {
+            echo '<a href="tag.php?page=' . $i . (!empty($search) ? '&search=' . urlencode($search) : '') . '" class="px-3 py-1 rounded ' . ($i == $page ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-orange-500 hover:text-white') . '">' . $i . '</a>';
+          }
+
+          if ($end < $totalPages - 1) {
+            echo '<span class="px-2">...</span>';
+            echo '<a href="tag.php?page=' . $totalPages . (!empty($search) ? '&search=' . urlencode($search) : '') . '" class="px-3 py-1 rounded ' . ($page == $totalPages ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-orange-500 hover:text-white') . '">' . $totalPages . '</a>';
+          } else {
+            for ($i = $end + 1; $i <= $totalPages; $i++) {
+              echo '<a href="tag.php?page=' . $i . (!empty($search) ? '&search=' . urlencode($search) : '') . '" class="px-3 py-1 rounded ' . ($i == $page ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-orange-500 hover:text-white') . '">' . $i . '</a>';
+            }
+          }
+          ?>
+
+          <?php if ($page < $totalPages): ?>
+            <a href="tag.php?page=<?= $page + 1 ?><?= !empty($search) ? '&search=' . urlencode($search) : '' ?>"
+              class="px-3 py-1 rounded bg-gray-200 text-gray-700 hover:bg-orange-500 hover:text-white">
+              &raquo;
+            </a>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+
+    <?php else: ?>
       <!-- Questions List -->
       <div class="mt-4 space-y-4">
         <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
