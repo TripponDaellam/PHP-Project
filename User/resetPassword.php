@@ -3,18 +3,37 @@ require '../DBConnection/DBConnector.php';
 session_start();
 
 $token = $_GET['token'] ?? '';
+if (!$token) {
+    die("No token provided.");
+}
+
 $token_hash = hash('sha256', $token);
 
+
+// Prepare and execute query
 $stmt = $pdo->prepare("SELECT * FROM users WHERE reset_token = ? AND token_expire > NOW()");
 $stmt->execute([$token_hash]);
-$user = $stmt->fetch();
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
-    echo "Invalid or expired token.";
-    exit();
+    echo "User not found or token expired.\n";
+
+    // Check if token exists ignoring expiry
+    $stmt2 = $pdo->prepare("SELECT * FROM users WHERE reset_token = ?");
+    $stmt2->execute([$token_hash]);
+    $user2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+    if ($user2) {
+        echo "Token exists but is expired. Token expire time: " . $user2['token_expire'] . "\n";
+    } else {
+        echo "Token does not exist in database.\n";
+    }
+
+    echo "</pre>";
+    exit("Invalid or expired token.");
 }
 
 $email = $user['email'];
+// Proceed with showing reset form or next steps
 ?>
 
 <!DOCTYPE html>
