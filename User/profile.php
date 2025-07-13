@@ -86,8 +86,8 @@ $userPosts = $stmt->fetchAll();
             <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('info')">Profile Info</button>
             <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('edit')">Edit Profile</button>
             <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('post')">Post</button>
-            <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('save')">Save</button>
-            <!-- <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('setting')">Setting</button> -->
+            <!-- <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('save')">Save</button> -->
+            <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('setting')">Setting</button>
           </div>
         </div>
       </section>
@@ -125,15 +125,15 @@ $userPosts = $stmt->fetchAll();
             <input type="text" value="<?= htmlspecialchars($user['github'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2" disabled />
           </div>
           <div class="flex flex-row space-x-4 mt-4">
-          <a href="change_password.php" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change Password</a>
-          <form action="../Controller/deleteAccount.php" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
+            <!-- <a href="change_password.php" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change Password</a> -->
+            <!-- <form action="../Controller/deleteAccount.php" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
             <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">
               Delete Account
             </button>
           </form>
           <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded" onclick="confirmLogout(event)">
             Log Out
-          </button>
+          </button> -->
           </div>
         </div>
       </div>
@@ -165,7 +165,7 @@ $userPosts = $stmt->fetchAll();
       </div>
 
       <!-- Save Tab -->
-      <div id="save" class="tab-content bg-white shadow rounded-xl p-6">
+      <!-- <div id="save" class="tab-content bg-white shadow rounded-xl p-6">
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Saved Items</h3>
         <?php if (count($savedQuestions) > 0): ?>
           <div class="space-y-4">
@@ -181,7 +181,7 @@ $userPosts = $stmt->fetchAll();
         <?php else: ?>
           <p class="text-gray-500">No saved items available yet.</p>
         <?php endif; ?>
-      </div>
+      </div> -->
 
       <!-- Edit Tab -->
       <div id="edit" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
@@ -221,13 +221,26 @@ $userPosts = $stmt->fetchAll();
 
       <!-- Settings -->
       <div id="setting" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
-        <div class="flex flex-row space-x-4 mt-4">
-          <form action="../Controller/deleteAccount.php" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
-            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded w-full sm:w-auto">
+        <div class="flex flex-wrap gap-4 mt-4">
+          <!-- Change Password Button -->
+          <a href="change_password.php"
+            class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">
+            Change Password
+          </a>
+
+          <!-- Delete Account Button inside form -->
+          <form action="../Controller/deleteAccount.php" method="POST"
+            onsubmit="return confirm('Are you sure you want to delete your account?');">
+            <button type="submit"
+              class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded w-full sm:w-auto">
               Delete Account
             </button>
           </form>
-          <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded w-full sm:w-auto" onclick="confirmLogout(event)">
+
+          <!-- Log Out Button -->
+          <button type="button"
+            onclick="confirmLogout(event)"
+            class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded w-full sm:w-auto">
             Log Out
           </button>
         </div>

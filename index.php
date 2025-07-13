@@ -97,7 +97,11 @@ if (!function_exists('word_limiter')) {
                   </svg>
                 </button>
                 <div class="dropdown absolute right-0 top-full mt-2 hidden bg-white shadow rounded text-sm z-50 w-36 md:w-32">
-                  <a href="../Actions/save.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Save</a>
+                  <button
+                    class="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                    onclick="saveQuestion(<?= $q['id'] ?>)">
+                    Save
+                  </button>
                   <button
                     class="block w-full text-left px-4 py-2 hover:bg-gray-100"
                     onclick="openReportModal(<?= $q['id'] ?>)">
@@ -183,7 +187,7 @@ if (!function_exists('word_limiter')) {
 
     <!-- Right Sidebar -->
     <aside class="hidden lg:block w-full lg:w-72 px-4 py-6 bg-white rounded shadow mt-10 lg:mt-[75px] lg:mr-6 h-fit sticky top-24">
-      <h3 class="text-xl font-bold text-gray-900 mb-4">Your Tags</h3>
+      <h3 class="text-xl font-bold text-gray-900 mb-4">Tags</h3>
       <div class="flex flex-wrap gap-2">
         <?php
         $tagStmt = $pdo->query("SELECT DISTINCT tags FROM questions");
@@ -323,6 +327,17 @@ if (!function_exists('word_limiter')) {
           .catch(() => alert('Failed to connect to server.'));
       });
     });
+
+    function saveQuestion(questionId) {
+      fetch(`../Actions/save.php?id=${questionId}`)
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message);
+        })
+        .catch(() => {
+          alert('Network error. Please try again later.');
+        });
+    }
   </script>
 
 </body>
