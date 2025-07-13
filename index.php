@@ -170,20 +170,69 @@ if (!function_exists('word_limiter')) {
     </main>
 
     <!-- Report Modal -->
-    <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-      <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
-        <button id="closeReportModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-xl font-bold">&times;</button>
-        <h2 class="text-xl font-semibold mb-4">Report Question</h2>
-        <form id="reportForm" class="space-y-4">
-          <textarea name="reason" placeholder="Reason for reporting..." required rows="5"
-            class="w-full p-3 border border-gray-300 rounded resize-none focus:outline-none focus:ring focus:border-blue-300"></textarea>
-          <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded shadow transition">
-            Submit Report
-          </button>
-        </form>
-        <div id="reportMessage" class="mt-4 text-center"></div>
+ <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
+    <button id="closeReportModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-xl font-bold">&times;</button>
+    <h2 class="text-xl font-semibold mb-4">Report Question</h2>
+    <form id="reportForm" class="space-y-4">
+      
+      <div>
+        <p class="font-medium mb-2">Select a reason:</p>
+        <div class="space-y-2">
+          <label class="flex items-center">
+            <input type="radio" name="reason" value="Spam or misleading" required class="mr-2">
+            Spam or misleading
+          </label>
+          <label class="flex items-center">
+            <input type="radio" name="reason" value="Hate speech or abusive" class="mr-2">
+            Hate speech or abusive
+          </label>
+          <label class="flex items-center">
+            <input type="radio" name="reason" value="Harassment or bullying" class="mr-2">
+            Harassment or bullying
+          </label>
+          <label class="flex items-center">
+            <input type="radio" name="reason" value="Violence or harmful content" class="mr-2">
+            Violence or harmful content
+          </label>
+          <label class="flex items-center">
+            <input type="radio" name="reason" value="Inappropriate content" class="mr-2">
+            Inappropriate content
+          </label>
+          <label class="flex items-center">
+            <input type="radio" name="reason" value="Other" class="mr-2" id="otherReasonOption">
+            Other (please explain)
+          </label>
+        </div>
       </div>
-    </div>
+
+      <div id="customReasonContainer" class="hidden">
+        <textarea name="custom_reason" placeholder="Please explain..." rows="4"
+          class="w-full p-3 border border-gray-300 rounded resize-none focus:outline-none focus:ring focus:border-blue-300"></textarea>
+      </div>
+
+      <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded shadow transition">
+        Submit Report
+      </button>
+    </form>
+    <div id="reportMessage" class="mt-4 text-center"></div>
+  </div>
+</div>
+<script>
+  const otherReasonOption = document.getElementById("otherReasonOption");
+  const customReasonContainer = document.getElementById("customReasonContainer");
+  const radioButtons = document.querySelectorAll('input[name="reason"]');
+
+  radioButtons.forEach((radio) => {
+    radio.addEventListener('change', () => {
+      if (otherReasonOption.checked) {
+        customReasonContainer.classList.remove("hidden");
+      } else {
+        customReasonContainer.classList.add("hidden");
+      }
+    });
+  });
+</script>
 
     <!-- Right Sidebar -->
     <aside class="hidden lg:block w-full lg:w-72 px-4 py-6 bg-white rounded shadow mt-10 lg:mt-[75px] lg:mr-6 h-fit sticky top-24">
