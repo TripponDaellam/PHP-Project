@@ -1,34 +1,42 @@
-<footer class="relative z-10 bg-black text-gray-300 border-t mt-10 w-full">
-  <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col lg:flex-row justify-between items-center text-sm space-y-4 lg:space-y-0">
+<footer class="relative z-10 bg-gradient-to-r from-gray-900 via-black to-gray-900 text-gray-300 border-t border-gray-800 mt-10 w-full">
+  <div class="max-w-6xl mx-auto px-4 py-4">
     
-    <!-- Left -->
-    <div class="text-center lg:text-left">
-      © <?php echo date('Y'); ?> Method Flow. All rights reserved.
+    <!-- Main Footer Content -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+      
+      <!-- Brand Section -->
+      <div class="lg:col-span-2">
+        <div class="mb-2">
+          <h3 class="text-base font-bold text-white mb-1">Method Flow</h3>
+          <p class="text-gray-400 text-xs leading-relaxed max-w-sm">
+            Empowering developers and tech enthusiasts to share knowledge, ask questions, and build a stronger community together.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <!-- <a href="" class="text-gray-400 flex items-center group text-xs">
+          <span class="w-1 h-1 bg-orange-500 rounded-full mr-2 group-hover:scale-150 transition-transform duration-200"></span>
+          Contact Us 
+        </a> -->
+      </div>
     </div>
 
-    <!-- Center Links -->
-    <div class="flex flex-wrap justify-center gap-4">
-      <a href="about.php" class="hover:text-orange-500">About</a>
-      <a href="contact.php" class="hover:text-orange-500">Contact</a>
-      <a href="privacy.php" class="hover:text-orange-500">Privacy</a>
-      <a href="terms.php" class="hover:text-orange-500">Terms</a>
-    </div>
+    <!-- Bottom Bar -->
+    <div class="border-t border-gray-800 pt-3">
+      <div class="flex flex-col md:flex-row justify-between items-center space-y-1 md:space-y-0">
+        <div class="text-center md:text-left">
+          <p class="text-gray-400 text-xs">
+            © <?php echo date('Y'); ?> Method Flow. All rights reserved.
+          </p>
+        </div>
 
-    <div class="flex justify-center gap-6">
-      <a href="#" target="_blank" class="hover:text-orange-500">
-        <i class="fab fa-facebook-f text-xl"></i>
-      </a>
-      <a href="#" target="_blank" class="hover:text-orange-500">
-        <i class="fab fa-twitter text-xl"></i>
-      </a>
-      <a href="#" target="_blank" class="hover:text-orange-500">
-        <i class="fab fa-instagram text-xl"></i>
-      </a>
-      <a href="#" target="_blank" class="hover:text-orange-500">
-        <i class="fab fa-linkedin-in text-xl"></i>
-      </a>
+        <div class="flex items-center space-x-4 text-xs">
+          <span class="text-gray-500">Made with ❤️</span>
+        </div>
+      </div>
     </div>
-
   </div>
 </footer>
 

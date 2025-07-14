@@ -45,7 +45,7 @@ if ($userId) {
     <div class="hidden md:flex items-center space-x-6">
 
       <!-- Search Bar (Desktop) -->
-      <div class="relative">
+      <!-- <div class="relative">
         <input
           type="text"
           placeholder="Search..."
@@ -60,12 +60,12 @@ if ($userId) {
           <circle cx="11" cy="11" r="7" stroke-linecap="round" stroke-linejoin="round" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-      </div>
+      </div> -->
 
       <a href="ask.php" class="bg-orange-600 text-white px-4 py-1.5 rounded-md hover:bg-orange-700 text-sm">Ask</a>
 
       <!-- Notification Dropdown -->
-      <div class="relative" x-data="{ open: false }">
+      <!-- <div class="relative" x-data="{ open: false }">
         <button @click="open = !open" class="cursor-pointer text-gray-700 hover:text-orange-500 pt-1" aria-label="Toggle Notifications">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path
@@ -96,7 +96,7 @@ if ($userId) {
             <a href="/notifications" class="text-sm text-orange-500 hover:underline">View all</a>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Settings Icon -->
       <a href="../User/profile.php#setting" class="text-gray-700 hover:text-orange-500" aria-label="Settings">
@@ -129,7 +129,7 @@ if ($userId) {
               0-5.216-.584-7.499-1.632Z" />
             </svg>
           <?php else: ?>
-            <img src="<?php echo htmlspecialchars($profileImage); ?>" class="w-10 h-10 rounded-full border-2 border-gray-100" alt="Profile" />
+            <img src="<?php echo htmlspecialchars($profileImage); ?>" class="w-8 h-8 rounded-full border-2 border-gray-100" alt="Profile" />
           <?php endif; ?>
         </a>
       <?php else: ?>

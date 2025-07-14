@@ -45,6 +45,7 @@ try {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Questions</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     /* For better word wrapping in tags and question titles */
     .break-word {
@@ -53,159 +54,261 @@ try {
   </style>
 </head>
 
-<body class="flex flex-col min-h-screen bg-gray-50 text-black pt-16 overflow-x-hidden">
+<body class="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800 pt-16 overflow-x-hidden">
 
   <?php include 'Partials/nav.php'; ?>
 
   <!-- Sidebar - hidden below lg -->
-  <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow overflow-auto">
+  <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-4rem)] w-[200px] bg-white z-10 shadow-lg overflow-auto">
     <?php include 'Partials/left_nav.php'; ?>
   </aside>
 
-  <main class="flex-1 min-w-[500px] md:min-w-[600px] max-w-screen-full ml-0 lg:ml-[220px] mr-0 lg:mr-10 p-4 overflow-x-auto transition-all duration-300 ease-in-out">
+  <main class="flex-1 min-w-[500px] md:min-w-[600px] max-w-screen-full ml-0 lg:ml-[220px] mr-0 lg:mr-10 p-6 overflow-x-auto transition-all duration-300 ease-in-out">
 
-    <!-- Sorting and filter controls -->
-    <div class="flex flex-wrap gap-2 items-center relative text-sm">
-
-      <!-- Sorting buttons -->
-      <button onclick="sortBy('upvotes')" class="px-3 py-1 border border-gray-300 rounded text-black hover:bg-gray-200 whitespace-nowrap">
-        Upvotes
-      </button>
-      <button onclick="sortBy('downvotes')" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200 whitespace-nowrap">
-        Downvotes
-      </button>
-      <button onclick="sortBy('answers')" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200 whitespace-nowrap">
-        Answers
-      </button>
-      <button onclick="sortBy('in 24 hours')" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200 whitespace-nowrap">
-        In 24 hours
-      </button>
-
-      <!-- More Dropdown -->
-      <div class="relative">
-        <button onclick="toggleMore()" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-200 whitespace-nowrap" id="moreBtn" type="button">
-          More
-        </button>
-        <div id="moreMenu" class="absolute hidden bg-white border border-gray-300 rounded shadow mt-1 w-48 z-50">
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Trending</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Most frequent</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:bg-gray-200">Most activity</a>
+    <!-- Header Section -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">All Questions</h1>
+          <p class="text-gray-600">Browse and filter questions from the community</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="text-sm text-gray-500">Sort by:</span>
+          <div class="flex items-center space-x-1">
+            <i class="fas fa-sort text-gray-400"></i>
+          </div>
         </div>
       </div>
 
-      <!-- Filter Button -->
-      <button onclick="toggleFilter()" class="px-2 py-0 border border-blue-500 text-blue-500 rounded hover:bg-blue-50 whitespace-nowrap" type="button" aria-expanded="false" aria-controls="filterPanel">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-block align-middle">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
-        </svg>
-        <span class="sr-only">Toggle filter panel</span>
-      </button>
+      <!-- Sorting and filter controls -->
+      <div class="flex flex-wrap gap-3 items-center">
+        <!-- Sorting buttons -->
+        <button onclick="sortBy('newest')" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 <?= $sort === 'newest' ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+          <i class="fas fa-clock mr-2"></i>Newest
+        </button>
+        <button onclick="sortBy('upvotes')" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 <?= $sort === 'upvotes' ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+          <i class="fas fa-arrow-up mr-2"></i>Upvotes
+        </button>
+        <button onclick="sortBy('downvotes')" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 <?= $sort === 'downvotes' ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+          <i class="fas fa-arrow-down mr-2"></i>Downvotes
+        </button>
+        <button onclick="sortBy('answers')" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 <?= $sort === 'answers' ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+          <i class="fas fa-comments mr-2"></i>Answers
+        </button>
+        <button onclick="sortBy('in 24 hours')" class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 <?= $sort === 'in 24 hours' ? 'bg-orange-500 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+          <i class="fas fa-fire mr-2"></i>24 Hours
+        </button>
+
+        <!-- More Dropdown -->
+        <!-- <div class="relative">
+          <button onclick="toggleMore()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 text-sm font-medium" id="moreBtn" type="button">
+            <i class="fas fa-ellipsis-h mr-2"></i>More
+          </button>
+          <div id="moreMenu" class="absolute hidden bg-white border border-gray-200 rounded-lg shadow-lg mt-2 w-48 z-50">
+            <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+              <i class="fas fa-trending-up mr-2 text-green-500"></i>Trending
+            </a>
+            <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+              <i class="fas fa-chart-line mr-2 text-blue-500"></i>Most frequent
+            </a>
+            <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+              <i class="fas fa-activity mr-2 text-purple-500"></i>Most activity
+            </a>
+          </div>
+        </div> -->
+
+        <!-- Filter Button -->
+        <!-- <button onclick="toggleFilter()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 text-sm font-medium" type="button" aria-expanded="false" aria-controls="filterPanel">
+          <i class="fas fa-filter mr-2"></i>Filter
+        </button> -->
+      </div>
     </div>
 
     <!-- Filter Panel -->
-    <div id="filterPanel" class="hidden bg-white text-black p-6 mt-4 rounded-md shadow-md max-w-4xl mx-auto">
+    <div id="filterPanel" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+      <div class="mb-4">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+          <i class="fas fa-filter text-blue-500 mr-3"></i>
+          Advanced Filters
+        </h3>
+      </div>
+      
       <form class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Filter by -->
-        <div>
-          <h3 class="font-semibold mb-2">Filter by</h3>
-          <label class="block"><input type="checkbox" class="mr-2"> No answers</label>
-          <label class="block"><input type="checkbox" class="mr-2"> No accepted answer</label>
-          <label class="block"><input type="checkbox" class="mr-2"> No Staging Ground</label>
-          <label class="block"><input type="checkbox" class="mr-2"> Has bounty</label>
-          <input type="text" placeholder="Days old" class="mt-2 px-2 py-1 border rounded w-full" />
+        <div class="space-y-3">
+          <h4 class="font-semibold text-gray-700 mb-3">Filter by</h4>
+          <label class="flex items-center p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+            <input type="checkbox" class="mr-3 text-orange-500">
+            <span class="text-gray-700">No answers</span>
+          </label>
+          <label class="flex items-center p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+            <input type="checkbox" class="mr-3 text-orange-500">
+            <span class="text-gray-700">No accepted answer</span>
+          </label>
+          <label class="flex items-center p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+            <input type="checkbox" class="mr-3 text-orange-500">
+            <span class="text-gray-700">Has bounty</span>
+          </label>
+          <div class="mt-4">
+            <input type="text" placeholder="Days old" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
+          </div>
         </div>
 
         <!-- Sorted by -->
-        <div>
-          <h3 class="font-semibold mb-2">Sorted by</h3>
-          <label class="block"><input type="radio" name="sort" class="mr-2" checked> Newest</label>
-          <label class="block"><input type="radio" name="sort" class="mr-2"> Recent activity</label>
-          <label class="block"><input type="radio" name="sort" class="mr-2"> Highest score</label>
-          <label class="block"><input type="radio" name="sort" class="mr-2"> Most frequent</label>
+        <div class="space-y-3">
+          <h4 class="font-semibold text-gray-700 mb-3">Sorted by</h4>
+          <label class="flex items-center p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+            <input type="radio" name="sort" class="mr-3 text-orange-500" checked>
+            <span class="text-gray-700">Newest</span>
+          </label>
+          <label class="flex items-center p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+            <input type="radio" name="sort" class="mr-3 text-orange-500">
+            <span class="text-gray-700">Recent activity</span>
+          </label>
+          <label class="flex items-center p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+            <input type="radio" name="sort" class="mr-3 text-orange-500">
+            <span class="text-gray-700">Highest score</span>
+          </label>
+          <label class="flex items-center p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+            <input type="radio" name="sort" class="mr-3 text-orange-500">
+            <span class="text-gray-700">Most frequent</span>
+          </label>
         </div>
 
         <!-- Tagged with -->
-        <div>
-          <h3 class="font-semibold mb-2">Tagged with</h3>
-          <label class="block"><input type="radio" name="tags" class="mr-2"> My watched tags</label>
-          <label class="block mt-2">
-            <input type="radio" name="tags" class="mr-2" checked> The following tags:
-            <input type="text" class="mt-1 px-2 py-1 border rounded w-full" placeholder="e.g. javascript or python" />
+        <div class="space-y-3">
+          <h4 class="font-semibold text-gray-700 mb-3">Tagged with</h4>
+          <label class="flex items-center p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors duration-200">
+            <input type="radio" name="tags" class="mr-3 text-orange-500">
+            <span class="text-gray-700">My watched tags</span>
+          </label>
+          <label class="block">
+            <input type="radio" name="tags" class="mr-3 text-orange-500" checked>
+            <span class="text-gray-700">The following tags:</span>
+            <input type="text" class="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" placeholder="e.g. javascript or python" />
           </label>
         </div>
       </form>
 
       <!-- Action buttons -->
-      <div class="mt-6 flex flex-col sm:flex-row justify-between gap-4">
-        <div>
-          <button class="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600">Apply filter</button>
-          <button class="ml-2 px-4 py-2 bg-gray-100 text-black rounded hover:bg-gray-200">Save custom filter</button>
+      <div class="mt-6 flex flex-col sm:flex-row justify-between gap-4 pt-4 border-t border-gray-200">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button class="px-6 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-200 font-medium">
+            <i class="fas fa-check mr-2"></i>Apply filter
+          </button>
+          <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium">
+            <i class="fas fa-save mr-2"></i>Save custom filter
+          </button>
         </div>
-        <button onclick="toggleFilter()" type="button" class="text-blue-500 hover:underline text-sm self-start sm:self-center">Cancel</button>
+        <button onclick="toggleFilter()" type="button" class="text-blue-500 hover:text-blue-700 transition-colors duration-200 text-sm font-medium self-start sm:self-center">
+          <i class="fas fa-times mr-1"></i>Cancel
+        </button>
       </div>
     </div>
 
     <!-- Question List -->
-    <div class="mt-4 space-y-4">
-      <?php foreach ($questions as $q):
-        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $q['title'])));
-        $tags = array_filter(array_map('trim', explode(',', $q['tags'])));
-      ?>
-        <div class=" relative bg-white shadow p-4 rounded flex flex-col sm:flex-row gap-4">
-          <div class="flex sm:flex-col text-sm text-center w-full sm:w-16 text-gray-500 gap-4">
-            <div class=""><strong><?php echo (int)$q['upvotes']; ?></strong><br class="hidden sm:block"> upvotes</div>
-            <div class=""><strong><?php echo (int)$q['downvotes']; ?></strong><br class="hidden sm:block"> downvotes</div>
-            <div class=""><strong><?php echo (int)$q['answer']; ?></strong><br class="hidden sm:block"> answers</div>
-          </div>
-          <div class="flex-1 break-word">
-            <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-xl font-semibold text-orange-600 pointer hover:text-orange-700 break-word">
-              <?php echo htmlspecialchars($q['title']); ?>
-            </a>
-            <p class="text-sm text-gray-600 mt-1">
-              <?php echo '<p class="text-md text-gray-600 mt-1">' . word_limiter($q['description'], 100) . '</p>'; ?>
-            </p>
-            <div class="mt-2 flex flex-wrap gap-2">
-              <?php foreach ($tags as $tag): ?>
-                <span class="inline-block bg-orange-100 text-orange-700 text-sm px-2 py-1 rounded break-word"><?php echo htmlspecialchars($tag); ?></span>
-              <?php endforeach; ?>
-            </div>
-            <!-- Options Dropdown -->
-            <div class="absolute top-2 right-4 flex flex-wrap gap-1 max-w-[50%] justify-end">
-              <button onclick="toggleDropdown(this)" class="p-1 rounded hover:bg-gray-200" aria-label="Options">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24"
-                  stroke-width="1.5" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-                </svg>
-              </button>
-              <div class="dropdown absolute right-0 top-full mt-2 hidden bg-white shadow rounded text-sm z-50 w-36 md:w-32">
-                <a href="../Actions/save.php?id=<?= $q['id'] ?>" class="block px-4 py-2 hover:bg-gray-100">Save</a>
-                <button
-                  class="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                  onclick="openReportModal(<?= $q['id'] ?>)">
-                  Report
+    <div class="space-y-4">
+      <?php if (!empty($questions)): ?>
+        <?php foreach ($questions as $q):
+          $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $q['title'])));
+          $tags = array_filter(array_map('trim', explode(',', $q['tags'])));
+        ?>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
+            
+            <!-- Header with Options -->
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex-1">
+                <a href="questionDetails.php?id=<?= $q['id'] ?>" class="text-xl font-bold text-gray-800 hover:text-orange-600 transition-colors duration-200 block mb-2 break-word">
+                  <?php echo htmlspecialchars($q['title']); ?>
+                </a>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                  <?php echo word_limiter($q['description'], 100); ?>
+                </p>
+              </div>
+              
+              <!-- Options Dropdown -->
+              <div class="relative ml-4">
+                <button onclick="toggleDropdown(this)" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200" aria-label="Options">
+                  <i class="fas fa-ellipsis-v text-gray-500"></i>
                 </button>
+                <div class="dropdown absolute right-0 top-full mt-2 hidden bg-white shadow-lg rounded-lg text-sm z-50 w-36 border border-gray-200">
+                  <a href="../Actions/save.php?id=<?= $q['id'] ?>" class="block px-4 py-3 hover:bg-gray-50 rounded-t-lg transition-colors duration-200">
+                    <i class="fas fa-bookmark mr-2 text-blue-500"></i>Save
+                  </a>
+                  <button class="block w-full text-left px-4 py-3 hover:bg-gray-50 rounded-b-lg transition-colors duration-200"
+                    onclick="openReportModal(<?= $q['id'] ?>)">
+                    <i class="fas fa-flag mr-2 text-red-500"></i>Report
+                  </button>
+                </div>
               </div>
             </div>
-            <div class="text-xs text-gray-400 text-right mt-10">
-              asked <?php echo date("M j, Y g:i a", strtotime($q['created_at'])); ?>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-2 mb-4">
+              <?php foreach ($tags as $tag): ?>
+                <span class="bg-gradient-to-r from-orange-100 to-orange-200 text-orange-700 text-xs px-3 py-1 rounded-full font-medium break-word">
+                  <?php echo htmlspecialchars($tag); ?>
+                </span>
+              <?php endforeach; ?>
+            </div>
+
+            <!-- Stats and Meta -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-6">
+                <!-- Stats -->
+                <div class="flex items-center space-x-4">
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-arrow-up text-green-500"></i>
+                    <span class="text-sm font-bold text-gray-700"><?php echo (int)$q['upvotes']; ?></span>
+                    <span class="text-xs text-gray-500">upvotes</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-arrow-down text-red-500"></i>
+                    <span class="text-sm font-bold text-gray-700"><?php echo (int)$q['downvotes']; ?></span>
+                    <span class="text-xs text-gray-500">downvotes</span>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-comments text-blue-500"></i>
+                    <span class="text-sm font-bold text-gray-700"><?php echo (int)$q['answer']; ?></span>
+                    <span class="text-xs text-gray-500">answers</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Date -->
+              <div class="text-xs text-gray-500 flex items-center">
+                <i class="fas fa-calendar mr-1"></i>
+                asked <?php echo date("M j, Y g:i a", strtotime($q['created_at'])); ?>
+              </div>
             </div>
           </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+          <i class="fas fa-question-circle text-6xl text-gray-300 mb-4"></i>
+          <h3 class="text-xl font-semibold text-gray-700 mb-2">No Questions Found</h3>
+          <p class="text-gray-500">No questions match your current filters.</p>
         </div>
-      <?php endforeach; ?>
+      <?php endif; ?>
     </div>
 
   </main>
 
   <!-- Report Modal -->
   <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
-      <button id="closeReportModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-900 text-xl font-bold">&times;</button>
-      <h2 class="text-xl font-semibold mb-4">Report Question</h2>
-      <form id="reportForm" class="space-y-4">
-        <textarea name="reason" placeholder="Reason for reporting..." required rows="5"
-          class="w-full p-3 border border-gray-300 rounded resize-none focus:outline-none focus:ring focus:border-blue-300"></textarea>
-        <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded shadow transition">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 relative mx-4">
+      <button id="closeReportModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-900 text-xl font-bold p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200">
+        <i class="fas fa-times"></i>
+      </button>
+      <h2 class="text-xl font-bold mb-6 flex items-center">
+        <i class="fas fa-flag text-red-500 mr-3"></i>
+        Report Question
+      </h2>
+      <form id="reportForm" class="space-y-6">
+        <textarea name="reason" placeholder="Please explain the reason for reporting..." required rows="5"
+          class="w-full p-4 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"></textarea>
+        <button type="submit" class="w-full px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 font-medium">
+          <i class="fas fa-paper-plane mr-2"></i>
           Submit Report
         </button>
       </form>

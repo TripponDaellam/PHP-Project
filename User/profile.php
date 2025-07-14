@@ -33,13 +33,9 @@ $userPosts = $stmt->fetchAll();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Profile</title>
+  <title>My Profile - Method Flow</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-    };
-  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     .tab-content {
       display: none;
@@ -51,217 +47,254 @@ $userPosts = $stmt->fetchAll();
   </style>
 </head>
 
-<body class="bg-gray-100 text-black pt-16">
+<body class="bg-gray-50 text-gray-800 pt-16">
   <?php include '../Partials/nav.php'; ?>
-  <div class="flex flex-col lg:flex-row min-h-screen bg-gray-100">
-    <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
-      <?php include '../Partials/left_nav.php'; ?>
-    </aside>
+  
+  <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100vh-4rem)] w-[200px] bg-white z-10 shadow-lg overflow-auto">
+    <?php include '../Partials/left_nav.php'; ?>
+  </aside>
 
-    <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full ml-[230px] lg:mr-10 p-4 overflow-x-auto bg-white">
+  <main class="ml-0 lg:ml-[220px] p-6">
+    <div class="max-w-6xl mx-auto">
+      
       <!-- Profile Header -->
-      <section class="flex flex-col gap-4 pb-5 pt-5">
-        <div class="flex flex-row">
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-6">
+        <div class="flex items-start space-x-6">
+          <!-- Profile Image -->
           <form id="avatarForm" action="../Controller/uploadPhoto.php" method="POST" enctype="multipart/form-data">
             <input type="file" id="profileInput" name="profile_image" accept="image/*" class="hidden" onchange="document.getElementById('avatarForm').submit();">
-            <div class="cursor-pointer pl-5" onclick="document.getElementById('profileInput').click();">
+            <div class="cursor-pointer group" onclick="document.getElementById('profileInput').click();">
               <?php if (!empty($user['profile_image'])): ?>
-                <img src="../uploads/<?= htmlspecialchars($user['profile_image']) ?>" alt="Profile" class="w-28 h-28 rounded-full object-cover border-4 border-gray-100 shadow" />
+                <div class="relative">
+                  <img src="../uploads/<?= htmlspecialchars($user['profile_image']) ?>" alt="Profile" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg" />
+                  <div class="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <i class="fas fa-camera text-white text-lg"></i>
+                  </div>
+                </div>
               <?php else: ?>
-                <div class="w-28 h-28 rounded-full bg-yellow-400 flex items-center justify-center border-4 border-white shadow">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-14 h-14">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                  </svg>
+                <div class="relative w-24 h-24 rounded-full bg-gradient-to-r from-orange-400 to-orange-600 flex items-center justify-center border-4 border-white shadow-lg group-hover:from-orange-500 group-hover:to-orange-700 transition-all duration-200">
+                  <i class="fas fa-user text-white text-2xl"></i>
+                  <div class="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <i class="fas fa-camera text-white text-lg"></i>
+                  </div>
                 </div>
               <?php endif; ?>
             </div>
           </form>
 
-          <h2 class="text-2xl font-semibold text-gray-800 pt-10 pl-5"><?= htmlspecialchars($user['username']) ?></h2>
-        </div>
-
-        <!-- Tabs -->
-        <div class="overflow-x-auto px-5">
-          <div class="flex flex-nowrap md:flex-wrap justify-start md:justify-left space-x-4 mt-2 border-b w-full">
-            <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('info')">Profile Info</button>
-            <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('edit')">Edit Profile</button>
-            <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('post')">Post</button>
-            <!-- <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('save')">Save</button> -->
-            <button class="tab-button whitespace-nowrap text-sm text-gray-600 py-2 px-4 border-b-2 border-transparent hover:border-orange-500" onclick="showTab('setting')">Setting</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Profile Info Tab -->
-      <div id="info" class="tab-content active bg-white shadow rounded-xl p-6 mx-5">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">Profile Information</h3>
-        <div class="space-y-4 border rounded-md p-4">
-          <div>
-            <label class="block text-sm text-gray-500 mb-1">Full Name</label>
-            <input type="text" value="<?= htmlspecialchars($user['full_name'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2" disabled />
-          </div>
-          <div>
-            <label class="block text-sm text-gray-500 mb-1">Email</label>
-            <input type="text" value="<?= htmlspecialchars($user['email'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2" disabled />
-          </div>
-          <div>
-            <label class="block text-sm text-gray-500 mb-1">Phone</label>
-            <input type="text" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2" disabled />
-          </div>
-          <div>
-            <label class="block text-sm text-gray-500 mb-1">Password</label>
-            <input type="text" value="********" class="w-full border rounded px-3 py-2" disabled />
-          </div>
-          <div>
-            <label class="block text-sm text-gray-500 mb-1 mt-4">About Me</label>
-            <textarea rows="4" class="w-full border rounded px-3 py-2 bg-gray-100 text-gray-800" disabled><?= htmlspecialchars($user['about_me'] ?? 'No bio provided.') ?></textarea>
-          </div>
-          <div>
-            <label class="block text-sm text-gray-500 mb-1">Website</label>
-            <input type="text" value="<?= htmlspecialchars($user['website'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2" disabled />
-          </div>
-          <div>
-            <label class="block text-sm text-gray-500 mb-1">GitHub</label>
-            <input type="text" value="<?= htmlspecialchars($user['github'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2" disabled />
-          </div>
-          <div class="flex flex-row space-x-4 mt-4">
-            <!-- <a href="change_password.php" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Change Password</a> -->
-            <!-- <form action="../Controller/deleteAccount.php" method="POST" onsubmit="return confirm('Are you sure you want to delete your account?');">
-            <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">
-              Delete Account
-            </button>
-          </form>
-          <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded" onclick="confirmLogout(event)">
-            Log Out
-          </button> -->
+          <!-- User Info -->
+          <div class="flex-1">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2"><?= htmlspecialchars($user['username']) ?></h1>
+            <p class="text-gray-600 mb-4"><?= htmlspecialchars($user['email'] ?? 'No email provided') ?></p>
+            
+            <!-- Stats -->
+            <div class="flex space-x-6">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-orange-600"><?= count($userPosts) ?></div>
+                <div class="text-sm text-gray-500">Questions</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-orange-600"><?= count($savedQuestions) ?></div>
+                <div class="text-sm text-gray-500">Saved</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-orange-600">0</div>
+                <div class="text-sm text-gray-500">Answers</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Posts Tab -->
-      <div id="post" class="tab-content bg-white shadow rounded-xl p-6">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">Your Posts</h3>
-        <?php if (count($userPosts) > 0): ?>
-          <ul class="space-y-4">
-            <?php foreach ($userPosts as $post): ?>
-              <li class="bg-gray-50 p-4 rounded shadow">
-                <a href="../questionDetails.php?id=<?= $post['id'] ?>" class="text-lg font-semibold text-orange-600 hover:underline block">
-                  <?= htmlspecialchars($post['title']) ?>
+      <!-- Navigation Tabs -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-6">
+        <div class="border-b border-gray-200">
+          <nav class="flex space-x-8 px-6">
+            <button class="tab-button py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200" onclick="showTab('info')">
+              <i class="fas fa-user mr-2"></i>Profile Info
+            </button>
+            <button class="tab-button py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200" onclick="showTab('edit')">
+              <i class="fas fa-edit mr-2"></i>Edit Profile
+            </button>
+            <button class="tab-button py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200" onclick="showTab('post')">
+              <i class="fas fa-question-circle mr-2"></i>My Questions
+            </button>
+            <button class="tab-button py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors duration-200" onclick="showTab('setting')">
+              <i class="fas fa-cog mr-2"></i>Settings
+            </button>
+          </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="p-6">
+          
+          <!-- Profile Info Tab -->
+          <div id="info" class="tab-content active">
+            <h3 class="text-xl font-semibold text-gray-900 mb-6">Profile Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900">
+                  <?= htmlspecialchars($user['full_name'] ?? 'Not provided') ?>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900">
+                  <?= htmlspecialchars($user['email'] ?? 'Not provided') ?>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900">
+                  <?= htmlspecialchars($user['phone'] ?? 'Not provided') ?>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900">
+                  <?= htmlspecialchars($user['website'] ?? 'Not provided') ?>
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">GitHub</label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900">
+                  <?= htmlspecialchars($user['github'] ?? 'Not provided') ?>
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">About Me</label>
+                <div class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-gray-900 min-h-[100px]">
+                  <?= htmlspecialchars($user['about_me'] ?? 'No bio provided.') ?>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Profile Tab -->
+          <div id="edit" class="tab-content">
+            <h3 class="text-xl font-semibold text-gray-900 mb-6">Edit Profile</h3>
+            <form action="../Controller/updateProfile.php" method="POST" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                  <input type="text" name="username" value="<?= htmlspecialchars($user['username'] ?? '') ?>" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                  <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name'] ?? '') ?>" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                  <input type="url" name="website" value="<?= htmlspecialchars($user['website'] ?? '') ?>" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200" />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">GitHub</label>
+                  <input type="url" name="github" value="<?= htmlspecialchars($user['github'] ?? '') ?>" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200" />
+                </div>
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-medium text-gray-700 mb-2">About Me</label>
+                  <textarea name="about_me" rows="4" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 resize-vertical"><?= htmlspecialchars($user['about_me'] ?? '') ?></textarea>
+                </div>
+              </div>
+              <div class="flex justify-end">
+                <button type="submit" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-3 rounded-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-200 font-semibold shadow-sm hover:shadow-md">
+                  <i class="fas fa-save mr-2"></i>Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- My Questions Tab -->
+          <div id="post" class="tab-content">
+            <h3 class="text-xl font-semibold text-gray-900 mb-6">My Questions</h3>
+            <?php if (count($userPosts) > 0): ?>
+              <div class="space-y-4">
+                <?php foreach ($userPosts as $post): ?>
+                  <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
+                    <div class="flex items-start justify-between">
+                      <div class="flex-1">
+                        <a href="../questionDetails.php?id=<?= $post['id'] ?>" class="text-lg font-semibold text-orange-600 hover:text-orange-700 transition-colors duration-200 block mb-2">
+                          <?= htmlspecialchars($post['title']) ?>
+                        </a>
+                        <p class="text-gray-600 text-sm mb-3"><?= htmlspecialchars(substr($post['description'], 0, 150)) ?>...</p>
+                        <div class="flex items-center text-xs text-gray-500">
+                          <i class="fas fa-calendar mr-1"></i>
+                          <?= date("F j, Y", strtotime($post['created_at'])) ?>
+                        </div>
+                      </div>
+                      <form method="POST" action="../Controller/deletePostController.php" onsubmit="return confirm('Are you sure you want to delete this question?');">
+                        <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
+                        <button type="submit" class="text-red-500 hover:text-red-700 transition-colors duration-200 p-2">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            <?php else: ?>
+              <div class="text-center py-12">
+                <i class="fas fa-question-circle text-4xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500 text-lg">No questions posted yet.</p>
+                <a href="../ask.php" class="inline-block mt-4 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-200">
+                  <i class="fas fa-plus mr-2"></i>Ask Your First Question
                 </a>
-                <p class="text-gray-600 text-md mb-1 mt-1"><?= htmlspecialchars(substr($post['description'], 0, 100)) ?>...</p>
-                <div class="flex justify-between items-center">
-                  <span class="text-gray-500 text-xs"><?= date("F j, Y", strtotime($post['created_at'])) ?></span>
-                  <form method="POST" action="../Controller/deletePostController.php" onsubmit="return confirm('Are you sure you want to delete this post?');">
-                    <input type="hidden" name="post_id" value="<?= $post['id'] ?>">
-                    <button type="submit" class="text-red-600 hover:underline">Delete</button>
+              </div>
+            <?php endif; ?>
+          </div>
+
+          <!-- Settings Tab -->
+          <div id="setting" class="tab-content">
+            <h3 class="text-xl font-semibold text-gray-900 mb-6">Account Settings</h3>
+            <div class="space-y-4">
+              <div class="bg-gray-50 border border-gray-200 rounded-lg p-6">
+                <h4 class="text-lg font-medium text-gray-900 mb-4">Account Actions</h4>
+                <div class="flex flex-wrap gap-4">
+                  <a href="change_password.php" class="inline-flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+                    <i class="fas fa-key mr-2"></i>Change Password
+                  </a>
+                  <button onclick="confirmLogout(event)" class="inline-flex items-center bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Log Out
+                  </button>
+                  <form action="../Controller/deleteAccount.php" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');" class="inline">
+                    <button type="submit" class="inline-flex items-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+                      <i class="fas fa-trash mr-2"></i>Delete Account
+                    </button>
                   </form>
                 </div>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-        <?php else: ?>
-          <p class="text-gray-500 mt-4">No posts available yet.</p>
-        <?php endif; ?>
-      </div>
-
-      <!-- Save Tab -->
-      <!-- <div id="save" class="tab-content bg-white shadow rounded-xl p-6">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">Saved Items</h3>
-        <?php if (count($savedQuestions) > 0): ?>
-          <div class="space-y-4">
-            <?php foreach ($savedQuestions as $question): ?>
-              <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-gray-50">
-                <h4 class="text-lg font-medium text-orange-600"><?= htmlspecialchars($question['title']) ?></h4>
-                <p class="text-gray-700 mt-1"><?= htmlspecialchars($question['description']) ?></p>
-                <p class="text-gray-400 text-xs mt-2">Saved on <?= date('F j, Y', strtotime($question['created_at'])) ?></p>
-                <a href="../questionDetails.php?id=<?= $question['id'] ?>" class="text-sm text-indigo-500 hover:underline mt-2 inline-block">View Question</a>
               </div>
-            <?php endforeach; ?>
+            </div>
           </div>
-        <?php else: ?>
-          <p class="text-gray-500">No saved items available yet.</p>
-        <?php endif; ?>
-      </div> -->
 
-      <!-- Edit Tab -->
-      <div id="edit" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">Edit Profile</h3>
-        <form action="../Controller/updateProfile.php" method="POST" class="space-y-4">
-          <div>
-            <label class="text-sm text-gray-500">Username</label>
-            <input type="text" name="username" value="<?= htmlspecialchars($user['username'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
-          </div>
-          <div>
-            <label class="text-sm text-gray-500">Full Name</label>
-            <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" />
-          </div>
-          <div>
-            <label class="text-sm text-gray-500">Phone</label>
-            <input type="text" name="phone" value="<?= htmlspecialchars($user['phone'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" disabled />
-          </div>
-          <div>
-            <label class="text-sm text-gray-500">Email</label>
-            <input type="text" name="email" value="<?= htmlspecialchars($user['email'] ?? 'N/A') ?>" class="w-full border rounded px-3 py-2 mt-1" disabled />
-          </div>
-          <div>
-            <label class="text-sm text-gray-500">About Me</label>
-            <textarea name="about_me" rows="4" class="w-full border rounded px-3 py-2 mt-1"><?= htmlspecialchars($user['about_me'] ?? '') ?></textarea>
-          </div>
-          <div>
-            <label class="text-sm text-gray-500">Website</label>
-            <input type="url" name="website" value="<?= htmlspecialchars($user['website'] ?? '') ?>" class="w-full border rounded px-3 py-2 mt-1" />
-          </div>
-          <div>
-            <label class="text-sm text-gray-500">GitHub</label>
-            <input type="url" name="github" value="<?= htmlspecialchars($user['github'] ?? '') ?>" class="w-full border rounded px-3 py-2 mt-1" />
-          </div>
-          <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">Save Changes</button>
-        </form>
-      </div>
-
-      <!-- Settings -->
-      <div id="setting" class="tab-content bg-white shadow rounded-xl p-6 space-y-4 mx-5">
-        <div class="flex flex-wrap gap-4 mt-4">
-          <!-- Change Password Button -->
-          <a href="change_password.php"
-            class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded">
-            Change Password
-          </a>
-
-          <!-- Delete Account Button inside form -->
-          <form action="../Controller/deleteAccount.php" method="POST"
-            onsubmit="return confirm('Are you sure you want to delete your account?');">
-            <button type="submit"
-              class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded w-full sm:w-auto">
-              Delete Account
-            </button>
-          </form>
-
-          <!-- Log Out Button -->
-          <button type="button"
-            onclick="confirmLogout(event)"
-            class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-2 rounded w-full sm:w-auto">
-            Log Out
-          </button>
         </div>
       </div>
-    </main>
-  </div>
-  <script>
-    function showTab(tabId, event) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('border-orange-500', 'text-orange-600'));
-      if (event) {
-        event.target.classList.add('border-orange-500', 'text-orange-600');
-      }
-    }
+    </div>
+  </main>
 
-    document.querySelectorAll('.tab-button').forEach(btn => {
-      btn.addEventListener('click', e => {
-        showTab(btn.getAttribute('onclick').match(/'(\w+)'/)[1], e);
+  <script>
+    function showTab(tabId) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      
+      // Remove active state from all tab buttons
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('border-orange-500', 'text-orange-600');
+        btn.classList.add('border-transparent', 'text-gray-500');
       });
-    });
+      
+      // Show selected tab content
+      document.getElementById(tabId).classList.add('active');
+      
+      // Add active state to clicked button
+      event.target.classList.remove('border-transparent', 'text-gray-500');
+      event.target.classList.add('border-orange-500', 'text-orange-600');
+    }
 
     function confirmLogout(event) {
       event.preventDefault();
@@ -269,6 +302,15 @@ $userPosts = $stmt->fetchAll();
         window.location.href = "../Controller/logout.php";
       }
     }
+
+    // Set initial active tab
+    document.addEventListener('DOMContentLoaded', function() {
+      const firstTab = document.querySelector('.tab-button');
+      if (firstTab) {
+        firstTab.classList.remove('border-transparent', 'text-gray-500');
+        firstTab.classList.add('border-orange-500', 'text-orange-600');
+      }
+    });
   </script>
 </body>
 </html>

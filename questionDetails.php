@@ -113,96 +113,173 @@ if (!empty($question['image'])) {
   <title><?= htmlspecialchars($question['title']) ?> - Question Details</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
-<body class="bg-gray-100 pt-16 px-4">
+<body class="bg-gray-50 pt-16">
   <?php include 'Partials/nav.php'; ?>
-  <div class="flex flex-col lg:flex-row min-h-screen bg-gray-100">
-    <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100%-0rem)] w-[200px] bg-white z-10 shadow">
-      <?php include 'Partials/left_nav.php'; ?>
-    </aside>
+  
+  <aside class="hidden lg:block fixed top-16 left-0 h-[calc(100vh-4rem)] w-[200px] bg-white z-10 shadow-lg overflow-auto">
+    <?php include 'Partials/left_nav.php'; ?>
+  </aside>
 
-    <main class="flex-1 min-w-full md:min-w-[500px] max-w-screen-full ml-[220px] lg:mr-10 p-4 overflow-x-auto bg-white">
-      <div class="flex items-center mb-6">
-        <img src="<?= $question['profile_image'] ? htmlspecialchars($question['profile_image']) : 'assets/default-user.png' ?>" class="w-12 h-12 rounded-full mr-4" alt="User">
-        <div>
-          <div class="font-semibold text-lg"><?= htmlspecialchars($question['username']) ?></div>
-          <div class="text-gray-500 text-sm">Posted on <?= date('F j, Y H:i', strtotime($question['created_at'])) ?></div>
-        </div>
-      </div>
-
-      <h1 class="text-3xl font-bold mb-4 text-orange-600"><?= htmlspecialchars($question['title']) ?></h1>
-      <p class="mb-6 text-gray-700 whitespace-pre-line"><?= htmlspecialchars($question['description']) ?></p>
-
-      <?php if ($base64Image): ?>
-        <div class="mb-6">
-          <div class="max-w-full sm:max-w-[600px] md:max-w-[800px] border rounded-xl overflow-hidden">
-            <img src="data:<?= htmlspecialchars($imageMime) ?>;base64,<?= $base64Image ?>"
-              class="w-full h-auto object-contain"
-              alt="Question Image">
-          </div>
-        </div>
-      <?php endif; ?>
-
-      <div class="mb-4 text-sm text-gray-600">
-        Upvotes: <?= $question['upvotes'] ?? 0 ?> | Downvotes: <?= $question['downvotes'] ?? 0 ?>
-      </div>
-
-      <div class="mb-8 flex flex-wrap gap-2">
-        <?php foreach (explode(',', $question['tags']) as $tag): ?>
-          <span class="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded"><?= htmlspecialchars(trim($tag)) ?></span>
-        <?php endforeach; ?>
-      </div>
-
-      <?php if ($isLoggedIn): ?>
-        <form action="../Controller/commentController.php" method="POST" class="mb-10">
-          <input type="hidden" name="question_id" value="<?= $question_id ?>">
-          <textarea name="comment" rows="4" required class="w-full border px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-orange-500" placeholder="Write your comment..."></textarea>
-          <button type="submit" class="mt-2 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700">Post Comment</button>
-        </form>
-      <?php else: ?>
-        <p class="text-sm text-gray-600">Please <a href="User/Login.php" class="text-orange-600 underline">log in</a> to comment.</p>
-      <?php endif; ?>
-
-      <section>
-        <h2 class="text-xl font-semibold mb-6">Answers</h2>
-        <?php if ($comments): ?>
-          <?php foreach ($comments as $comment): ?>
-            <div class="mb-8 flex items-start space-x-4">
-              <img src="<?= $comment['profile_image'] ? htmlspecialchars($comment['profile_image']) : 'assets/default-user.png' ?>" class="w-10 h-10 rounded-full mt-1" alt="User">
-              <div class="flex-1">
-                <div class="text-sm font-semibold"><?= htmlspecialchars($comment['username']) ?></div>
-                <div class="text-xs text-gray-500 mb-1">Posted on <?= date('F j, Y H:i', strtotime($comment['created_at'])) ?></div>
-                <div class="bg-gray-100 p-3 rounded text-sm whitespace-pre-line"><?= htmlspecialchars($comment['content']) ?></div>
-                <button onclick="toggleReplyForm(<?= $comment['id'] ?>)" class="text-orange-500 text-xs mt-1 hover:underline">Reply</button>
-
-                <form action="../Controller/addReply.php" method="POST" id="reply-form-<?= $comment['id'] ?>" class="hidden mt-2">
-                  <input type="hidden" name="question_id" value="<?= $question_id ?>">
-                  <input type="hidden" name="parent_comment_id" value="<?= $comment['id'] ?>">
-                  <textarea name="reply_content" rows="2" class="w-full p-2 border rounded text-sm mb-1" placeholder="Write a reply..."></textarea>
-                  <button type="submit" class="bg-orange-500 text-white text-xs px-3 py-1 rounded hover:bg-orange-600">Submit</button>
-                </form>
-
-                <?php if (!empty($comment['replies'])): ?>
-                  <div class="ml-6 mt-3 space-y-3">
-                    <?php foreach ($comment['replies'] as $reply): ?>
-                      <div class="bg-gray-50 p-3 rounded text-sm whitespace-pre-line">
-                        <div class="font-semibold text-xs"><?= htmlspecialchars($reply['username']) ?></div>
-                        <div class="text-xs text-gray-500 mb-1">Replied on <?= date('F j, Y H:i', strtotime($reply['created_at'])) ?></div>
-                        <?= htmlspecialchars($reply['content']) ?>
-                      </div>
-                    <?php endforeach; ?>
-                  </div>
-                <?php endif; ?>
+  <main class="ml-0 lg:ml-[220px] p-6">
+    <div class="max-w-6xl mx-auto">
+      <!-- Question Card -->
+      <div class="bg-white rounded-xl shadow-md border border-gray-200 mb-8">
+        <!-- Question Header -->
+        <div class="p-6 border-b border-gray-100">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center space-x-4">
+              <div class="w-12 h-12 bg-gradient-to-r from-orange-400 to-orange-500 rounded-full flex items-center justify-center text-white text-lg font-semibold">
+                <?= strtoupper(substr($question['username'], 0, 1)) ?>
+              </div>
+              <div>
+                <div class="font-semibold text-lg"><?= htmlspecialchars($question['username']) ?></div>
+                <div class="text-sm text-gray-500"><?= date('M j, Y', strtotime($question['created_at'])) ?></div>
               </div>
             </div>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <p class="text-gray-500">No answers yet. Be the first to comment!</p>
-        <?php endif; ?>
-      </section>
-    </main>
-  </div>
+            <div class="flex items-center space-x-6 text-base text-gray-600">
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-thumbs-up text-green-500 text-lg"></i>
+                <span class="font-semibold"><?= $question['upvotes'] ?? 0 ?></span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-thumbs-down text-red-500 text-lg"></i>
+                <span class="font-semibold"><?= $question['downvotes'] ?? 0 ?></span>
+              </div>
+            </div>
+          </div>
+          <h1 class="text-3xl font-bold text-gray-800"><?= htmlspecialchars($question['title']) ?></h1>
+        </div>
+
+        <!-- Question Content -->
+        <div class="p-6">
+          <p class="text-gray-700 text-base leading-relaxed mb-6"><?= htmlspecialchars($question['description']) ?></p>
+
+          <?php if ($base64Image): ?>
+            <div class="mb-6">
+              <div class="max-w-2xl border border-gray-200 rounded-xl overflow-hidden">
+                <img src="data:<?= htmlspecialchars($imageMime) ?>;base64,<?= $base64Image ?>"
+                  class="w-full h-auto object-contain"
+                  alt="Question Image">
+              </div>
+            </div>
+          <?php endif; ?>
+
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-2 mb-6">
+            <?php foreach (explode(',', $question['tags']) as $tag): ?>
+              <span class="bg-orange-50 text-orange-600 text-sm px-3 py-2 rounded-lg border border-orange-200 font-medium">
+                <?= htmlspecialchars(trim($tag)) ?>
+              </span>
+            <?php endforeach; ?>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comment Form -->
+      <?php if ($isLoggedIn): ?>
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 mb-8">
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Add Your Answer</h3>
+            <form action="../Controller/commentController.php" method="POST">
+              <input type="hidden" name="question_id" value="<?= $question_id ?>">
+              <textarea name="comment" rows="5" required 
+                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                placeholder="Write your answer..."></textarea>
+              <div class="mt-4 flex justify-end">
+                <button type="submit" class="bg-orange-500 text-white text-base px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors font-medium">
+                  <i class="fas fa-paper-plane mr-2"></i>Post Answer
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      <?php else: ?>
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
+          <p class="text-base text-blue-700">
+            <i class="fas fa-info-circle mr-2 text-lg"></i>
+            Please <a href="User/Login.php" class="text-blue-600 underline font-medium">log in</a> to add an answer.
+          </p>
+        </div>
+      <?php endif; ?>
+
+      <!-- Answers Section -->
+      <div class="bg-white rounded-xl shadow-md border border-gray-200">
+        <div class="p-6 border-b border-gray-100">
+          <h2 class="text-2xl font-semibold text-gray-800">
+            <i class="fas fa-comments mr-3 text-orange-500 text-xl"></i>
+            Answers (<?= count($comments) ?>)
+          </h2>
+        </div>
+
+        <div class="divide-y divide-gray-100">
+          <?php if ($comments): ?>
+            <?php foreach ($comments as $comment): ?>
+              <div class="p-6">
+                <div class="flex items-start space-x-4">
+                  <div class="w-12 h-12 bg-gradient-to-r from-blue-400 to-blue-500 rounded-full flex items-center justify-center text-white text-lg font-semibold flex-shrink-0">
+                    <?= strtoupper(substr($comment['username'], 0, 1)) ?>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-3">
+                      <div class="font-semibold text-lg text-gray-800"><?= htmlspecialchars($comment['username']) ?></div>
+                      <div class="text-sm text-gray-500"><?= date('M j, Y', strtotime($comment['created_at'])) ?></div>
+                    </div>
+                    <div class="text-base text-gray-700 leading-relaxed mb-3"><?= htmlspecialchars($comment['content']) ?></div>
+                    
+                    <?php if ($isLoggedIn): ?>
+                      <button onclick="toggleReplyForm(<?= $comment['id'] ?>)" 
+                        class="text-orange-500 text-base hover:text-orange-600 transition-colors font-medium">
+                        <i class="fas fa-reply mr-2"></i>Reply
+                      </button>
+                    <?php endif; ?>
+
+                    <!-- Reply Form -->
+                    <form action="../Controller/addReply.php" method="POST" id="reply-form-<?= $comment['id'] ?>" class="hidden mt-4">
+                      <input type="hidden" name="question_id" value="<?= $question_id ?>">
+                      <input type="hidden" name="parent_comment_id" value="<?= $comment['id'] ?>">
+                      <textarea name="reply_content" rows="3" required
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" 
+                        placeholder="Write a reply..."></textarea>
+                      <div class="mt-3 flex justify-end">
+                        <button type="submit" class="bg-orange-500 text-white text-base px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors font-medium">
+                          Submit Reply
+                        </button>
+                      </div>
+                    </form>
+
+                    <!-- Replies -->
+                    <?php if (!empty($comment['replies'])): ?>
+                      <div class="mt-4 space-y-3">
+                        <?php foreach ($comment['replies'] as $reply): ?>
+                          <div class="bg-gray-50 rounded-lg p-4 ml-6">
+                            <div class="flex items-center justify-between mb-2">
+                              <div class="font-semibold text-base text-gray-800"><?= htmlspecialchars($reply['username']) ?></div>
+                              <div class="text-sm text-gray-500"><?= date('M j, Y', strtotime($reply['created_at'])) ?></div>
+                            </div>
+                            <div class="text-base text-gray-700"><?= htmlspecialchars($reply['content']) ?></div>
+                          </div>
+                        <?php endforeach; ?>
+                      </div>
+                    <?php endif; ?>
+                  </div>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <div class="p-12 text-center">
+              <div class="text-gray-400 mb-4">
+                <i class="fas fa-comments text-5xl"></i>
+              </div>
+              <p class="text-gray-500 text-lg">No answers yet. Be the first to help!</p>
+            </div>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+  </main>
 
   <script>
     function toggleReplyForm(commentId) {

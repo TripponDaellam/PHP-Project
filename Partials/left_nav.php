@@ -1,12 +1,51 @@
-<div class="relative pt-[5px]">
-  <div class="z-10 space-y-1">
-    <a href="../index.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Home</a>
-    <a href="../Question.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Questions</a>
-    <a href="../tag.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Tags</a>
-    <a href="../save.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Saved</a>
-    <!-- <a href="../Admin/admin_reported.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Reported</a> -->
-    <a href="friend.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Friends</a>
-    <!-- <a href="../Admin/admin_approve_questions.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">Approval</a> -->
-    <a href="../about.php" class="hover:bg-[#f1f2f3] relative top-0 left-0 flex text-black-600 hover:-top-1 hover:-left-1 transition-all bg-white before:content-[''] before:absolute before:top-0 before:left-0 before:hover:top-0 before:hover:left-0 before:w-full before:h-full before:border-2 before:border-gray-300 before:-z-10 before:transition-all px-4 pl-16 h-9 items-center text-md">About</a>
+<div class="p-4">
+  <div class="space-y-2">
+    <!-- Home -->
+    <a href="../index.php" class="group flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-all duration-200 hover:shadow-sm">
+      <div class="w-5 h-5 flex items-center justify-center">
+        <i class="fas fa-home text-lg group-hover:text-orange-500 transition-colors"></i>
+      </div>
+      <span class="font-medium">Home</span>
+    </a>
+
+    <!-- Questions -->
+    <a href="../Question.php" class="group flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-all duration-200 hover:shadow-sm">
+      <div class="w-5 h-5 flex items-center justify-center">
+        <i class="fas fa-question-circle text-lg group-hover:text-orange-500 transition-colors"></i>
+      </div>
+      <span class="font-medium">Questions</span>
+    </a>
+
+    <!-- Tags -->
+    <a href="../tag.php" class="group flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-all duration-200 hover:shadow-sm">
+      <div class="w-5 h-5 flex items-center justify-center">
+        <i class="fas fa-tags text-lg group-hover:text-orange-500 transition-colors"></i>
+      </div>
+      <span class="font-medium">Tags</span>
+    </a>
+
+    <!-- Saved -->
+    <a href="../save.php" class="group flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-all duration-200 hover:shadow-sm">
+      <div class="w-5 h-5 flex items-center justify-center">
+        <i class="fas fa-bookmark text-lg group-hover:text-orange-500 transition-colors"></i>
+      </div>
+      <span class="font-medium">Saved</span>
+    </a>
+
+    <!-- Friends -->
+    <a href="friend.php" class="group flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-all duration-200 hover:shadow-sm">
+      <div class="w-5 h-5 flex items-center justify-center">
+        <i class="fas fa-users text-lg group-hover:text-orange-500 transition-colors"></i>
+      </div>
+      <span class="font-medium">Friends</span>
+    </a>
+
+    <!-- About -->
+    <!-- <a href="../about.php" class="group flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-orange-50 hover:text-orange-600 rounded-lg transition-all duration-200 hover:shadow-sm">
+      <div class="w-5 h-5 flex items-center justify-center">
+        <i class="fas fa-info-circle text-lg group-hover:text-orange-500 transition-colors"></i>
+      </div>
+      <span class="font-medium">About</span>
+    </a> -->
   </div>
 </div>

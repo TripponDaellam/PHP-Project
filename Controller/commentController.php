@@ -33,8 +33,9 @@ try {
             echo "⚠️ Update affected 0 rows. Question may not exist.";
         }
     }
+    header("Location: ../questionDetails.php?id=" . ($questionId ?: ''));
+    exit();
 } catch (PDOException $e) {
     echo "❌ Error: " . $e->getMessage();
     exit();
 }
-
